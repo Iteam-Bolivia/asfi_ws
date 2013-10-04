@@ -9,5 +9,5 @@ package bo.gob.uif.wsi.web;
  * @author John
  */
 public class ClienteController {
-    
+
 }
