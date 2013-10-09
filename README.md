@@ -1,12 +1,8 @@
-asfi_ws
-=======
-
 Servicios Web ASFI - UIF
 ========================
 
 
 NetBeans 7.3.1, Projects
-
 ===========================================
 
 swi (Web Project)
