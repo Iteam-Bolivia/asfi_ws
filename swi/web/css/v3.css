@@ -1,0 +1,146 @@
+body {
+    margin: 0px 0px 0px 0px;
+    background: #FFFFFF;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:70%;
+}
+
+#header {
+    top: 0px;
+    padding-top:15px;
+    padding-left:15px;
+    padding-bottom:5px;
+    background: url('../images/Header-BG.png') repeat-x top left;
+    height:50px;
+}
+
+#header .Content{
+    height: 63px;
+    margin: auto;
+    position: relative;
+    width: 960px;
+}
+
+
+#container {
+    margin-left:auto;
+    margin-right: auto;
+    width:475px;
+}
+#address_box {
+    width:355px;
+}
+#button { width: 110px; }
+#options {
+    width: 271px;
+    height: 200px;
+    float:left;
+}
+#rightbox { 
+    padding: 0px 0px 0px 0px;
+    float:right;
+    width:200px;
+    height:200px;
+}
+.greenbox {
+    border-color: #7dbe0b;
+    border-style: solid;
+    border-width: 1px;	
+    background-color:#dcf0b9;
+    font-size: 11px;
+    font-family: arial;
+    
+}
+#bookmark {
+    margin-top: 20px;
+    margin-left: 40px;
+}
+#infobox {
+    padding: 4px 4px 4px 4px;
+}
+#footer {
+    margin-top: 25px;
+    bottom: 0px;
+    margin-bottom: 0px;
+    font-size: 9px;
+    font-family: arial; 
+}
+#more {
+    display:none;
+    float:right;
+    font-size: 11px;
+    font-family: arial;
+    
+}
+
+#loginpanel {
+    padding:0px 0px 0px 0px;    
+}
+
+#footermain {
+    padding: 0px 0px 0px 0px;
+    background: url('../resources/Footer-BG.jpg') repeat-x top left;
+    height:100px;
+}
+.labelTxt {
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.textfield-out {
+    font-size: 11px;
+    border: 1px solid #CCCCCC;
+    margin-left: 1px;
+    margin-top: 1px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    padding: 2px;
+    margin-bottom: 1px;
+}
+.textfield-over {
+    font-size: 11px;
+    border: 1px solid #000000;
+    margin-left: 1px;
+    margin-top: 1px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    padding: 2px;
+    margin-bottom: 1px;
+    background-color: #CCCCCC;
+}
+.button {
+    cursor:pointer;  
+    margin-top:5px; 
+    border:outset 1px #ccc; 
+    background:#999; 
+    font-size:.9em; 
+    color:#666; 
+    font-weight:bold;  
+    background:url(../images/button-bg.gif) repeat-x left top;
+    padding:1px; 
+}
+.text-field {
+    font-size: 11px;
+    border: 1px solid #CCCCCC;
+    margin-left: 1px;
+    margin-top: 1px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    padding: 2px;
+    margin-bottom: 1px;
+    width: 150px
+}
+.heymaname {
+    font-family: Geneva,Arial,Helvetica,sans-serif; 
+    font-weight: normal;
+    font-size: 12pt;
+    color: #000000; 
+    font-style: normal;
+    padding-top: 10px;
+    width: 620px
+}
+
+
+a:visited,
+a:link  {color:#00369A; text-decoration: none;}
+a:hover .termhighlight,
+a:hover {color:#D40; text-decoration: underline;}
+a:active .termhighlight,
+a:active{color:#C20; text-decoration: none;}

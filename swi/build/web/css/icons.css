@@ -1,0 +1,100 @@
+/*!
+ * SWI 1.0
+ * Copyright(c) 2013 ITEAM
+ * Johns Castillo Valencia
+ * john.gnu@gmail.com
+ */
+.icon-user-add {background-image: url(/ext-3.3.1/examples/shared/icons/fam/user_add.gif)!important;}
+.icon-user-delete {background-image: url(/ext-3.3.1/examples/shared/icons/fam/user_delete.gif)!important;}
+.icon-user-save {background-image: url(/ext-3.3.1/examples/shared/icons/save.gif)!important;}
+.create {background-image: url(/ext-3.3.1/resources/images/silk/icons/add.png)!important;}
+.create_entity {background-image: url(/ext-3.3.1/resources/images/silk/icons/table_add.png)!important;}
+.eliminar {background-image: url(/ext-3.3.1/resources/images/silk/icons/delete.png)!important;}
+.history {background-image: url(/ext-3.3.1/resources/images/silk/icons/book_previous.png)!important;}
+.guardar {background-image: url(../images/iconos_visor/map_save.png)!important;}
+.editar {background-image: url(../images/iconos_visor/shape_square_edit.png)!important;}
+.update {background-image: url(/ext-3.3.1/resources/images/silk/icons/pencil.png)!important;}
+.ruler {background-image: url(../images/iconos_visor/ruler.png)!important;}
+.ruler_square {background-image: url(../images/iconos_visor/ruler_square.png)!important;}
+.navigate {background-image: url(../images/iconos_visor/mano.png)!important;}
+.magnifier {background-image: url(../images/iconos_visor/magnifier.png)!important;}
+.printer {background-image: url(../images/iconos_visor/printer.png)!important;}
+.attribute {background-image: url(../images/iconos_visor/star.png)!important;}
+.ojo {background-image: url(../images/iconos_visor/eye.png) !important;}
+.user {background-image: url(/ext-3.3.1/resources/images/silk/icons/user.png) !important;}
+.lock {background-image: url(/ext-3.3.1/resources/images/silk/icons/lock.png) !important;}
+.lock_edit {background-image: url(/ext-3.3.1/resources/images/silk/icons/lock_edit.png) !important;}
+.entity-save {background-image: url(/ext-3.3.1/resources/images/silk/icons/disk.png) !important;}
+.entity-undo {background-image: url(/ext-3.3.1/resources/images/silk/icons/arrow_undo.png) !important;}
+.entity-form {background-image: url(/ext-3.3.1/resources/images/silk/icons/application_form.png) !important;}
+.entity-grid {background-image: url(/ext-3.3.1/resources/images/silk/icons/database.png) !important;}
+.entity-grid-deleted {background-image: url(/ext-3.3.1/resources/images/silk/icons/database_delete.png) !important;}
+.entity-app {background-image: url(/ext-3.3.1/resources/images/silk/icons/database.png) !important;}
+.table-ok {background-image: url(/ext-3.3.1/resources/images/silk/icons/table.png) !important;}
+.table-error {background-image: url(/ext-3.3.1/resources/images/silk/icons/table_error.png) !important;}
+.module-app {background-image: url(/ext-3.3.1/docs/resources/cmp.gif) !important;}
+.open {background-image: url(/ext-3.3.1/resources/images/silk/icons/folder.png) !important;}
+.key {background-image: url(/ext-3.3.1/resources/images/silk/icons/key.png) !important;}
+.settings {background-image: url(/ext-3.3.1/resources/images/silk/icons/wrench_orange.png) !important;}
+.attr-visible {background-image: url(/ext-3.3.1/resources/images/silk/icons/eye.png) !important;}
+.arrow-up {background-image: url(/ext-3.3.1/resources/images/silk/icons/arrow_up.png) !important;}
+.arrow-down {background-image: url(/ext-3.3.1/resources/images/silk/icons/arrow_down.png) !important;}
+.security-app {background-image: url(/ext-3.3.1/resources/images/silk/icons/lock.png) !important;}
+.refresh {background-image: url(/ext-3.3.1/resources/images/silk/icons/arrow_refresh.png) !important;}
+.nuevo{background-image: url(../images/iconos_visor/add.png); }
+.report{background-image: url(../images/iconos_visor/report.png); }
+.application_form{background-image: url(../images/iconos_visor/application_form.png); }
+.delete{ background-image: url(../images/iconos_visor/delete.png);}
+.guardar{background-image: url(../images/iconos_visor/map_save.png);}
+.editar{background-image: url(../images/iconos_visor/shape_square_edit.png);}
+.ruler{background-image: url(../images/iconos_visor/ruler.png);}
+.ruler_square{background-image: url(../images/iconos_visor/ruler_square.png);}
+.navigate{background-image: url(../images/iconos_visor/mano.png);}
+.magnifier{background-image: url(../images/iconos_visor/magnifier.png);}
+.printer{background-image: url(../images/iconos_visor/printer.png);}
+.ojo{background-image: url(../images/iconos_visor/eye.png);}
+.anexar{background-image: url(../images/iconos_visor/map_add.png);}
+.dividir{background-image: url(../images/iconos_visor/map_delete.png);}
+.pdf{background-image: url(../images/iconos_visor/page_white_acrobat.png);}
+.coord{background-image: url(../images/iconos_visor/map_coord.png);}
+.dibujar{background-image: url(../images/iconos_visor/map_edit.png);}
+.gps_con{background-image: url(../images/icon/connect.png);}
+.gps_lee{background-image: url(../images/icon/leer.png); }
+.gps_dis{background-image: url(../images/icon/disconnect.png);}
+.gps_pin{background-image: url(../images/icon/map-pin.png);}
+.gps_pol{background-image: url(../images/icon/crear-poli.png);}
+.add_point{background-image: url(../images/iconos_visor/vector_add.png);}
+.era_point{background-image: url(../images/iconos_visor/vector_delete.png);}
+.cle_point{background-image: url(../images/iconos_visor/vector.png);}
+.legend{background-image: url(../images/icon/tag_red.png);}
+.layers{background-image: url(../images/icon/layers.png);}
+.nuevo{background-image: url(../images/iconos_visor/add.png); }
+.delete{ background-image: url(../images/iconos_visor/delete.png);}
+.guardar{background-image: url(../images/iconos_visor/map_save.png);}
+.editar{background-image: url(../images/iconos_visor/shape_square_edit.png);}
+.ruler{background-image: url(../images/iconos_visor/ruler.png);}
+.ruler_square{background-image: url(../images/iconos_visor/ruler_square.png);}
+.zoomin{background-image: url(../images/iconos_visor/magnifier_zoom_in.png);}
+.navigate{background-image: url(../images/iconos_visor/mano.png);}
+.magnifier{background-image: url(../images/iconos_visor/magnifier.png);}
+.printer{background-image: url(../images/iconos_visor/printer.png);}
+.ojo{background-image: url(../images/iconos_visor/eye.png);}
+.anexar{background-image: url(../images/iconos_visor/map_add.png);}
+.dividir{background-image: url(../images/iconos_visor/map_delete.png);}
+.pdf{background-image: url(../images/iconos_visor/page_white_acrobat.png);}
+.coord{background-image: url(../images/iconos_visor/map_coord.png);}
+.dibujar{background-image: url(../images/iconos_visor/map_edit.png);}
+.gps_con{background-image: url(../images/icon/connect.png);}
+.gps_lee{background-image: url(../images/icon/leer.png); }
+.gps_dis{background-image: url(../images/icon/disconnect.png);}
+.gps_pin{background-image: url(../images/icon/map-pin.png);}
+.gps_pol{background-image: url(../images/icon/crear-poli.png);}
+.add_point{background-image: url(../images/iconos_visor/vector_add.png);}
+.era_point{background-image: url(../images/iconos_visor/vector_delete.png);}
+.cle_point{background-image: url(../images/iconos_visor/vector.png);}
+.legend{background-image: url(../images/icon/tag_red.png);}
+.layers{background-image: url(../images/icon/layers.png);}
+.finalizar{background-image: url(../images/iconos_visor/map_save.png);}
+.editardatos{background-image: url(../images/iconos_visor/map_edit.png);}
+.upload-icon {background: url('/ext-3.3.1/examples/shared/icons/fam/image_add.png') !important;}
+.magnifier_zoom_in{background:transparent url(../images/iconos_visor/magnifier_zoom_in.png) 0px 0px no-repeat !important;}
