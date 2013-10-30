@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UIFController {
 
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/main")
     public String portal() {
         return "main";

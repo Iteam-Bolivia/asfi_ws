@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+    <items>
+        <!-- Principal Usuario UIF ToolBar -->
+        <menu>
+            <xtype>tbbutton</xtype>
+            <text>Administrar usuarios</text> 
+            <iconCls>user</iconCls> 
+            <menu>
+                <items>                    
+                    <menu>                    
+                        <text>Cuentas de usuario</text> 
+                        <iconCls>user</iconCls> 
+                        <module>
+                            <id>_usuarios</id> 
+                            <title>Cuentas de usuario</title>
+                            <iconCls>user</iconCls> 
+                            <url>usuarios.jsp</url> 
+                        </module>
+                    </menu>                     
+                    <menu>                    
+                        <text>Menu 1</text> 
+                        <iconCls>icon</iconCls> 
+                        <module>
+                            <id>_menu12</id> 
+                            <title>Menu 1</title>
+                            <iconCls>icon</iconCls> 
+                            <url>404.jsp</url> 
+                        </module>
+                    </menu> 
+                </items>
+            </menu>
+        </menu>
+        
+        <menu>
+            <xtype>tbbutton</xtype>
+            <text>Administrar servicios</text> 
+            <iconCls>module-app</iconCls> 
+            <menu>
+                <items>                    
+                    <menu>                    
+                        <text>Menu 1</text> 
+                        <iconCls>module-app</iconCls> 
+                        <module>
+                            <id>_menu21</id> 
+                            <title>Menu 1</title>
+                            <iconCls>module-app</iconCls> 
+                            <url>404.jsp</url> 
+                        </module>
+                    </menu>                     
+                    <menu>                    
+                        <text>Menu 1</text> 
+                        <iconCls>icon</iconCls> 
+                        <module>
+                            <id>_menu22</id> 
+                            <title>Menu 1</title>
+                            <iconCls>icon</iconCls> 
+                            <url>404.jsp</url> 
+                        </module>
+                    </menu> 
+                </items>
+            </menu>
+        </menu>
+    </items>   
+</menu>
