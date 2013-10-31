@@ -41,60 +41,6 @@
 .arrow-down {background-image: url(/ext-3.3.1/resources/images/silk/icons/arrow_down.png) !important;}
 .security-app {background-image: url(/ext-3.3.1/resources/images/silk/icons/lock.png) !important;}
 .refresh {background-image: url(/ext-3.3.1/resources/images/silk/icons/arrow_refresh.png) !important;}
-.nuevo{background-image: url(../images/iconos_visor/add.png); }
-.report{background-image: url(../images/iconos_visor/report.png); }
-.application_form{background-image: url(../images/iconos_visor/application_form.png); }
-.delete{ background-image: url(../images/iconos_visor/delete.png);}
-.guardar{background-image: url(../images/iconos_visor/map_save.png);}
-.editar{background-image: url(../images/iconos_visor/shape_square_edit.png);}
-.ruler{background-image: url(../images/iconos_visor/ruler.png);}
-.ruler_square{background-image: url(../images/iconos_visor/ruler_square.png);}
-.navigate{background-image: url(../images/iconos_visor/mano.png);}
-.magnifier{background-image: url(../images/iconos_visor/magnifier.png);}
-.printer{background-image: url(../images/iconos_visor/printer.png);}
-.ojo{background-image: url(../images/iconos_visor/eye.png);}
-.anexar{background-image: url(../images/iconos_visor/map_add.png);}
-.dividir{background-image: url(../images/iconos_visor/map_delete.png);}
-.pdf{background-image: url(../images/iconos_visor/page_white_acrobat.png);}
-.coord{background-image: url(../images/iconos_visor/map_coord.png);}
-.dibujar{background-image: url(../images/iconos_visor/map_edit.png);}
-.gps_con{background-image: url(../images/icon/connect.png);}
-.gps_lee{background-image: url(../images/icon/leer.png); }
-.gps_dis{background-image: url(../images/icon/disconnect.png);}
-.gps_pin{background-image: url(../images/icon/map-pin.png);}
-.gps_pol{background-image: url(../images/icon/crear-poli.png);}
-.add_point{background-image: url(../images/iconos_visor/vector_add.png);}
-.era_point{background-image: url(../images/iconos_visor/vector_delete.png);}
-.cle_point{background-image: url(../images/iconos_visor/vector.png);}
-.legend{background-image: url(../images/icon/tag_red.png);}
-.layers{background-image: url(../images/icon/layers.png);}
-.nuevo{background-image: url(../images/iconos_visor/add.png); }
-.delete{ background-image: url(../images/iconos_visor/delete.png);}
-.guardar{background-image: url(../images/iconos_visor/map_save.png);}
-.editar{background-image: url(../images/iconos_visor/shape_square_edit.png);}
-.ruler{background-image: url(../images/iconos_visor/ruler.png);}
-.ruler_square{background-image: url(../images/iconos_visor/ruler_square.png);}
-.zoomin{background-image: url(../images/iconos_visor/magnifier_zoom_in.png);}
-.navigate{background-image: url(../images/iconos_visor/mano.png);}
-.magnifier{background-image: url(../images/iconos_visor/magnifier.png);}
-.printer{background-image: url(../images/iconos_visor/printer.png);}
-.ojo{background-image: url(../images/iconos_visor/eye.png);}
-.anexar{background-image: url(../images/iconos_visor/map_add.png);}
-.dividir{background-image: url(../images/iconos_visor/map_delete.png);}
-.pdf{background-image: url(../images/iconos_visor/page_white_acrobat.png);}
-.coord{background-image: url(../images/iconos_visor/map_coord.png);}
-.dibujar{background-image: url(../images/iconos_visor/map_edit.png);}
-.gps_con{background-image: url(../images/icon/connect.png);}
-.gps_lee{background-image: url(../images/icon/leer.png); }
-.gps_dis{background-image: url(../images/icon/disconnect.png);}
-.gps_pin{background-image: url(../images/icon/map-pin.png);}
-.gps_pol{background-image: url(../images/icon/crear-poli.png);}
-.add_point{background-image: url(../images/iconos_visor/vector_add.png);}
-.era_point{background-image: url(../images/iconos_visor/vector_delete.png);}
-.cle_point{background-image: url(../images/iconos_visor/vector.png);}
-.legend{background-image: url(../images/icon/tag_red.png);}
-.layers{background-image: url(../images/icon/layers.png);}
-.finalizar{background-image: url(../images/iconos_visor/map_save.png);}
-.editardatos{background-image: url(../images/iconos_visor/map_edit.png);}
+.delete {background-image: url(/ext-3.3.1/resources/images/silk/icons/delete.png) !important;}
 .upload-icon {background: url('/ext-3.3.1/examples/shared/icons/fam/image_add.png') !important;}
 .magnifier_zoom_in{background:transparent url(../images/iconos_visor/magnifier_zoom_in.png) 0px 0px no-repeat !important;}

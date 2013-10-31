@@ -4,60 +4,180 @@
         <!-- Principal Usuario UIF ToolBar -->
         <menu>
             <xtype>tbbutton</xtype>
-            <text>Administrar usuarios</text> 
-            <iconCls>user</iconCls> 
+            <text>Seguridad</text> 
+            <iconCls>security</iconCls> 
             <menu>
-                <items>                    
+                <items>
+                    <menu>    
+                        <text>Gestion de Usuarios</text> 
+                        <iconCls>icon</iconCls> 
+                        <menu>
+                            <items>                    
+                                <menu>                    
+                                    <text>Registro de Usuarios</text> 
+                                    <iconCls>user</iconCls> 
+                                    <module>
+                                        <id>gu-001</id> 
+                                        <title>Registro de Usuarios</title>
+                                        <iconCls>user</iconCls> 
+                                        <url>security/usermanager</url> 
+                                    </module>
+                                </menu>                     
+                                <menu>                    
+                                    <text>Asignacion de Rol</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>gu-002</id> 
+                                        <title>Asignacion de Rol</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>404.jsp</url> 
+                                    </module>
+                                </menu> 
+                                <menu>                    
+                                    <text>Asignacion de Servicios</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>gu-003</id> 
+                                        <title>Asignacion de Servicios</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>404.jsp</url> 
+                                    </module>
+                                </menu> 
+                                <menu>                    
+                                    <text>Caducidad de acceso</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>gu-004</id> 
+                                        <title>Caducidad de acceso</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>404.jsp</url> 
+                                    </module>
+                                </menu> 
+                                <menu>                    
+                                    <text>Habilitar acceso</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>gu-005</id> 
+                                        <title>Habilitar acceso</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>404.jsp</url> 
+                                    </module>
+                                </menu> 
+                            </items>
+                        </menu>
+                    </menu>
+                    
+                    <menu>    
+                        <text>Bitacora de Usuarios</text> 
+                        <iconCls>icon</iconCls> 
+                        <menu>
+                            <items>                    
+                                <menu>                    
+                                    <text>Busqueda por usuario</text> 
+                                    <iconCls>user</iconCls> 
+                                    <module>
+                                        <id>bu-001</id> 
+                                        <title>Busqueda por usuario</title>
+                                        <iconCls>user</iconCls> 
+                                        <url>404.jsp</url> 
+                                    </module>
+                                </menu>                     
+                                <menu>                    
+                                    <text>Busqueda por servicio</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>bu-002</id> 
+                                        <title>Busqueda por servicio</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>404.jsp</url> 
+                                    </module>
+                                </menu> 
+                                <menu>                    
+                                    <text>Busqueda por periodo</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>bu-003</id> 
+                                        <title>Busqueda por periodo</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>404.jsp</url> 
+                                    </module>
+                                </menu> 
+                            </items>
+                        </menu>
+                    </menu>
+                    
                     <menu>                    
-                        <text>Cuentas de usuario</text> 
+                        <text>Prueba 1</text> 
                         <iconCls>user</iconCls> 
                         <module>
-                            <id>_usuarios</id> 
-                            <title>Cuentas de usuario</title>
-                            <iconCls>user</iconCls> 
-                            <url>usuarios.jsp</url> 
-                        </module>
-                    </menu>                     
-                    <menu>                    
-                        <text>Menu 1</text> 
-                        <iconCls>icon</iconCls> 
-                        <module>
-                            <id>_menu12</id> 
-                            <title>Menu 1</title>
+                            <id>prb-001</id> 
+                            <title>Prueba 1</title>
                             <iconCls>icon</iconCls> 
-                            <url>404.jsp</url> 
+                            <url>formulario1</url> 
                         </module>
                     </menu> 
                 </items>
             </menu>
         </menu>
         
+        
+        
+        
+        
+        
+        
         <menu>
             <xtype>tbbutton</xtype>
-            <text>Administrar servicios</text> 
+            <text>Parametrizacion de Servicios</text> 
             <iconCls>module-app</iconCls> 
             <menu>
-                <items>                    
-                    <menu>                    
-                        <text>Menu 1</text> 
-                        <iconCls>module-app</iconCls> 
-                        <module>
-                            <id>_menu21</id> 
-                            <title>Menu 1</title>
-                            <iconCls>module-app</iconCls> 
-                            <url>404.jsp</url> 
-                        </module>
-                    </menu>                     
-                    <menu>                    
-                        <text>Menu 1</text> 
+                <items>
+                    <menu>    
+                        <text>Gestion de Servicios</text> 
                         <iconCls>icon</iconCls> 
-                        <module>
-                            <id>_menu22</id> 
-                            <title>Menu 1</title>
-                            <iconCls>icon</iconCls> 
-                            <url>404.jsp</url> 
-                        </module>
-                    </menu> 
+                        <menu>
+                            <items>                    
+                                <menu>                    
+                                    <text>Registrar conexiones</text> 
+                                    <iconCls>user</iconCls> 
+                                    <module>
+                                        <id>gs-001</id> 
+                                        <title>Registrar conexiones</title>
+                                        <iconCls>module-app</iconCls> 
+                                        <url>servicios.jsp</url> 
+                                    </module>
+                                </menu>                     
+                                <menu>                    
+                                    <text>Habilitar servicios</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>gs-002</id> 
+                                        <title>Habilitar servicios</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>404.jsp</url> 
+                                    </module>
+                                </menu> 
+                            </items>
+                        </menu>
+                    </menu>
+                    <menu>    
+                        <text>Compatibilización de Datos</text> 
+                        <iconCls>icon</iconCls>                     
+                        <menu>     
+                            <items>               
+                                <menu>                    
+                                    <text>Visualizar datos</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>cd-001</id> 
+                                        <title>Visualizar datos</title>
+                                        <iconCls>module-app</iconCls> 
+                                        <url>servicios.jsp</url> 
+                                    </module>
+                                </menu>
+                            </items>                                              
+                        </menu>                    
+                    </menu>
                 </items>
             </menu>
         </menu>
