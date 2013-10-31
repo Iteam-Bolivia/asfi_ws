@@ -26,7 +26,6 @@ public class Persona {
     private String nombre;
     private String paterno;
     private String materno;
-    @Column(columnDefinition = "TEXT")
     private String direccion;
 
     public Integer getId() {
