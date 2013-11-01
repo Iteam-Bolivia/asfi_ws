@@ -39,9 +39,9 @@ public class DaoImpl implements Dao {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public <T> List<T> find(Class<T> entityClass) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.sessionFactory.getCurrentSession().createCriteria(entityClass).list();
     }
 
     @Override

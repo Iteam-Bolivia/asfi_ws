@@ -29,7 +29,7 @@ public class SampleController {
      public @ResponseBody Persona getPersona(@PathVariable int id) {
          Persona p = new Persona();
          p.setId(id);
-         p.setNombre("John Castillo");        
+         p.setNombres("John Castillo");        
          return p;
      }
      

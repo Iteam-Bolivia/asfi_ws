@@ -23,10 +23,10 @@ public class Persona {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "persona_id")
     private Integer id;
-    private String nombre;
-    private String paterno;
-    private String materno;
-    private String direccion;
+    private String nombres;
+    private String apellidos;
+    private String cargo;
+    private String descripcion;
 
     public Integer getId() {
         return id;
@@ -36,35 +36,35 @@ public class Persona {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombres() {
+        return nombres;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
     }
 
-    public String getPaterno() {
-        return paterno;
+    public String getApellidos() {
+        return apellidos;
     }
 
-    public void setPaterno(String paterno) {
-        this.paterno = paterno;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
-    public String getMaterno() {
-        return materno;
+    public String getCargo() {
+        return cargo;
     }
 
-    public void setMaterno(String materno) {
-        this.materno = materno;
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

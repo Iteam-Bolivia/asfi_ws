@@ -7,6 +7,7 @@ package bo.gob.asfi.uif.swi.web.uif;
 import bo.gob.asfi.uif.swi.dao.Dao;
 import bo.gob.asfi.uif.swi.model.Persona;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,6 +48,15 @@ public class Sample2 {
     public @ResponseBody Map<String, ? extends Object> guardarPersona(Persona persona) {                
         Map<String, Object> body = new HashMap<String, Object>();
         dao.persist(persona);
+        body.put("success", true);
+        return body;
+    }
+    
+    @RequestMapping(value = "/listarpersonas", method = RequestMethod.GET)
+    public @ResponseBody Map<String, ? extends Object> listarPersonas() {                
+        Map<String, Object> body = new HashMap<String, Object>();
+        List lst = dao.find(Persona.class);
+        body.put("data", lst);
         return body;
     }
 }
