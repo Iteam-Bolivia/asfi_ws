@@ -18,4 +18,11 @@ public class UIFController {
     public String portal() {
         return "main";
     }
+    
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/cualquiercosa")
+    public String cuequiercosa() {
+        return "main";
+    }
 }
