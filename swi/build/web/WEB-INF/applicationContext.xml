@@ -20,6 +20,42 @@
     Note that, with Spring 3.1, this tag works in Servlet MVC only!  -->
     <mvc:annotation-driven /> 
     
+    <bean id="httpRequestHandlerAdapter" class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"></bean>
+                
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="mediaTypes">
+            <map>
+                <entry key="atom" value="application/atom+xml"/>
+                <entry key="html" value="text/html"/>
+                <entry key="js" value="text/javascript"/>
+                <entry key="json" value="application/json"/>
+                <entry key="xml" value="application/xml"/>		
+            </map>
+        </property>
+        <property name="viewResolvers">
+            <list>
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="prefix" value="/WEB-INF/jsp/"/>
+                    <property name="suffix" value=".jsp"/>
+                </bean>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+                    <property name="prefixJson" value="false" />
+                </bean>    
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <property name="marshaller">
+                        <bean class="org.springframework.oxm.xstream.XStreamMarshaller">
+                            <property name="autodetectAnnotations" value="true"></property>
+                        </bean>   
+                    </property>
+                </bean>			
+            </list>
+        </property>
+    </bean> 
+    
     <!-- Forwards requests to the "/" resource to the "index" view -->
     <mvc:view-controller path="/" view-name="main"/>
     
