@@ -4,28 +4,40 @@
  */
 package bo.gob.asfi.uif.swi.model;
 
+import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import org.hibernate.sql.ordering.antlr.Factory;
 
 /**
  *
  * @author John
  */
 @Entity
-@Table(schema = "uif", name = "usuarios")
+@Table(name = "usuarios")
 public class Usuario {
 
     @Id
-    @Column(name = "clm0")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "usuario_id")
     private Integer id;
-    @Column(name = "clm1")
-    private String usernamae;
-    @Column(name = "clm2", length = 100)
-    private String password;
-    @Column(name = "clm3")
+    private String nombres;
+    private String paterno;
+    private String materno;
+    private String cargo;
+    private String descripcion;
+    private String usuario;
+    private String email;
     private String rol;
+    private String clave;
+    private Boolean activo;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Calendar caducaEn;
 
     public Integer getId() {
         return id;
@@ -35,19 +47,91 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getUsernamae() {
-        return usernamae;
+    public String getNombres() {
+        return nombres;
     }
 
-    public void setUsernamae(String usernamae) {
-        this.usernamae = usernamae;
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPaterno() {
+        return paterno;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPaterno(String paterno) {
+        this.paterno = paterno;
+    }
+
+    public String getMaterno() {
+        return materno;
+    }
+
+    public void setMaterno(String materno) {
+        this.materno = materno;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    public Calendar getCaducaEn() {
+        return caducaEn;
+    }
+
+    public void setCaducaEn(Calendar caducaEn) {
+        this.caducaEn = caducaEn;
     }
 }

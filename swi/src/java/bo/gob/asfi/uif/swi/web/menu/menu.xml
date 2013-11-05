@@ -79,7 +79,7 @@
                                         <id>bu-001</id> 
                                         <title>Busqueda por usuario</title>
                                         <iconCls>user</iconCls> 
-                                        <url>404.jsp</url> 
+                                        <url>busquedaporusurio</url> 
                                     </module>
                                 </menu>                     
                                 <menu>                    

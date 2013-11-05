@@ -24,9 +24,13 @@ public class Persona {
     @Column(name = "persona_id")
     private Integer id;
     private String nombres;
-    private String apellidos;
+    private String paterno;
+    private String materno;
     private String cargo;
     private String descripcion;
+    private String usuario;
+    private String email;
+    private String rol;
 
     public Integer getId() {
         return id;
@@ -44,12 +48,20 @@ public class Persona {
         this.nombres = nombres;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getPaterno() {
+        return paterno;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setPaterno(String paterno) {
+        this.paterno = paterno;
+    }
+
+    public String getMaterno() {
+        return materno;
+    }
+
+    public void setMaterno(String materno) {
+        this.materno = materno;
     }
 
     public String getCargo() {
@@ -66,5 +78,29 @@ public class Persona {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }
