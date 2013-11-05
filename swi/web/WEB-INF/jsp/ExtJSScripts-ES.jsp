@@ -11,8 +11,8 @@
         <script type="text/javascript" src="/ext-3.3.1/adapter/ext/ext-base.js"></script>
         <script type="text/javascript" src="/ext-3.3.1/ext-all.js"></script>        
         <script type="text/javascript" src="/ext-3.3.1/src/locale/ext-lang-es.js"></script> 
-        <script type="text/javascript" src="<c:url value="/js/ui/sitmax-errors-msgs.js"/>"></script> 
-        <script type="text/javascript" src="<c:url value="/js/ui/sitmax-vtypes.js"/>"></script> 
+        <script type="text/javascript" src="<c:url value="/js/ui/swi-errors-msgs.js"/>"></script> 
+        <script type="text/javascript" src="<c:url value="/js/ui/swi-vtypes.js"/>"></script> 
         <script type="text/javascript">    
             /**
             * Variables Globales estaticas
@@ -21,15 +21,16 @@
             Ext.BLANK_IMAGE_URL = '/ext-3.3.1/resources/images/default/s.gif';    
             Ext.IMAGES_SILK = '/ext-3.3.1/resources/images/silk/icons/';
             Ext.SROOT = '<c:url value="/"/>';            
-            Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
-            Ext.util.CSS.swapStyleSheet('theme', '/ext-3.3.1/resources/css/' + Ext.state.Manager.get('theme'));
+            //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+            //Ext.util.CSS.swapStyleSheet('theme', '/ext-3.3.1/resources/css/' + Ext.state.Manager.get('theme'));
             Ext.QuickTips.init();
+            
             /**
             * Principal ROOT_APP namespace
             * @author Johns Castillo Valencia
             */
             Ext.ns('swi.ui');
-            Ext.ns('swi.ui.struct'); 
+            //Ext.ns('swi.ui.struct'); 
         </script>
         <!-- ALL Application ICONS -->        
         <link rel="stylesheet" type="text/css" href="<c:url value="/css/icons.css"/>"/>
