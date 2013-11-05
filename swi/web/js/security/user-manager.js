@@ -67,10 +67,10 @@ domain.formButtons = function(options) {
 
 domain.UserManager = {
     wizard: function(options) {
-        
+
     },
     update: function(options) {
-        
+
     },
     changePassword: function(options) {
 
@@ -110,7 +110,7 @@ domain.UserManager = {
                 'activo', 'descripcion'],
             autoLoad: true
         });
-        
+
         var grid = new Ext.grid.GridPanel({
             title: 'Usuarios',
             border: false,
@@ -156,18 +156,18 @@ domain.UserManager = {
                         domain.UserManager.newUser(options);
                     }
                 }, {
-                    text:'Modificar',
+                    text: 'Modificar',
                     iconCls: 'update',
                     tooltip: 'Modificar',
                     handler: function() {
-                        
+
                     }
                 }, {
                     text: 'Eliminar',
                     iconCls: 'delete',
                     tooltip: 'Eliminar',
                     handler: function() {
-                        
+
                     }
                 }, '-', {
                     iconCls: 'key',
@@ -264,41 +264,86 @@ domain.UserManager = {
             labelWidth: 130,
             items: [{
                     xtype: 'fieldset',
-                    title: 'Datos de la Cuenta',
+                    title: 'Datos personales',
                     defaults: {
-                        msgTarget: 'side'
+                        msgTarget: 'side',
+                        width: 200
                     },
                     items: [{
                             xtype: 'textfield',
                             fieldLabel: 'Nombres',
                             allowBlank: false,
-                            width: 200,
                             name: 'nombres'
                         }, {
                             xtype: 'textfield',
-                            fieldLabel: 'Apellidos',
+                            fieldLabel: 'Apellido paterno',
                             allowBlank: false,
-                            width: 200,
-                            name: 'apellidos'
+                            name: 'paterno'
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: 'Apellido materno',
+                            allowBlank: false,
+                            name: 'materno'
                         }, {
                             xtype: 'textfield',
                             fieldLabel: 'Cargo',
                             allowBlank: false,
-                            width: 200,
                             name: 'cargo'
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: 'Correo electr&oacute;nico',
+                            allowBlank: false,
+                            vtype: 'email',
+                            name: 'email'
                         }, {
                             xtype: 'textarea',
                             fieldLabel: 'Descripcion',
                             allowBlank: true,
-                            width: 200,
                             name: 'descripcion'
+                        }]
+                }, {
+                    xtype: 'fieldset',
+                    title: 'Datos de acceso',
+                    defaults: {
+                        msgTarget: 'side',
+                        width: 200
+                    },
+                    items: [{
+                            xtype: 'textfield',
+                            fieldLabel: 'Usuario',
+                            allowBlank: false,
+                            name: 'usuario',
+                            regex: /^[a-z,_,0-9]{0,}$/
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: 'Clave (Password)',
+                            allowBlank: false,
+                            name: 'clave',
+                            inputType: 'password',
+                            id: '_um_passfield'
+                        }, {
+                            xtype: 'textfield',
+                            fieldLabel: 'Confirmar Clave',
+                            allowBlank: false,
+                            inputType: 'password',
+                            vtype: 'password',
+                            initialPassField: '_um_passfield'
+                        }, {
+                            xtype: 'checkbox',
+                            fieldLabel: 'Activo',
+                            name: 'activo',
+                            checked: true
+                        }, {
+                            xtype:'datefield',
+                            fieldLabel:'Caducar en',
+                            name:'caduca'
                         }]
                 }]
         });
 
         var win = new Ext.Window({
             title: 'Registrar Usuario',
-            autoScroll: true,            
+            autoScroll: true,
             width: 600,
             activeItem: 0,
             layout: 'card',
@@ -309,8 +354,8 @@ domain.UserManager = {
                     handler: function() {
                         form.getForm().submit({
                             success: function(form, action) {
-                                   options.grid.store.reload();
-                                   win.close();                                   
+                                options.grid.store.reload();
+                                win.close();
                             },
                             failure: function(form, action) {
 
