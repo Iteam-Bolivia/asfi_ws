@@ -72,7 +72,7 @@ domain.security.Login = function() {
     
     var login = new Ext.FormPanel({
         labelWidth:130,
-        url:'../j_spring_security_check',
+        url:'j_spring_security_check',
         frame:true,
         defaultType:'textfield',
         monitorValid:true,
