@@ -180,38 +180,38 @@ domain.UserManager = {
             autoLoad: true
         });
 
-//        var searchListFilters = new Ext.ux.grid.GridFilters({
-//            encode: false,
-//            local: true,
-//            menuFilterText: 'Filtrar',
-//            filters: [
-//                {type: 'string', dataIndex: 'nombres'},
-//                {type: 'string', dataIndex: 'paterno'},
-//                {type: 'string', dataIndex: 'materno'},
-//                {type: 'list', dataIndex: 'rol', options: ['Usuario', 'Administrador']},
-//                {type: 'boolean', dataIndex: 'activo', yesText: 'Activo', noText: 'Desactivado'}
-//            ]});
+        var searchListFilters = new Ext.ux.grid.GridFilters({
+            encode: false,
+            local: true,
+            menuFilterText: 'Filtrar',
+            filters: [
+                {type: 'string', dataIndex: 'nombres'},
+                {type: 'string', dataIndex: 'paterno'},
+                {type: 'string', dataIndex: 'materno'},
+                {type: 'list', dataIndex: 'rol', options: ['Usuario', 'Administrador']},
+                {type: 'boolean', dataIndex: 'activo', yesText: 'Activo', noText: 'Desactivado'}
+            ]});
 
         var grid = new Ext.grid.GridPanel({
             title: 'Usuarios',
             border: false,
             store: store,
-            //plugins: [searchListFilters],
-            plugins: [new Ext.ux.grid.Search({
-                    iconCls: 'icon-zoom'
-                            , readonlyIndexes: ['id']
-                            , disableIndexes: ['uid', 'clave']
-                            , minChars: 3
-                            , autoFocus: true,
-                    width: 100
+            plugins: [searchListFilters],
+//            plugins: [new Ext.ux.grid.Search({
+//                    iconCls: 'icon-zoom'
+//                            , readonlyIndexes: ['id']
+//                            , disableIndexes: ['uid', 'clave']
+//                            , minChars: 3
+//                            , autoFocus: true,
+//                    width: 100
 //				,menuStyle:'radio'
-                }), new Ext.ux.grid.RowActions({
-                    actions: [{
-                            iconCls: 'icon-minus'
-                                    , qtip: 'Delete Record'
-                                    , style: 'margin:0 0 0 3px'
-                        }]
-                })],
+//                }), new Ext.ux.grid.RowActions({
+//                    actions: [{
+//                            iconCls: 'icon-minus'
+//                                    , qtip: 'Delete Record'
+//                                    , style: 'margin:0 0 0 3px'
+//                        }]
+//                })],
             loadMask: true,
             columns: [new Ext.grid.RowNumberer({
                     width: 27
@@ -333,12 +333,12 @@ domain.UserManager = {
                         }
                     }
                 }, '-',
-            ],
-            bbar: new Ext.PagingToolbar({
-                store: this.store
-                        , displayInfo: true
-                        , pageSize: 3
-            })
+            ]//,
+//            bbar: new Ext.PagingToolbar({
+//                store: this.store
+//                        , displayInfo: true
+//                        , pageSize: 3
+//            })
 //            bbar: new Ext.PagingToolbar({
 //                store: store,
 //                pageSize: 50,
