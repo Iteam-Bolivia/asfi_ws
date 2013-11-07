@@ -78,6 +78,7 @@ domain.security.Login = function() {
         monitorValid:true,
         bodyStyle:'padding:10px',
         defaults: {
+            msgTarget: 'side',
             width:200
         },
         items:[{
@@ -113,7 +114,7 @@ domain.security.Login = function() {
         closable:false,
         items:[{
             xtype:'panel',    
-            bodyStyle:'padding:10px;background-color:orange;color:#FFFFFF',
+            bodyStyle:'padding:10px;background-color:#FFFFFF;color:#CCCCCC',
             html:'<b>Identifíquese para continuar...</b>',
             height:50
         },login]
