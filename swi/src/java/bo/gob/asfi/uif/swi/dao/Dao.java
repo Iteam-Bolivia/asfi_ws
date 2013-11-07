@@ -27,5 +27,7 @@ public interface Dao {
 
     public <T> T get(Class<T> entityClass, Serializable id);
 
-    public <T> List<T> find(String hql);
+    public <T> List<T> find(String sql);
+    
+    public <T> T getUsuarioByUsername(String username);
 }

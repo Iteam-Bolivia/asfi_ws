@@ -4,12 +4,12 @@
  */
 package bo.gob.asfi.uif.swi.dao;
 
+import bo.gob.asfi.uif.swi.model.Usuario;
 import java.io.Serializable;
 import java.util.List;
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,19 +50,25 @@ public class DaoImpl implements Dao {
         return this.sessionFactory.getCurrentSession().createCriteria(entityClass).list();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public <T> T load(Class<T> entityClass, Serializable id) {
         return (T) this.sessionFactory.getCurrentSession().load(entityClass, id);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public <T> T get(Class<T> entityClass, Serializable id) {
         return (T) this.sessionFactory.getCurrentSession().get(entityClass, id);
     }
 
-    @Override
-    public <T> List<T> find(String hql) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Transactional(readOnly = true)
+    public <T> List<T> find(String sql) {
+        return this.sessionFactory.getCurrentSession().createSQLQuery(sql).list();
+    }
+    
+    @Transactional(readOnly = true)
+    public <T> T getUsuarioByUsername(String username) {
+        return (T) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)                
+                .add(Restrictions.eq("usuario", username)).uniqueResult();
     }
 
 }
