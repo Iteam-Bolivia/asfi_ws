@@ -73,7 +73,75 @@ domain.UserManager = {
 
     },
     changePassword: function(options) {
+        var form = new Ext.FormPanel({                      
+            url: Ext.SROOT + 'changepassword',                                          
+            border:false,
+            autoHeight:true,
+            bodyStyle:'padding:10px',
+            labelWidth:130,           
+            items:[{
+                xtype:'fieldset',                    
+                defaults:{
+                    msgTarget:'side'
+                },
+                items:[{
+                    xtype:'displayfield',
+                    fieldLabel:'<b>ID Usuario</b>',                    
+                    name:'usuario'
+                },{
+                    xtype:'textfield',
+                    password:true,
+                    fieldLabel:'Clave',
+                    width: 200,
+                    allowBlank:false,
+                    name: 'password',
+                    inputType:'password',
+                    id:'_um_passfield'
+                },{
+                    xtype:'textfield',
+                    password:true,
+                    fieldLabel:'Confirmar Clave',
+                    width: 200,
+                    allowBlank:false,
+                    inputType:'password',
+                    vtype:'password',
+                    initialPassField:'_um_passfield'
+                },{
+                    "xtype":"hidden",
+                    "name":"id"
+                }]
+            }]            
+        });                
 
+        var win = new Ext.Window({
+            title:'Asignar o cambiar clave',
+            autoScroll:true,
+            autoHeight:true,
+            width:600,
+            activeItem: 0,
+            layout:'card',
+            items:form,
+            modal:true,
+            buttonAlign:'center',
+            buttons:[{
+                text:'Guardar',
+                handler: function() {                                           
+                    form.getForm().submit({                        
+                        success: function(form, action) {                                                                                      
+                            win.close();                            
+                        },
+                        failure: function(form, action) {
+                            if(action.failureType === 'server') {
+                                var r = Ext.util.JSON.decode(action.response.responseText);                                
+                                com.icg.errors.submitFailure('Error', r.errorMessage);
+                            } 
+                        }     
+                    });                
+                }
+            }]
+        });        
+        win.show();
+        form.getForm().loadRecord(options.record);
     },
     deleteUser: function(options) {
 
@@ -104,32 +172,69 @@ domain.UserManager = {
     },
     usersGrid: function(options) {
         var store = new Ext.data.JsonStore({
-            url: Ext.SROOT + 'listarpersonas',
+            url: Ext.SROOT + 'listarusuarios',
             root: 'data',
-            fields: ['id', 'cargo', 'nombres', 'apellidos',
-                'activo', 'descripcion'],
+            fields: ['id', 'cargo', 'nombres', 'paterno', 'materno',
+                'activo', 'descripcion', 'usuario', 'email',
+                {name: 'caducaEn', type: 'long'}, 'rol'],
             autoLoad: true
         });
+
+//        var searchListFilters = new Ext.ux.grid.GridFilters({
+//            encode: false,
+//            local: true,
+//            menuFilterText: 'Filtrar',
+//            filters: [
+//                {type: 'string', dataIndex: 'nombres'},
+//                {type: 'string', dataIndex: 'paterno'},
+//                {type: 'string', dataIndex: 'materno'},
+//                {type: 'list', dataIndex: 'rol', options: ['Usuario', 'Administrador']},
+//                {type: 'boolean', dataIndex: 'activo', yesText: 'Activo', noText: 'Desactivado'}
+//            ]});
 
         var grid = new Ext.grid.GridPanel({
             title: 'Usuarios',
             border: false,
             store: store,
+            //plugins: [searchListFilters],
+            plugins: [new Ext.ux.grid.Search({
+                            iconCls: 'icon-zoom'
+                            , readonlyIndexes: ['id']
+                            , disableIndexes: ['uid','clave']
+                            , minChars: 3
+                            , autoFocus: true,
+                            width: 100
+//				,menuStyle:'radio'
+                }), new Ext.ux.grid.RowActions({
+                    actions: [{
+                            iconCls: 'icon-minus'
+                                    , qtip: 'Delete Record'
+                                    , style: 'margin:0 0 0 3px'
+                        }]
+                })],
             loadMask: true,
             columns: [new Ext.grid.RowNumberer({
                     width: 27
                 }), {
                     header: "UID",
                     sortable: true,
-                    dataIndex: 'id'
+                    dataIndex: 'usuario'
                 }, {
                     header: "Nombre",
                     sortable: true,
                     dataIndex: 'nombres'
                 }, {
-                    header: "Apellidos",
+                    header: "Paterno",
                     sortable: true,
-                    dataIndex: 'apellidos'
+                    dataIndex: 'paterno'
+                }, {
+                    header: "Materno",
+                    sortable: true,
+                    dataIndex: 'materno'
+                }, {
+                    header: "Correo",
+                    sortable: true,
+                    dataIndex: 'email'
                 }, {
                     header: "Cargo",
                     sortable: true,
@@ -139,9 +244,29 @@ domain.UserManager = {
                     sortable: true,
                     dataIndex: 'descripcion'
                 }, {
+                    header: "Rol",
+                    sortable: true,
+                    dataIndex: 'rol',
+                    filterable: true
+                }, {
                     header: "Activo",
                     sortable: true,
-                    dataIndex: 'activo'
+                    dataIndex: 'activo',
+                    renderer: function(val) {
+                        if (val) {
+                            return '<img src="' + Ext.IMAGES_SILK + 'accept.png">';
+                        } else {
+                            return '<img src="' + Ext.IMAGES_SILK + 'cancel.png">';
+                        }
+                    }
+                }, {
+                    header: "Caduca en",
+                    sortable: true,
+                    dataIndex: 'caducaEn',
+                    renderer: function(val) {
+                        var date = new Date(val);
+                        return date.format('d/m/Y');
+                    }
                 }],
             tbar: [{
                     iconCls: 'refresh',
@@ -149,27 +274,33 @@ domain.UserManager = {
                         grid.store.reload();
                     }
                 }, '-', {
-                    text: 'Nuevo',
+                    text: 'Nuevo usuario',
                     iconCls: 'create',
                     tooltip: 'Nuevo',
                     handler: function() {
                         domain.UserManager.newUser(options);
                     }
-                }, {
-                    text: 'Modificar',
-                    iconCls: 'update',
-                    tooltip: 'Modificar',
-                    handler: function() {
-
-                    }
-                }, {
-                    text: 'Eliminar',
-                    iconCls: 'delete',
-                    tooltip: 'Eliminar',
-                    handler: function() {
-
-                    }
                 }, '-', {
+                    //text: 'Modificar',
+                    iconCls: 'update',
+                    tooltip: 'Modificar datos personales',
+                    handler: function() {
+                        var record = grid.getSelectionModel().getSelected();
+                        if (record) {
+                            options.record = record;
+                            domain.UserManager.updateUser(options);
+                        } else {
+                            com.icg.errors.mustSelect();
+                        }
+                    }
+                }, {
+                    //text: 'Eliminar',
+                    iconCls: 'delete',
+                    tooltip: 'Desactivar cuenta',
+                    handler: function() {
+
+                    }
+                }, {
                     iconCls: 'key',
                     tooltip: 'Asignar o cambiar la clave',
                     handler: function() {
@@ -181,7 +312,18 @@ domain.UserManager = {
                             domain.errors.mustSelect();
                         }
                     }
-                }]
+                }, '-',                        
+            ],
+            bbar: new Ext.PagingToolbar({
+			 store:this.store
+			,displayInfo:true
+			,pageSize:3
+		})   
+//            bbar: new Ext.PagingToolbar({
+//                store: store,
+//                pageSize: 50,
+//                plugins: [searchListFilters]
+//            })
         });
         options.grid = grid;
         return grid;
@@ -255,53 +397,56 @@ domain.UserManager = {
         }
         return form;
     },
+    datosPersonales: function() {
+        return {
+            xtype: 'fieldset',
+            title: 'Datos personales',
+            defaults: {
+                msgTarget: 'side',
+                width: 200
+            },
+            items: [{
+                    xtype: 'textfield',
+                    fieldLabel: 'Nombres',
+                    allowBlank: false,
+                    name: 'nombres'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: 'Apellido paterno',
+                    allowBlank: false,
+                    name: 'paterno'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: 'Apellido materno',
+                    allowBlank: false,
+                    name: 'materno'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: 'Cargo',
+                    allowBlank: false,
+                    name: 'cargo'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: 'Correo electr&oacute;nico',
+                    allowBlank: false,
+                    vtype: 'email',
+                    name: 'email'
+                }, {
+                    xtype: 'textarea',
+                    fieldLabel: 'Descripcion',
+                    allowBlank: true,
+                    name: 'descripcion'
+                }]
+        };
+    },
     newUser: function(options) {
         var form = new Ext.FormPanel({
-            url: Ext.SROOT + 'guardarpersona',
+            url: Ext.SROOT + 'crearusuario',
             border: false,
             autoHeight: true,
             bodyStyle: 'padding:10px',
             labelWidth: 130,
-            items: [{
-                    xtype: 'fieldset',
-                    title: 'Datos personales',
-                    defaults: {
-                        msgTarget: 'side',
-                        width: 200
-                    },
-                    items: [{
-                            xtype: 'textfield',
-                            fieldLabel: 'Nombres',
-                            allowBlank: false,
-                            name: 'nombres'
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Apellido paterno',
-                            allowBlank: false,
-                            name: 'paterno'
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Apellido materno',
-                            allowBlank: false,
-                            name: 'materno'
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Cargo',
-                            allowBlank: false,
-                            name: 'cargo'
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Correo electr&oacute;nico',
-                            allowBlank: false,
-                            vtype: 'email',
-                            name: 'email'
-                        }, {
-                            xtype: 'textarea',
-                            fieldLabel: 'Descripcion',
-                            allowBlank: true,
-                            name: 'descripcion'
-                        }]
-                }, {
+            items: [this.datosPersonales(), {
                     xtype: 'fieldset',
                     title: 'Datos de acceso',
                     defaults: {
@@ -309,6 +454,22 @@ domain.UserManager = {
                         width: 200
                     },
                     items: [{
+                            xtype: 'combo',
+                            fieldLabel: 'Rol',
+                            hiddenName: 'rol',
+                            forceSelection: true,
+                            store: new Ext.data.ArrayStore({
+                                fields: ['type', 'objeto'],
+                                data: [['usuario_uif', 'Usuario'], ['admin_uif', 'Administrador']]
+                            }),
+                            valueField: 'type',
+                            displayField: 'objeto',
+                            typeAhead: true,
+                            mode: 'local',
+                            triggerAction: 'all',
+                            emptyText: 'Selecione el Rol...',
+                            selectOnFocus: true
+                        }, {
                             xtype: 'textfield',
                             fieldLabel: 'Usuario',
                             allowBlank: false,
@@ -334,9 +495,9 @@ domain.UserManager = {
                             name: 'activo',
                             checked: true
                         }, {
-                            xtype:'datefield',
-                            fieldLabel:'Caducar en',
-                            name:'caduca'
+                            xtype: 'datefield',
+                            fieldLabel: 'Caducar en',
+                            name: 'caducaEn'
                         }]
                 }]
         });
@@ -345,10 +506,13 @@ domain.UserManager = {
             title: 'Registrar Usuario',
             autoScroll: true,
             width: 600,
-            activeItem: 0,
-            layout: 'card',
+            height: 300,
+            minHeight: 250,
+            minWidth: 550,
             items: form,
+            maximizable: true,
             modal: true,
+            buttonAlign:'center',
             buttons: [{
                     text: 'Guardar',
                     handler: function() {
@@ -365,6 +529,52 @@ domain.UserManager = {
                 }]
         });
         win.show();
+    },
+    updateUser: function(options) {
+        var form = new Ext.FormPanel({
+            url: Ext.SROOT + 'guardarusuario',
+            border: false,
+            autoHeight: true,
+            bodyStyle: 'padding:10px',
+            labelWidth: 130,
+            items: [this.datosPersonales(),
+                {
+                    xtype: 'hidden',
+                    name: 'id'
+                }
+            ]
+        });
+
+        var win = new Ext.Window({
+            title: 'Modificar datos de Usuario',
+            autoScroll: true,
+            width: 600,
+            height: 300,
+            minHeight: 250,
+            minWidth: 550,
+            items: form,
+            maximizable: true,
+            modal: true,
+            buttonAlign:'center',
+            buttons: [{
+                    text: 'Guardar',
+                    handler: function() {
+                        form.getForm().submit({
+                            success: function(form, action) {
+                                options.grid.store.reload();
+                                win.close();
+                            },
+                            failure: function(form, action) {
+
+                            }
+                        });
+                    }
+                }]
+        });
+        win.show();
+        if (options.record) {
+            form.getForm().loadRecord(options.record);
+        }
     }
 };
 
