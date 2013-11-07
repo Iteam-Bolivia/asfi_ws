@@ -14,6 +14,8 @@ import java.util.List;
 public interface Dao {
 
     public void persist(Object entity);
+    
+    public void update(Object entity);
 
     public void persist(Object[] entities);
 

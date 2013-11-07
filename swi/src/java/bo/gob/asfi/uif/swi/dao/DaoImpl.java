@@ -28,6 +28,12 @@ public class DaoImpl implements Dao {
         System.out.println(sessionFactory);
         this.sessionFactory.getCurrentSession().save(entity);
     }
+    
+    @Transactional
+    public void update(Object entity) {   
+        System.out.println(sessionFactory);
+        this.sessionFactory.getCurrentSession().merge(entity);
+    }
 
     @Override
     public void persist(Object[] entities) {
@@ -44,14 +50,14 @@ public class DaoImpl implements Dao {
         return this.sessionFactory.getCurrentSession().createCriteria(entityClass).list();
     }
 
-    @Override
+    @Transactional
     public <T> T load(Class<T> entityClass, Serializable id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (T) this.sessionFactory.getCurrentSession().load(entityClass, id);
     }
 
-    @Override
+    @Transactional
     public <T> T get(Class<T> entityClass, Serializable id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (T) this.sessionFactory.getCurrentSession().get(entityClass, id);
     }
 
     @Override

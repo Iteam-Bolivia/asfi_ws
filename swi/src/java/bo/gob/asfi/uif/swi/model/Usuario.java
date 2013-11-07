@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.hibernate.sql.ordering.antlr.Factory;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -35,8 +35,9 @@ public class Usuario {
     private String email;
     private String rol;
     private String clave;
-    private Boolean activo;
+    private Boolean activo = false;
     @Temporal(javax.persistence.TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Calendar caducaEn;
 
     public Integer getId() {
