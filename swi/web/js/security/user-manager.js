@@ -73,73 +73,73 @@ domain.UserManager = {
 
     },
     changePassword: function(options) {
-        var form = new Ext.FormPanel({                      
-            url: Ext.SROOT + 'changepassword',                                          
-            border:false,
-            autoHeight:true,
-            bodyStyle:'padding:10px',
-            labelWidth:130,           
-            items:[{
-                xtype:'fieldset',                    
-                defaults:{
-                    msgTarget:'side'
-                },
-                items:[{
-                    xtype:'displayfield',
-                    fieldLabel:'<b>ID Usuario</b>',                    
-                    name:'usuario'
-                },{
-                    xtype:'textfield',
-                    password:true,
-                    fieldLabel:'Clave',
-                    width: 200,
-                    allowBlank:false,
-                    name: 'password',
-                    inputType:'password',
-                    id:'_um_passfield'
-                },{
-                    xtype:'textfield',
-                    password:true,
-                    fieldLabel:'Confirmar Clave',
-                    width: 200,
-                    allowBlank:false,
-                    inputType:'password',
-                    vtype:'password',
-                    initialPassField:'_um_passfield'
-                },{
-                    "xtype":"hidden",
-                    "name":"id"
+        var form = new Ext.FormPanel({
+            url: Ext.SROOT + 'changepassword',
+            border: false,
+            autoHeight: true,
+            bodyStyle: 'padding:10px',
+            labelWidth: 130,
+            items: [{
+                    xtype: 'fieldset',
+                    defaults: {
+                        msgTarget: 'side'
+                    },
+                    items: [{
+                            xtype: 'displayfield',
+                            fieldLabel: '<b>ID Usuario</b>',
+                            name: 'usuario'
+                        }, {
+                            xtype: 'textfield',
+                            password: true,
+                            fieldLabel: 'Clave',
+                            width: 200,
+                            allowBlank: false,
+                            name: 'clave',
+                            inputType: 'password',
+                            id: '_um_passfield'
+                        }, {
+                            xtype: 'textfield',
+                            password: true,
+                            fieldLabel: 'Confirmar Clave',
+                            width: 200,
+                            allowBlank: false,
+                            inputType: 'password',
+                            vtype: 'password',
+                            initialPassField: '_um_passfield'
+                        }, {
+                            "xtype": "hidden",
+                            "name": "id"
+                        }]
                 }]
-            }]            
-        });                
+        });
 
         var win = new Ext.Window({
-            title:'Asignar o cambiar clave',
-            autoScroll:true,
-            autoHeight:true,
-            width:600,
+            title: 'Asignar o cambiar clave',
+            autoScroll: true,
+            autoHeight: true,
+            width: 600,
             activeItem: 0,
-            layout:'card',
-            items:form,
-            modal:true,
-            buttonAlign:'center',
-            buttons:[{
-                text:'Guardar',
-                handler: function() {                                           
-                    form.getForm().submit({                        
-                        success: function(form, action) {                                                                                      
-                            win.close();                            
-                        },
-                        failure: function(form, action) {
-                            if(action.failureType === 'server') {
-                                var r = Ext.util.JSON.decode(action.response.responseText);                                
-                                com.icg.errors.submitFailure('Error', r.errorMessage);
-                            } 
-                        }     
-                    });                
-                }
-            }]
-        });        
+            layout: 'card',
+            items: form,
+            modal: true,
+            buttonAlign: 'center',
+            buttons: [{
+                    text: 'Guardar',
+                    handler: function() {
+                        form.getForm().submit({
+                            success: function(form, action) {
+                                win.close();
+                            },
+                            failure: function(form, action) {
+                                if (action.failureType === 'server') {
+                                    var r = Ext.util.JSON.decode(action.response.responseText);
+                                    com.icg.errors.submitFailure('Error', r.errorMessage);
+                                }
+                            }
+                        });
+                    }
+                }]
+        });
         win.show();
         form.getForm().loadRecord(options.record);
     },
@@ -198,12 +198,12 @@ domain.UserManager = {
             store: store,
             //plugins: [searchListFilters],
             plugins: [new Ext.ux.grid.Search({
-                            iconCls: 'icon-zoom'
+                    iconCls: 'icon-zoom'
                             , readonlyIndexes: ['id']
-                            , disableIndexes: ['uid','clave']
+                            , disableIndexes: ['uid', 'clave']
                             , minChars: 3
                             , autoFocus: true,
-                            width: 100
+                    width: 100
 //				,menuStyle:'radio'
                 }), new Ext.ux.grid.RowActions({
                     actions: [{
@@ -296,9 +296,29 @@ domain.UserManager = {
                 }, {
                     //text: 'Eliminar',
                     iconCls: 'delete',
-                    tooltip: 'Desactivar cuenta',
+                    tooltip: 'Activar/Desactivar cuenta',
                     handler: function() {
-
+                        var record = grid.getSelectionModel().getSelected();
+                        if (record) {
+                            var box = Ext.MessageBox.wait('Por favor espere...');
+                            Ext.Ajax.request({
+                                url: Ext.SROOT + 'disableaccount',
+                                method: 'POST',
+                                params: {
+                                    id: record.data.id
+                                },
+                                success: function(result, request) {
+                                    grid.getStore().reload();                                    
+                                    box.hide();
+                                },
+                                failure: function(result, request) {
+                                    Ext.Msg.alert('Error', 'Fallo.');
+                                    box.hide();
+                                }
+                            });
+                        } else {
+                            domain.errors.mustSelect();
+                        }
                     }
                 }, {
                     iconCls: 'key',
@@ -312,13 +332,13 @@ domain.UserManager = {
                             domain.errors.mustSelect();
                         }
                     }
-                }, '-',                        
+                }, '-',
             ],
             bbar: new Ext.PagingToolbar({
-			 store:this.store
-			,displayInfo:true
-			,pageSize:3
-		})   
+                store: this.store
+                        , displayInfo: true
+                        , pageSize: 3
+            })
 //            bbar: new Ext.PagingToolbar({
 //                store: store,
 //                pageSize: 50,
@@ -512,7 +532,7 @@ domain.UserManager = {
             items: form,
             maximizable: true,
             modal: true,
-            buttonAlign:'center',
+            buttonAlign: 'center',
             buttons: [{
                     text: 'Guardar',
                     handler: function() {
@@ -555,7 +575,7 @@ domain.UserManager = {
             items: form,
             maximizable: true,
             modal: true,
-            buttonAlign:'center',
+            buttonAlign: 'center',
             buttons: [{
                     text: 'Guardar',
                     handler: function() {
