@@ -23,7 +23,8 @@
                      	
         <form-login
             login-page="/loginform" 
-            authentication-failure-url="/loginform?error=true"                                 
+            authentication-failure-url="/login?error=true"    
+            authentication-success-handler-ref="authSuccessHandler"                          
             default-target-url="/" 
         />			
         <logout 
@@ -31,7 +32,9 @@
             logout-success-url="/" 
             logout-url="/logout"/>
     </http>
-	
+    
+<!--    <bean id="authSuccessHandler" class="bo.gob.asfi.uif.swi.security.AuthenticationSuccessHandlerImpl"/>-->
+                	
     <authentication-manager>
         <authentication-provider user-service-ref="customUserDetailsService">
             <!--<password-encoder hash="md5"/>-->
