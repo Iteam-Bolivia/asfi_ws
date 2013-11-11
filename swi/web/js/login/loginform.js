@@ -61,7 +61,7 @@ domain.security.Login = function() {
         login.getForm().submit({
             method:'POST', 
             success:function(form, action){
-                window.location = '../main';                   
+                window.location = 'main';                   
             },                    
             failure:function(form, action){
                 domain.security.msg.login();
