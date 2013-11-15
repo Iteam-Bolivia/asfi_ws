@@ -1,19 +1,17 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- Author: Johns Castillo Valencia, john.gnu@gmail.com -->
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>SWI - Iniciar sesiÃ³n</title>
-        
+<html lang="es">
+    <head>        
+        <title>SWI - Iniciar sesión</title>
+
         <%@include file="../ExtJSScripts-ES.jsp"%>  
-                
+
         <script type="text/javascript" src="js/login/loginform.js"></script>
         <style type="text/css">
             body {
-                background: url(images/w1.jpg);
+                background: url(images/w3.jpg);
                 padding: 10px;
                 font-family: tahoma;
                 font-size:11px;
@@ -27,7 +25,7 @@
             }
         </style>
         <script type="text/javascript">
-            
+
             Ext.ns('domain');
 
             domain.Manager = {
@@ -36,7 +34,7 @@
                     ln.show();
                 }
             }
-            
+
             Ext.onReady(domain.Manager.init, domain.Manager);
         </script>
     <body>

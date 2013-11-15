@@ -11,16 +11,7 @@
 .create_entity {background-image: url(/ext-3.3.1/resources/images/silk/icons/table_add.png)!important;}
 .eliminar {background-image: url(/ext-3.3.1/resources/images/silk/icons/delete.png)!important;}
 .history {background-image: url(/ext-3.3.1/resources/images/silk/icons/book_previous.png)!important;}
-.guardar {background-image: url(../images/iconos_visor/map_save.png)!important;}
-.editar {background-image: url(../images/iconos_visor/shape_square_edit.png)!important;}
 .update {background-image: url(/ext-3.3.1/resources/images/silk/icons/pencil.png)!important;}
-.ruler {background-image: url(../images/iconos_visor/ruler.png)!important;}
-.ruler_square {background-image: url(../images/iconos_visor/ruler_square.png)!important;}
-.navigate {background-image: url(../images/iconos_visor/mano.png)!important;}
-.magnifier {background-image: url(../images/iconos_visor/magnifier.png)!important;}
-.printer {background-image: url(../images/iconos_visor/printer.png)!important;}
-.attribute {background-image: url(../images/iconos_visor/star.png)!important;}
-.ojo {background-image: url(../images/iconos_visor/eye.png) !important;}
 .user {background-image: url(/ext-3.3.1/resources/images/silk/icons/user.png) !important;}
 .lock {background-image: url(/ext-3.3.1/resources/images/silk/icons/lock.png) !important;}
 .lock_edit {background-image: url(/ext-3.3.1/resources/images/silk/icons/lock_edit.png) !important;}
@@ -43,4 +34,3 @@
 .refresh {background-image: url(/ext-3.3.1/resources/images/silk/icons/arrow_refresh.png) !important;}
 .delete {background-image: url(/ext-3.3.1/resources/images/silk/icons/delete.png) !important;}
 .upload-icon {background: url('/ext-3.3.1/examples/shared/icons/fam/image_add.png') !important;}
-.magnifier_zoom_in{background:transparent url(../images/iconos_visor/magnifier_zoom_in.png) 0px 0px no-repeat !important;}

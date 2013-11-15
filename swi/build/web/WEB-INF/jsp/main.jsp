@@ -12,8 +12,7 @@
         <title>SWI</title>
 
         <%@include file="ExtJSScripts-ES.jsp"%>     
-        <!-- Main Application MENU  -->        
-        <script type="text/javascript" src="js/ui/ThemeCombo.js"></script>
+        
         <script type="text/javascript" src="menu"></script>
         <!-- TabsClose Menu  -->   
         <script type="text/javascript" src="js/ui/TabCloseMenu-ES.js"></script>

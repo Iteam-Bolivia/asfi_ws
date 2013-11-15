@@ -61,7 +61,7 @@ domain.security.Login = function() {
         login.getForm().submit({
             method:'POST', 
             success:function(form, action){
-                window.location = '../main';                   
+                window.location = 'main';                   
             },                    
             failure:function(form, action){
                 domain.security.msg.login();
@@ -72,12 +72,13 @@ domain.security.Login = function() {
     
     var login = new Ext.FormPanel({
         labelWidth:130,
-        url:'../j_spring_security_check',
+        url:'j_spring_security_check',
         frame:true,
         defaultType:'textfield',
         monitorValid:true,
         bodyStyle:'padding:10px',
         defaults: {
+            msgTarget: 'side',
             width:200
         },
         items:[{
@@ -113,7 +114,7 @@ domain.security.Login = function() {
         closable:false,
         items:[{
             xtype:'panel',    
-            bodyStyle:'padding:10px;background-color:orange;color:#FFFFFF',
+            bodyStyle:'padding:10px;background-color:#FFFFFF;color:#CCCCCC',
             html:'<b>Identifíquese para continuar...</b>',
             height:50
         },login]

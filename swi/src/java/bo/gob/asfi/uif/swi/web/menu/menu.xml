@@ -139,12 +139,12 @@
                             <items>                    
                                 <menu>                    
                                     <text>Registrar conexiones</text> 
-                                    <iconCls>user</iconCls> 
+                                    <iconCls>module-app</iconCls> 
                                     <module>
                                         <id>gs-001</id> 
                                         <title>Registrar conexiones</title>
                                         <iconCls>module-app</iconCls> 
-                                        <url>servicios.jsp</url> 
+                                        <url>administrarservicios</url> 
                                     </module>
                                 </menu>                     
                                 <menu>                    
