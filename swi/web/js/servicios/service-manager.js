@@ -65,7 +65,7 @@ domain.formButtons = function(options) {
         }];
 };
 
-domain.UserManager = {
+domain.ServiceManager = {
     wizard: function(options) {
 
     },
@@ -170,33 +170,32 @@ domain.UserManager = {
 
 
     },
-    usersGrid: function(options) {
+    serviceGrid: function(options) {
         var store = new Ext.data.JsonStore({
-            url: Ext.SROOT + 'listarusuarios',
-            root: 'data',
-            fields: ['id', 'cargo', 'nombres', 'paterno', 'materno',
-                'activo', 'descripcion', 'usuario', 'email',
-                {name: 'caducaEn', type: 'long'}, 'rol'],
+            url: Ext.SROOT + 'servicios',
+            //root: 'data',
+            fields: ['id', 'nombre', 'servidor', 'puerto', 'protocolo',
+                'activo', 'descripcion', 'username'],
             autoLoad: true
         });
 
-        var searchListFilters = new Ext.ux.grid.GridFilters({
-            encode: false,
-            local: true,
-            menuFilterText: 'Filtrar',
-            filters: [
-                {type: 'string', dataIndex: 'nombres'},
-                {type: 'string', dataIndex: 'paterno'},
-                {type: 'string', dataIndex: 'materno'},
-                {type: 'list', dataIndex: 'rol', options: ['Usuario', 'Administrador']},
-                {type: 'boolean', dataIndex: 'activo', yesText: 'Activo', noText: 'Desactivado'}
-            ]});
+//        var searchListFilters = new Ext.ux.grid.GridFilters({
+//            encode: false,
+//            local: true,
+//            menuFilterText: 'Filtrar',
+//            filters: [
+//                {type: 'string', dataIndex: 'nombres'},
+//                {type: 'string', dataIndex: 'paterno'},
+//                {type: 'string', dataIndex: 'materno'},
+//                {type: 'list', dataIndex: 'rol', options: ['Usuario', 'Administrador']},
+//                {type: 'boolean', dataIndex: 'activo', yesText: 'Activo', noText: 'Desactivado'}
+//            ]});
 
         var grid = new Ext.grid.GridPanel({
-            title: 'Usuarios',
+            title: 'Servicios',
             border: false,
             store: store,
-            plugins: [searchListFilters],
+//            plugins: [searchListFilters],
 //            plugins: [new Ext.ux.grid.Search({
 //                    iconCls: 'icon-zoom'
 //                            , readonlyIndexes: ['id']
@@ -216,38 +215,21 @@ domain.UserManager = {
             columns: [new Ext.grid.RowNumberer({
                     width: 27
                 }), {
-                    header: "UID",
-                    sortable: true,
-                    dataIndex: 'usuario'
-                }, {
                     header: "Nombre",
                     sortable: true,
-                    dataIndex: 'nombres'
+                    dataIndex: 'nombre'
                 }, {
-                    header: "Paterno",
+                    header: "Servidor",
                     sortable: true,
-                    dataIndex: 'paterno'
+                    dataIndex: 'servidor'
                 }, {
-                    header: "Materno",
+                    header: "Puerto",
                     sortable: true,
-                    dataIndex: 'materno'
+                    dataIndex: 'puerto'
                 }, {
-                    header: "Correo",
+                    header: "Usuario",
                     sortable: true,
-                    dataIndex: 'email'
-                }, {
-                    header: "Cargo",
-                    sortable: true,
-                    dataIndex: 'cargo'
-                }, {
-                    header: "Descripcion",
-                    sortable: true,
-                    dataIndex: 'descripcion'
-                }, {
-                    header: "Rol",
-                    sortable: true,
-                    dataIndex: 'rol',
-                    filterable: true
+                    dataIndex: 'username'
                 }, {
                     header: "Activo",
                     sortable: true,
@@ -258,14 +240,6 @@ domain.UserManager = {
                         } else {
                             return '<img src="' + Ext.IMAGES_SILK + 'cancel.png">';
                         }
-                    }
-                }, {
-                    header: "Caduca en",
-                    sortable: true,
-                    dataIndex: 'caducaEn',
-                    renderer: function(val) {
-                        var date = new Date(val);
-                        return date.format('d/m/Y');
                     }
                 }],
             tbar: [{
@@ -278,9 +252,9 @@ domain.UserManager = {
                     iconCls: 'create',
                     tooltip: 'Nuevo',
                     handler: function() {
-                        domain.UserManager.newUser(options);
+                        domain.ServiceManager.newService(options);
                     }
-                }, '-', {
+                }/*, '-', {
                     //text: 'Modificar',
                     iconCls: 'update',
                     tooltip: 'Modificar datos personales',
@@ -293,16 +267,16 @@ domain.UserManager = {
                             com.icg.errors.mustSelect();
                         }
                     }
-                }, {
-                    //text: 'Eliminar',
+                }*/, {
+                    text: 'Activar/Desactivar',
                     iconCls: 'delete',
-                    tooltip: 'Activar/Desactivar cuenta',
+                    tooltip: 'Activar/Desactivar',
                     handler: function() {
                         var record = grid.getSelectionModel().getSelected();
                         if (record) {
                             var box = Ext.MessageBox.wait('Por favor espere...');
                             Ext.Ajax.request({
-                                url: Ext.SROOT + 'disableaccount',
+                                url: Ext.SROOT + 'disableservice',
                                 method: 'POST',
                                 params: {
                                     id: record.data.id
@@ -320,7 +294,7 @@ domain.UserManager = {
                             domain.errors.mustSelect();
                         }
                     }
-                }, {
+                }/*, {
                     iconCls: 'key',
                     tooltip: 'Asignar o cambiar la clave',
                     handler: function() {
@@ -332,7 +306,7 @@ domain.UserManager = {
                             domain.errors.mustSelect();
                         }
                     }
-                }, '-',
+                }, '-',*/
             ]//,
 //            bbar: new Ext.PagingToolbar({
 //                store: this.store
@@ -417,40 +391,39 @@ domain.UserManager = {
         }
         return form;
     },
-    datosPersonales: function() {
+    datosServicio: function() {
         return {
             xtype: 'fieldset',
-            title: 'Datos personales',
+            title: 'Datos de conexion',
             defaults: {
                 msgTarget: 'side',
                 width: 200
             },
             items: [{
                     xtype: 'textfield',
-                    fieldLabel: 'Nombres',
+                    fieldLabel: 'Nombre',
                     allowBlank: false,
-                    name: 'nombres'
+                    name: 'nombre'
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Apellido paterno',
+                    fieldLabel: 'Servidor',
                     allowBlank: false,
-                    name: 'paterno'
+                    name: 'servidor'
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Apellido materno',
+                    fieldLabel: 'Puerto',
                     allowBlank: false,
-                    name: 'materno'
+                    name: 'puerto'
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Cargo',
+                    fieldLabel: 'Usuario',
                     allowBlank: false,
-                    name: 'cargo'
+                    name: 'username'
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Correo electr&oacute;nico',
-                    allowBlank: false,
-                    vtype: 'email',
-                    name: 'email'
+                    fieldLabel: 'Password',
+                    allowBlank: false,                    
+                    name: 'password'
                 }, {
                     xtype: 'textarea',
                     fieldLabel: 'Descripcion',
@@ -459,71 +432,18 @@ domain.UserManager = {
                 }]
         };
     },
-    newUser: function(options) {
+    newService: function(options) {
         var form = new Ext.FormPanel({
-            url: Ext.SROOT + 'crearusuario',
+            url: Ext.SROOT + 'crearservicio',
             border: false,
             autoHeight: true,
             bodyStyle: 'padding:10px',
             labelWidth: 130,
-            items: [this.datosPersonales(), {
-                    xtype: 'fieldset',
-                    title: 'Datos de acceso',
-                    defaults: {
-                        msgTarget: 'side',
-                        width: 200
-                    },
-                    items: [{
-                            xtype: 'combo',
-                            fieldLabel: 'Rol',
-                            hiddenName: 'rol',
-                            forceSelection: true,
-                            store: new Ext.data.ArrayStore({
-                                fields: ['type', 'objeto'],
-                                data: [['usuario_uif', 'Usuario'], ['admin_uif', 'Administrador']]
-                            }),
-                            valueField: 'type',
-                            displayField: 'objeto',
-                            typeAhead: true,
-                            mode: 'local',
-                            triggerAction: 'all',
-                            emptyText: 'Selecione el Rol...',
-                            selectOnFocus: true
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Usuario',
-                            allowBlank: false,
-                            name: 'usuario',
-                            regex: /^[a-z,_,0-9]{0,}$/
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Clave (Password)',
-                            allowBlank: false,
-                            name: 'clave',
-                            inputType: 'password',
-                            id: '_um_passfield'
-                        }, {
-                            xtype: 'textfield',
-                            fieldLabel: 'Confirmar Clave',
-                            allowBlank: false,
-                            inputType: 'password',
-                            vtype: 'password',
-                            initialPassField: '_um_passfield'
-                        }, {
-                            xtype: 'checkbox',
-                            fieldLabel: 'Activo',
-                            name: 'activo',
-                            checked: true
-                        }, {
-                            xtype: 'datefield',
-                            fieldLabel: 'Caducar en',
-                            name: 'caducaEn'
-                        }]
-                }]
+            items: [this.datosServicio()]
         });
 
         var win = new Ext.Window({
-            title: 'Registrar Usuario',
+            title: 'Registrar Servicio',
             autoScroll: true,
             width: 600,
             height: 300,
@@ -672,6 +592,16 @@ domain.UserManager.View = {
                         url: 'http://extjs.com/blog/2008/02/24/tasks2/',
                         icon: 'air.gif',
                         desc: 'Complete personal task management application example that runs on <a href="http://labs.adobe.com/technologies/air/" target="_blank">Adobe AIR</a>.'
+                    }, {
+                        text: 'Simple Tasks',
+                        url: 'http://extjs.com/blog/2008/02/24/tasks2/',
+                        icon: 'air.gif',
+                        desc: 'Complete personal task management application example that runs on <a href="http://labs.adobe.com/technologies/air/" target="_blank">Adobe AIR</a>.'
+                    }, {
+                        text: 'Simple Tasks',
+                        url: 'http://extjs.com/blog/2008/02/24/tasks2/',
+                        icon: 'air.gif',
+                        desc: 'Complete personal task management application example that runs on <a href="http://labs.adobe.com/technologies/air/" target="_blank">Adobe AIR</a>.'
                     }]
             }];
         var store = new Ext.data.JsonStore({
@@ -680,10 +610,11 @@ domain.UserManager.View = {
             data: catalog
         });
 
-        var servicios = new domain.SamplePanel({
-            store: store
-        });
-
+        //var servicios = new domain.SamplePanel({
+        //    store: store
+        //});
+        
+        var servicios = domain.ServiceManager.serviceGrid({});
         new Ext.Viewport({
             layout: 'fit',
             frame: true,
