@@ -41,6 +41,8 @@ public class ClientAuthentication {
             //System.out.println(entity.getContentType());
             //Gson g = new Gson();
             RestClient.read(entity.getContent());
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             // When HttpClient instance is no longer needed,
             // shut down the connection manager to ensure
