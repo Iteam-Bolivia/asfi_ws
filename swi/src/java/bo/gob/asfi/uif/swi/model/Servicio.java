@@ -28,6 +28,9 @@ public class Servicio {
     private Long id;
     private String nombre;
     private String servidor;
+    @Column(columnDefinition = "TEXT")
+    private String wsdl;
+    private String wsdlurl;
     private String puerto;
     private String protocolo;
     private String username;
@@ -52,7 +55,6 @@ public class Servicio {
 //    public void setRecursos(List<Recurso> recursos) {
 //        this.recursos = recursos;
 //    }
-
     public Long getId() {
         return id;
     }
@@ -107,5 +109,21 @@ public class Servicio {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getWsdl() {
+        return wsdl;
+    }
+
+    public void setWsdl(String wsdl) {
+        this.wsdl = wsdl;
+    }
+
+    public String getWsdlurl() {
+        return wsdlurl;
+    }
+
+    public void setWsdlurl(String wsdlurl) {
+        this.wsdlurl = wsdlurl;
     }
 }
