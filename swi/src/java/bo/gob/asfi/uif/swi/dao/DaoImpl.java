@@ -24,25 +24,25 @@ public class DaoImpl implements Dao {
     SessionFactory sessionFactory;
 
     @Transactional
-    public void persist(Object entity) {   
-        System.out.println(sessionFactory);
+    public void persist(Object entity) {
         this.sessionFactory.getCurrentSession().save(entity);
     }
-    
+
     @Transactional
-    public void update(Object entity) {   
-        System.out.println(sessionFactory);
+    public void update(Object entity) {
         this.sessionFactory.getCurrentSession().merge(entity);
     }
 
-    @Override
+    @Transactional
     public void persist(Object[] entities) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Object entity : entities) {
+            this.sessionFactory.getCurrentSession().save(entity);
+        }
     }
 
-    @Override
+    @Transactional
     public void remove(Object entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.sessionFactory.getCurrentSession().delete(entity);
     }
 
     @Transactional(readOnly = true)
@@ -64,11 +64,10 @@ public class DaoImpl implements Dao {
     public <T> List<T> find(String sql) {
         return this.sessionFactory.getCurrentSession().createSQLQuery(sql).list();
     }
-    
+
     @Transactional(readOnly = true)
     public <T> T getUsuarioByUsername(String username) {
-        return (T) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)                
+        return (T) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)
                 .add(Restrictions.eq("usuario", username)).uniqueResult();
     }
-
 }
