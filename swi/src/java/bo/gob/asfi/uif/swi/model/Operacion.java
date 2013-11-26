@@ -4,16 +4,13 @@
  */
 package bo.gob.asfi.uif.swi.model;
 
-import java.util.List;
-
 /**
  *
  * @author John
  */
-public class Servicio {
+public class Operacion {
 
     private String nombre;
-    private List<Puerto> puertos;
 
     public String getNombre() {
         return nombre;
@@ -21,13 +18,5 @@ public class Servicio {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public List<Puerto> getPuertos() {
-        return puertos;
-    }
-
-    public void setPuertos(List<Puerto> puertos) {
-        this.puertos = puertos;
     }
 }

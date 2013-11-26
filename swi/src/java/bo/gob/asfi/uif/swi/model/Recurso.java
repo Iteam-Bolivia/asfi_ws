@@ -24,8 +24,8 @@ public class Recurso {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "recurso_id")
     private Long id;
-    @ManyToOne
-    Servicio servicio;
+//    @ManyToOne
+//    Servicio servicio;
     String nombre;
     String uri;
     String metodo;
@@ -38,13 +38,13 @@ public class Recurso {
         this.id = id;
     }
 
-    public Servicio getServicio() {
-        return servicio;
-    }
-
-    public void setServicio(Servicio servicio) {
-        this.servicio = servicio;
-    }
+//    public Servicio getServicio() {
+//        return servicio;
+//    }
+//
+//    public void setServicio(Servicio servicio) {
+//        this.servicio = servicio;
+//    }
 
     public String getNombre() {
         return nombre;

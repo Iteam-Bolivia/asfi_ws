@@ -10,10 +10,10 @@ import java.util.List;
  *
  * @author John
  */
-public class Servicio {
+public class Puerto {
 
     private String nombre;
-    private List<Puerto> puertos;
+    private List<Operacion> operaciones;
 
     public String getNombre() {
         return nombre;
@@ -23,11 +23,11 @@ public class Servicio {
         this.nombre = nombre;
     }
 
-    public List<Puerto> getPuertos() {
-        return puertos;
+    public List<Operacion> getOperaciones() {
+        return operaciones;
     }
 
-    public void setPuertos(List<Puerto> puertos) {
-        this.puertos = puertos;
+    public void setOperaciones(List<Operacion> operaciones) {
+        this.operaciones = operaciones;
     }
 }
