@@ -6,34 +6,33 @@
         <title>Page 1</title>    
         <!-- ALL ExtJS Framework resources -->
         <%@include file="../ExtJSScripts-ES.jsp"%>                       
-    </head>
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-        Ext.ns('domain');
+            Ext.ns('domain');
 
-        domain.View = {
-            init: function() {
-                
-                new Ext.Viewport({
-                    layout: 'fit',                    
-                    frame: true,
-                    border: false,
-                    items: new Ext.Panel({
-                        title:'Busqueda por usuario',
+            domain.View = {
+                init: function() {
+
+                    new Ext.Viewport({
+                        layout: 'fit',
                         frame: true,
                         border: false,
-                        layout: 'fit'                   
-                    })
-                });
+                        items: new Ext.Panel({
+                            title: 'Busqueda por usuario',
+                            frame: true,
+                            border: false,
+                            layout: 'fit'
+                        })
+                    });
+                }
             }
-        }
 
-        Ext.onReady(domain.View.init, domain.View);
+            Ext.onReady(domain.View.init, domain.View);
 
-    </script>
+        </script>
+    </head>
+    <body>     
 
-<body>     
-
-</body>
+    </body>
 </html>
 
