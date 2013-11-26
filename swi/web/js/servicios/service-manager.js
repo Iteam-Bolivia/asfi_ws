@@ -66,12 +66,6 @@ domain.formButtons = function(options) {
 };
 
 domain.ServiceManager = {
-    wizard: function(options) {
-
-    },
-    update: function(options) {
-
-    },
     changePassword: function(options) {
         var form = new Ext.FormPanel({
             url: Ext.SROOT + 'changepassword',
@@ -170,6 +164,9 @@ domain.ServiceManager = {
 
 
     },
+    deleteService: function(options) {
+        console.log(options.node.attributes.iconCls === 'server');
+    },
     serviceGrid: function(options) {
         var store = new Ext.data.JsonStore({
             url: Ext.SROOT + 'servicios',
@@ -195,6 +192,7 @@ domain.ServiceManager = {
             title: 'Servicios',
             border: false,
             store: store,
+            region: 'center',
 //            plugins: [searchListFilters],
 //            plugins: [new Ext.ux.grid.Search({
 //                    iconCls: 'icon-zoom'
@@ -255,19 +253,19 @@ domain.ServiceManager = {
                         domain.ServiceManager.newService(options);
                     }
                 }/*, '-', {
-                    //text: 'Modificar',
-                    iconCls: 'update',
-                    tooltip: 'Modificar datos personales',
-                    handler: function() {
-                        var record = grid.getSelectionModel().getSelected();
-                        if (record) {
-                            options.record = record;
-                            domain.UserManager.updateUser(options);
-                        } else {
-                            com.icg.errors.mustSelect();
-                        }
-                    }
-                }*/, {
+                 //text: 'Modificar',
+                 iconCls: 'update',
+                 tooltip: 'Modificar datos personales',
+                 handler: function() {
+                 var record = grid.getSelectionModel().getSelected();
+                 if (record) {
+                 options.record = record;
+                 domain.UserManager.updateUser(options);
+                 } else {
+                 com.icg.errors.mustSelect();
+                 }
+                 }
+                 }*/, {
                     text: 'Activar/Desactivar',
                     iconCls: 'delete',
                     tooltip: 'Activar/Desactivar',
@@ -295,18 +293,18 @@ domain.ServiceManager = {
                         }
                     }
                 }/*, {
-                    iconCls: 'key',
-                    tooltip: 'Asignar o cambiar la clave',
-                    handler: function() {
-                        var record = grid.getSelectionModel().getSelected();
-                        if (record) {
-                            options.record = record;
-                            domain.UserManager.changePassword(options);
-                        } else {
-                            domain.errors.mustSelect();
-                        }
-                    }
-                }, '-',*/
+                 iconCls: 'key',
+                 tooltip: 'Asignar o cambiar la clave',
+                 handler: function() {
+                 var record = grid.getSelectionModel().getSelected();
+                 if (record) {
+                 options.record = record;
+                 domain.UserManager.changePassword(options);
+                 } else {
+                 domain.errors.mustSelect();
+                 }
+                 }
+                 }, '-',*/
             ]//,
 //            bbar: new Ext.PagingToolbar({
 //                store: this.store
@@ -397,7 +395,7 @@ domain.ServiceManager = {
             title: 'Datos de conexion',
             defaults: {
                 msgTarget: 'side',
-                width: 200
+                width: 450
             },
             items: [{
                     xtype: 'textfield',
@@ -406,29 +404,9 @@ domain.ServiceManager = {
                     name: 'nombre'
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Servidor',
+                    fieldLabel: 'WSDL URL',
                     allowBlank: false,
-                    name: 'servidor'
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Puerto',
-                    allowBlank: false,
-                    name: 'puerto'
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Usuario',
-                    allowBlank: false,
-                    name: 'username'
-                }, {
-                    xtype: 'textfield',
-                    fieldLabel: 'Password',
-                    allowBlank: false,                    
-                    name: 'password'
-                }, {
-                    xtype: 'textarea',
-                    fieldLabel: 'Descripcion',
-                    allowBlank: true,
-                    name: 'descripcion'
+                    name: 'wsdlurl'
                 }]
         };
     },
@@ -438,70 +416,30 @@ domain.ServiceManager = {
             border: false,
             autoHeight: true,
             bodyStyle: 'padding:10px',
-            labelWidth: 130,
+            labelWidth: 100,
+            waitMsgTarget: true,
             items: [this.datosServicio()]
         });
 
         var win = new Ext.Window({
+            iconCls: 'server',
             title: 'Registrar Servicio',
             autoScroll: true,
-            width: 600,
-            height: 300,
-            minHeight: 250,
-            minWidth: 550,
-            items: form,
-            maximizable: true,
-            modal: true,
-            buttonAlign: 'center',
-            buttons: [{
-                    text: 'Guardar',
-                    handler: function() {
-                        form.getForm().submit({
-                            success: function(form, action) {
-                                options.grid.store.reload();
-                                win.close();
-                            },
-                            failure: function(form, action) {
-
-                            }
-                        });
-                    }
-                }]
-        });
-        win.show();
-    },
-    updateUser: function(options) {
-        var form = new Ext.FormPanel({
-            url: Ext.SROOT + 'guardarusuario',
-            border: false,
+            width: 650,
             autoHeight: true,
-            bodyStyle: 'padding:10px',
-            labelWidth: 130,
-            items: [this.datosPersonales(),
-                {
-                    xtype: 'hidden',
-                    name: 'id'
-                }
-            ]
-        });
-
-        var win = new Ext.Window({
-            title: 'Modificar datos de Usuario',
-            autoScroll: true,
-            width: 600,
-            height: 300,
-            minHeight: 250,
-            minWidth: 550,
+            minWidth: 640,
             items: form,
-            maximizable: true,
             modal: true,
             buttonAlign: 'center',
             buttons: [{
                     text: 'Guardar',
                     handler: function() {
+                        this.disabled = true;
                         form.getForm().submit({
+                            waitMsg: 'Leyendo WSDL...',
                             success: function(form, action) {
-                                options.grid.store.reload();
+                                options.tree.getRootNode().reload();
+                                //options.tree.getRootNode().expand(true);                                
                                 win.close();
                             },
                             failure: function(form, action) {
@@ -512,9 +450,6 @@ domain.ServiceManager = {
                 }]
         });
         win.show();
-        if (options.record) {
-            form.getForm().loadRecord(options.record);
-        }
     }
 };
 
@@ -575,9 +510,6 @@ domain.SamplePanel = Ext.extend(Ext.DataView, {
 
 Ext.reg('samplespanel', domain.SamplePanel);
 
-
-
-
 domain.UserManager.View = {
     init: function() {
         var catalog = [{
@@ -613,17 +545,90 @@ domain.UserManager.View = {
         //var servicios = new domain.SamplePanel({
         //    store: store
         //});
-        
-        var servicios = domain.ServiceManager.serviceGrid({});
+
+        //var servicios = domain.ServiceManager.serviceGrid({});
+
+        var tree = new Ext.tree.TreePanel({
+            title: 'Servicios',
+            iconCls: 'server',
+            region: 'west',
+            width: 400,
+            //useArrows: true,
+            autoScroll: true,
+            animate: true,
+            //enableDD: true,
+            //nodeType: 'async',
+            loadMask: true,
+            //containerScroll: true,
+            rootVisible: false,
+            //frame: false,
+            root: {
+                nodeType: 'async'
+            },
+//                    root: new Ext.tree.AsyncTreeNode({
+//            text:'Servidores',            
+//            id:'id',
+//            expanded:true
+//        }), 
+            loader: new Ext.tree.TreeLoader({
+                dataUrl: 'treeservices',
+                requestMethod: 'GET'
+            }),
+            //dataUrl: 'treeservices',
+            tbar: [{
+                    iconCls: 'refresh',
+                    tooltip: 'Recargar',
+                    handler: function() {
+                        tree.getRootNode().reload();
+                        tree.getRootNode().expand(true);
+                    }
+                }, '-', {
+                    text: 'Expandir todo',
+                    handler: function() {
+                        tree.getRootNode().reload();
+                        tree.getRootNode().expand(true);
+                    }
+                }, {
+                    text: 'Nuevo',
+                    iconCls: 'create',
+                    tooltip: 'Nuevo servicio',
+                    handler: function() {
+                        domain.ServiceManager.newService({tree: tree});
+                    }
+                }, {
+                    text: 'Eliminar',
+                    iconCls: 'delete',
+                    tooltip: 'Eliminar servicio',
+                    handler: function() {
+                        var record = tree.getSelectionModel().getSelectedNode();
+                        if (record) {
+                           domain.ServiceManager.deleteService({node:record});
+                        } else {
+                           domain.errors.mustSelect();
+                        }
+                    }
+                }]
+        });
+
+        //tree.getRootNode().expand(true);
+
+
+
+
+
         new Ext.Viewport({
             layout: 'fit',
-            frame: true,
+            //frame: true,
             border: false,
             items: new Ext.Panel({
-                frame: true,
+                //frame: true,
                 border: false,
-                layout: 'fit',
-                items: servicios
+                layout: 'border',
+                items: [tree, {
+                        title: 'Informacion',
+                        region: 'center',
+                        layout: 'fit'
+                    }]
             })
         });
     }
