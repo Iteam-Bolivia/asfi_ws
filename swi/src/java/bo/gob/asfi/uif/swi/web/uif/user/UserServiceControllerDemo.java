@@ -7,6 +7,9 @@ package bo.gob.asfi.uif.swi.web.uif.user;
 import bo.gob.asfi.uif.swi.dao.Dao;
 import bo.gob.asfi.uif.swi.model.Parametro;
 import bo.gob.asfi.uif.swi.model.UserService;
+import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,14 +51,25 @@ public class UserServiceControllerDemo {
     }
 
     @RequestMapping(value = "/listuserservice", method = RequestMethod.GET)
-    public @ResponseBody
+    public @ResponseBody            
     List<UserService> listarUserServices() {
-        return dao.find(UserService.class);
+        
+        List<UserService> lst = dao.find(UserService.class);
+        List<UserService> lst2 = new ArrayList<UserService>();
+        for(UserService us : lst) {
+            System.out.println(us.getNombre());            
+            UserService nus = new UserService();
+            nus.setId(us.getId());
+            nus.setNombre(us.getNombre());
+            lst2.add(nus);            
+        }
+        
+        return lst2;
     }
 
     @RequestMapping(value = "/registrarparametro", method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, ? extends Object> registrarParametro(Parametro param) {
+    Map<String, ? extends Object> registrarParametro(Parametro param /*, @RequestParam Integer servicio_id*/) {
         Map<String, Object> body = new HashMap<String, Object>();
         try {
             dao.persist(param);
@@ -67,9 +81,39 @@ public class UserServiceControllerDemo {
         return body;
     }
 
+     @RequestMapping(value = "/updateparam", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, ? extends Object> actualizarParametro(Parametro param /*, @RequestParam Integer servicio_id*/) {
+        Map<String, Object> body = new HashMap<String, Object>();
+        try {
+            //Parametro            
+            dao.update(param);
+            body.put("success", true);
+            return body;
+        } catch (Exception e) {
+        }
+        body.put("success", false);
+        return body;
+    }
+    
     @RequestMapping(value = "/listaparametros")
     public @ResponseBody
-    List<Parametro> listarParametros(@RequestParam Integer servicio_id) {
-        return dao.get(UserService.class, servicio_id).getParametros();
+    Collection<Parametro> listarParametros(@RequestParam Integer servicio_id) {
+        
+        Collection<Parametro> lst = dao.get(UserService.class, servicio_id).getParametros();
+        
+        List<Parametro> lst2 = new ArrayList<Parametro>();
+        for(Parametro pm : lst) {
+            System.out.println(pm.getNombre());            
+            Parametro npm = new Parametro();
+            npm.setId(pm.getId());
+            npm.setNombre(pm.getNombre());
+            npm.setEtiqueta(pm.getEtiqueta());
+            npm.setRequerido(pm.getRequerido());
+            npm.setTipo(pm.getTipo());
+            lst2.add(npm);            
+        }
+        
+        return lst2;        
     }
 }

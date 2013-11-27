@@ -4,8 +4,11 @@
  */
 package bo.gob.asfi.uif.swi.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,15 +24,16 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "servicios")
-public class UserService {
+public class UserService implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "servicio_id")
     private Integer id;
     private String nombre;
-    @OneToMany(mappedBy = "servicio", fetch = FetchType.EAGER)
-    private List<Parametro> parametros = new ArrayList<Parametro>();
+    @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Collection<Parametro> parametros;
 
     public Integer getId() {
         return id;
@@ -47,11 +51,36 @@ public class UserService {
         this.nombre = nombre;
     }
 
-    public List<Parametro> getParametros() {
+    public Collection<Parametro> getParametros() {
         return parametros;
     }
 
-    public void setParametros(List<Parametro> parametros) {
-        this.parametros = parametros;
+//    public void setParametros(Collection<Parametro> parametros) {
+//        this.parametros = parametros;
+//    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof UserService)) {
+            return false;
+        }
+        UserService other = (UserService) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "bo.gob.asfi.uif.swi.model.UserService[ id=" + id + " ]";
     }
 }

@@ -36,6 +36,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -103,15 +104,14 @@ public class ClienteDeServiciosController {
         return new Gson().toJson(servicios);
     }
 
-    @RequestMapping(value = "/disableservice", method = RequestMethod.POST)
+    @RequestMapping(value = "/eliminarservidor", method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, ? extends Object> disableService(Servidor servidor) {
+    Map<String, ? extends Object> eliminarServidor(@RequestParam Long id) {
         Map<String, Object> body = new HashMap<String, Object>();
 
-        Servidor s = dao.get(Servidor.class, servidor.getId());
-        s.setActivo(!s.getActivo());
-
-        dao.update(s);
+        Servidor s = dao.get(Servidor.class, id);        
+        dao.remove(s);
+        
         body.put("success", true);
         return body;
     }
@@ -289,10 +289,10 @@ public class ClienteDeServiciosController {
         List<Node> nodes = new ArrayList<Node>();
 
         for (Servidor s : servidores) {
-
             Node n = new Node();
             n.setText(s.getNombre());
             n.setIconCls("server");
+            n.setId(s.getId().intValue());
             n.setChildren(this.parseJsonStructServiceTree(s.getJsonstruct()));
             nodes.add(n);
         }
@@ -309,4 +309,6 @@ public class ClienteDeServiciosController {
 
         return nodes;
     }
+    
+    
 }
