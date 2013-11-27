@@ -112,6 +112,10 @@
                                 header: "Etiqueta",
                                 sortable: true,
                                 dataIndex: 'etiqueta'
+                            }, {
+                                header: "ID",
+                                sortable: true,
+                                dataIndex: 'id'
                             }],
                         tbar: [{
                                 text: 'Nuevo parametro',
@@ -152,6 +156,86 @@
                                                 }]
                                         });
 
+                                        var win = new Ext.Window({
+                                            iconCls: 'server',
+                                            title: 'Registrar Parametro',
+                                            autoScroll: true,
+                                            width: 400,
+                                            autoHeight: true,                                            
+                                            items: form,
+                                            modal: true,                                            
+                                            buttons: [{
+                                                    text: 'Guardar',
+                                                    handler: function() {
+                                                        this.disabled = true;
+                                                        form.getForm().submit({
+                                                            waitMsg: 'Leyendo WSDL...',
+                                                            success: function(form, action) {
+                                                                grid2.store.reload();                               
+                                                                win.close();
+                                                            },
+                                                            failure: function(form, action) {
+
+                                                            }
+                                                        });
+                                                    }
+                                                }]
+                                        });
+                                        win.show();
+                                    } else {
+                                        Ext.MessageBox.show({
+                                            title: 'Aviso',
+                                            msg: 'Debe seleccionar un <b>Servicio</b>.',
+                                            buttons: Ext.MessageBox.OK,
+                                            icon: Ext.Msg.INFO
+                                        });
+                                    }
+                                }
+                            },{
+                                text: 'Modificar',
+                                iconCls: 'update',
+                                handler: function() {
+                                    var record = grid2.getSelectionModel().getSelected();
+                                    var rserv = grid.getSelectionModel().getSelected();
+                                    if (record) {
+                                        var form = new Ext.FormPanel({
+                                            url: Ext.SROOT + 'updateparam',
+                                            border: false,
+                                            autoHeight: true,
+                                            bodyStyle: 'padding:10px',
+                                            labelWidth: 100,
+                                            waitMsgTarget: true,
+                                            items: [{
+                                                    xtype: 'fieldset',
+                                                    title: 'Datos',
+                                                    defaults: {
+                                                        msgTarget: 'side'                                                        
+                                                    },
+                                                    items: [{
+                                                            xtype: 'textfield',
+                                                            fieldLabel: 'Nombre',
+                                                            allowBlank: false,
+                                                            name: 'nombre'
+                                                        },{
+                                                            xtype: 'textfield',
+                                                            fieldLabel: 'Etiqueta',
+                                                            allowBlank: false,
+                                                            name: 'etiqueta'
+                                                        },{
+                                                            xtype: 'textfield',
+                                                            fieldLabel: 'id',
+                                                            allowBlank: false,
+                                                            name: 'id'
+                                                        },{
+                                                            xtype: 'textfield',
+                                                            fieldLabel: 'ref',
+                                                            allowBlank: false,
+                                                            name: 'servicio.id',
+                                                            value: rserv.data.id
+                                                        }]
+                                                }]
+                                        });
+                                        form.getForm().loadRecord(record);
                                         var win = new Ext.Window({
                                             iconCls: 'server',
                                             title: 'Registrar Parametro',
