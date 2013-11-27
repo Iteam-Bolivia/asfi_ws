@@ -7,7 +7,6 @@ package bo.gob.asfi.uif.swi.web.uif.user;
 import bo.gob.asfi.uif.swi.dao.Dao;
 import bo.gob.asfi.uif.swi.model.Parametro;
 import bo.gob.asfi.uif.swi.model.UserService;
-import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
