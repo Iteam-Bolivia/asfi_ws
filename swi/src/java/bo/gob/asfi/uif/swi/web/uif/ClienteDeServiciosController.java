@@ -5,16 +5,25 @@
 package bo.gob.asfi.uif.swi.web.uif;
 
 import bo.gob.asfi.uif.swi.dao.Dao;
+import bo.gob.asfi.uif.swi.model.ElementParam;
+import bo.gob.asfi.uif.swi.model.FormField;
 import bo.gob.asfi.uif.swi.model.Node;
+import bo.gob.asfi.uif.swi.model.ORequest;
+import bo.gob.asfi.uif.swi.model.OResponse;
 import bo.gob.asfi.uif.swi.model.Operacion;
+import bo.gob.asfi.uif.swi.model.Parametro;
 import bo.gob.asfi.uif.swi.model.Puerto;
 import bo.gob.asfi.uif.swi.model.Servicio;
 import bo.gob.asfi.uif.swi.model.Servidor;
+import bo.gob.asfi.uif.swi.model.UserService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.predic8.schema.ComplexType;
+import com.predic8.schema.Element;
 import com.predic8.wsdl.Binding;
 import com.predic8.wsdl.BindingOperation;
 import com.predic8.wsdl.Definitions;
+import com.predic8.wsdl.Operation;
 import com.predic8.wsdl.Port;
 import com.predic8.wsdl.Service;
 import com.predic8.wsdl.WSDLParser;
@@ -95,6 +104,19 @@ public class ClienteDeServiciosController {
                 for (BindingOperation op : port.getBinding().getOperations()) {
                     Operacion o = new Operacion();
                     o.setNombre(op.getName());
+
+                    Operation operation = definitions.getOperation(op.getName(), op.getBinding().getPortType().getName());
+                    Element elreq = operation.getInput().getMessage().getParts().get(0).getElement();
+                    if (elreq != null) {
+                        o.setRequest(new ORequest());
+                        o.getRequest().setElements(this.listParameters(elreq));
+
+                        Element elres = operation.getOutput().getMessage().getParts().get(0).getElement();
+
+                        o.setResponse(new OResponse());
+                        o.getResponse().setElements(this.listParameters(elres));
+                    }
+
                     p.getOperaciones().add(o);
                 }
                 s.getPuertos().add(p);
@@ -109,9 +131,9 @@ public class ClienteDeServiciosController {
     Map<String, ? extends Object> eliminarServidor(@RequestParam Long id) {
         Map<String, Object> body = new HashMap<String, Object>();
 
-        Servidor s = dao.get(Servidor.class, id);        
+        Servidor s = dao.get(Servidor.class, id);
         dao.remove(s);
-        
+
         body.put("success", true);
         return body;
     }
@@ -254,12 +276,16 @@ public class ClienteDeServiciosController {
         return nodes;
     }
 
-    private List<org.heyma.core.extjs.components.Node> parseJsonStructServiceTree(String json) {
+//    private List<Servicio> fromJson(String json) {
+//        Type listType = new TypeToken<ArrayList<Servicio>>() {
+//        }.getType();
+//        List<Servicio> servicios = new Gson().fromJson(json, listType);
+//        return servicios;
+//    }
+    private List<org.heyma.core.extjs.components.Node> parseJsonStructServiceTree(String rootId, List<Servicio> servicios) {
         List<org.heyma.core.extjs.components.Node> nodes = new ArrayList<org.heyma.core.extjs.components.Node>();
 
-        Type listType = new TypeToken<ArrayList<Servicio>>() {
-        }.getType();
-        List<Servicio> servicios = new Gson().fromJson(json, listType);
+        //List<Servicio> servicios = this.fromJson(json);
 
         for (Servicio srv : servicios) {
             Node ns = new Node();
@@ -274,6 +300,7 @@ public class ClienteDeServiciosController {
                 for (Operacion op : prt.getOperaciones()) {
                     Node no = new Node();
                     no.setText(op.getNombre());
+                    no.setId(rootId + ":" + srv.getNombre() + ":" + prt.getNombre() + ":" + op.getNombre());
                     no.setIconCls("operation");
                     no.setLeaf(Boolean.TRUE);
                     nb.getChildren().add(no);
@@ -292,8 +319,8 @@ public class ClienteDeServiciosController {
             Node n = new Node();
             n.setText(s.getNombre());
             n.setIconCls("server");
-            n.setId(s.getId().intValue());
-            n.setChildren(this.parseJsonStructServiceTree(s.getJsonstruct()));
+            n.setId(s.getId().toString());
+            n.setChildren(this.parseJsonStructServiceTree(s.getId().toString(), s.getServicios()));
             nodes.add(n);
         }
         return nodes;
@@ -309,6 +336,102 @@ public class ClienteDeServiciosController {
 
         return nodes;
     }
-    
-    
+
+    private List<ElementParam> listParameters(Element element) {
+
+        ArrayList<ElementParam> listElement = new ArrayList<ElementParam>();
+        ComplexType ct = (ComplexType) element.getEmbeddedType();
+
+        if (ct == null) {
+            ct = element.getSchema().getComplexType(element.getType().getLocalPart());
+        }
+
+        if (ct.getSequence() != null) {
+            for (Element e : ct.getSequence().getElements()) {
+                ElementParam ne = new ElementParam();
+                ne.setName(e.getName());
+                ne.setType(e.getType().getLocalPart());
+                listElement.add(ne);
+            }
+        }
+        return listElement;
+    }
+
+    @RequestMapping(value = "/formserviceitems")
+    public @ResponseBody
+    List<FormField> formServiceItems(@RequestParam(value = "id") String opId) {
+        //parts = ["Root-Rervidor_id","ServiceName","PortName","OperationName"]
+        String[] parts = opId.split(":");
+        Servidor servidor = dao.get(Servidor.class, new Long(parts[0]));
+        List<Servicio> servicios = servidor.getServicios();
+
+        Operacion op = this.getOperacion(parts[1], parts[2], parts[3], servicios);
+        System.out.println(op);
+        if (op != null) {
+            if (op.getRequest() != null) {
+                return requestFormFiends(op.getRequest());
+            }
+        }
+        return null;
+    }
+
+    private List<FormField> requestFormFiends(ORequest request) {
+        List<FormField> list = new ArrayList<FormField>();
+        for (ElementParam ep : request.getElements()) {
+            FormField ff = new FormField();
+            ff.setFieldLabel(ep.getName() + "  (" + ep.getType() + ")");
+            ff.setXtype(FormField.TEXT_FIELD);
+            list.add(ff);
+        }
+        return list;
+    }
+
+    private Operacion getOperacion(String serviceName, String portName, String operationName, List<Servicio> servicios) {
+        for (Servicio s : servicios) {
+            if (s.getNombre().equals(serviceName)) {
+                for (Puerto p : s.getPuertos()) {
+                    if (p.getNombre().equals(portName)) {
+                        for (Operacion o : p.getOperaciones()) {
+                            if (o.getNombre().equals(operationName)) {
+                                return o;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/definirservicio", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, ? extends Object> crearServicio(UserService serv) {
+        Map<String, Object> body = new HashMap<String, Object>();
+        try {
+            dao.persist(serv);
+            String[] parts = serv.getRouter().split(":");
+            Servidor servidor = dao.get(Servidor.class, new Long(parts[0]));
+            List<Servicio> servicios = servidor.getServicios();
+
+            Operacion op = this.getOperacion(parts[1], parts[2], parts[3], servicios);
+            if (op != null) {
+                if (op.getRequest() != null) {
+                    for (ElementParam ep : op.getRequest().getElements()) {
+                        Parametro param =  new Parametro();
+                        param.setNombre(ep.getName());
+                        param.setEtiqueta(ep.getName());
+                        param.setTipo(ep.getType());
+                        param.setServicio(serv);
+                        dao.persist(param);
+                    }
+                }
+            }
+
+            body.put("success", true);
+            return body;
+        } catch (Exception e) {
+        }
+        body.put("success", false);
+        return body;
+    }
 }

@@ -31,6 +31,9 @@ public class Parametro implements Serializable {
     private String etiqueta;
     private String tipo;
     private Boolean requerido;
+    private Boolean oculto;
+    private String valordefecto;
+    private String patron;
     @ManyToOne(fetch = FetchType.LAZY)
     private UserService servicio;
 
@@ -80,6 +83,30 @@ public class Parametro implements Serializable {
 
     public void setServicio(UserService servicio) {
         this.servicio = servicio;
+    }
+
+    public Boolean getOculto() {
+        return oculto;
+    }
+
+    public void setOculto(Boolean oculto) {
+        this.oculto = oculto;
+    }
+
+    public String getValordefecto() {
+        return valordefecto;
+    }
+
+    public void setValordefecto(String valordefecto) {
+        this.valordefecto = valordefecto;
+    }
+
+    public String getPatron() {
+        return patron;
+    }
+
+    public void setPatron(String patron) {
+        this.patron = patron;
     }
 
     @Override

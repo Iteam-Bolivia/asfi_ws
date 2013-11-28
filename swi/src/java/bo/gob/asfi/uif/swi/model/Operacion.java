@@ -11,6 +11,8 @@ package bo.gob.asfi.uif.swi.model;
 public class Operacion {
 
     private String nombre;
+    private ORequest request;
+    private OResponse response;
 
     public String getNombre() {
         return nombre;
@@ -18,5 +20,21 @@ public class Operacion {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public ORequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(ORequest request) {
+        this.request = request;
+    }
+
+    public OResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(OResponse response) {
+        this.response = response;
     }
 }

@@ -11,15 +11,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * @author John
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Node extends org.heyma.core.extjs.components.Node {
-
-    private String id;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+public class FormField extends org.heyma.core.extjs.components.FormField {
+    
 }

@@ -4,6 +4,10 @@
  */
 package bo.gob.asfi.uif.swi.model;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -67,7 +71,9 @@ public class Servidor {
     }
 
     public List<Servicio> getServicios() {
-        return servicios;
+        Type listType = new TypeToken<ArrayList<Servicio>>() {
+        }.getType();
+        return new Gson().fromJson(this.jsonstruct, listType);        
     }
 
     public void setServicios(List<Servicio> servicios) {

@@ -32,6 +32,7 @@ public class UserService implements Serializable {
     @Column(name = "servicio_id")
     private Integer id;
     private String nombre;
+    private String router;
     @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Parametro> parametros;
 
@@ -51,6 +52,14 @@ public class UserService implements Serializable {
         this.nombre = nombre;
     }
 
+    public String getRouter() {
+        return router;
+    }
+
+    public void setRouter(String router) {
+        this.router = router;
+    }
+
     public Collection<Parametro> getParametros() {
         return parametros;
     }
@@ -58,7 +67,6 @@ public class UserService implements Serializable {
 //    public void setParametros(Collection<Parametro> parametros) {
 //        this.parametros = parametros;
 //    }
-
     @Override
     public int hashCode() {
         int hash = 0;

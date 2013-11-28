@@ -139,14 +139,24 @@
                             <items>                    
                                 <menu>                    
                                     <text>Registrar conexiones</text> 
-                                    <iconCls>module-app</iconCls> 
+                                    <iconCls>server</iconCls> 
                                     <module>
                                         <id>gs-001</id> 
                                         <title>Registrar conexiones</title>
-                                        <iconCls>module-app</iconCls> 
+                                        <iconCls>server</iconCls> 
                                         <url>administrarservicios</url> 
                                     </module>
                                 </menu>                     
+                                <menu>                    
+                                    <text>Configurar parametros</text> 
+                                    <iconCls>module-app</iconCls> 
+                                    <module>
+                                        <id>gs-002</id> 
+                                        <title>Configurar parametros</title>
+                                        <iconCls>module-app</iconCls> 
+                                        <url>individual</url> 
+                                    </module>
+                                </menu> 
                                 <menu>                    
                                     <text>Habilitar servicios</text> 
                                     <iconCls>icon</iconCls> 
