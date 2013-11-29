@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author John
  */
-@Controller
+//@Controller
+@RequestMapping(value = "/sss")
 public class UsuarioController {
 
 //    @Autowired
