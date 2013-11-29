@@ -79,20 +79,20 @@ domain.ServiceManager = {
             url: Ext.SROOT + 'definirservicio',
             border: false,
             autoHeight: true,
-            bodyStyle: 'padding:10px',            
+            bodyStyle: 'padding:10px',
             defaults: {
                 msgTarget: 'side',
-                width: 250
+                width: 300
             },
             items: [{
                     xtype: 'textfield',
-                    fieldLabel: 'Nombre',                    
+                    fieldLabel: 'Nombre',
                     allowBlank: false,
                     name: 'nombre'
                 }, {
                     xtype: "hidden",
                     name: "router",
-                    value:options.router,
+                    value: options.router,
                 }]
         });
 
@@ -105,10 +105,10 @@ domain.ServiceManager = {
             layout: 'anchor',
             items: [{
                     xtype: 'panel',
-                    bodyStyle: 'padding:10px;background-color:#FFFFFF;color:#CCCCCC',
-                    html: '<b>Este proceso establece la operacion como servicio del sistema.  El Servicio requerira configuracion.</b>',
+                    bodyStyle: 'padding:10px;background-color:#FFFFFF;color:#777777',
+                    html: '<b>Esta acci&oacute;n establece la Operaci&oacute;n Web Service como servicio del sistema.  El Servicio requiere configuraci&oacute;n.</b>',
                     height: 50,
-                    border:false
+                    border: false
                 }, form],
             modal: true,
             buttonAlign: 'center',
@@ -130,7 +130,6 @@ domain.ServiceManager = {
                 }]
         });
         win.show();
-        form.getForm().loadRecord(options.record);
     },
     deleteUser: function(options) {
 
@@ -184,7 +183,6 @@ domain.ServiceManager = {
         }
     },
     openOperation: function(options) {
-        //console.log(options.node.attributes);
         options.panelinfo.removeAll();
         if (options.node.attributes.iconCls === 'operation') {
             var item = options.node.attributes;
@@ -194,10 +192,8 @@ domain.ServiceManager = {
                 params: {
                     id: item.id
                 },
-                success: function(result, request) {
-                    //console.log(result.responseText);
-                    var sfields = Ext.util.JSON.decode(result.responseText);
-                    console.log(sfields);
+                success: function(result, request) {                    
+                    var sfields = Ext.util.JSON.decode(result.responseText);                    
                     var form = new Ext.FormPanel({
                         url: Ext.SROOT + 'submitservice',
                         border: false,
@@ -226,7 +222,7 @@ domain.ServiceManager = {
                                 iconCls: 'accept',
                                 tooltip: 'Definir como Servicio del sistema',
                                 handler: function() {
-                                    domain.ServiceManager.definirServicio({router:item.id});
+                                    domain.ServiceManager.definirServicio({router: item.id});
                                 }
                             }]
                     });
@@ -237,10 +233,6 @@ domain.ServiceManager = {
 
                 }
             });
-
-
-
-
         } else {
             domain.errors.mustBeOperation();
         }
@@ -600,7 +592,20 @@ domain.ServiceManager.View = {
                             domain.errors.mustSelect();
                         }
                     }
-                }]
+                }],
+            listeners: {
+                dblclick: function(node, e) {
+                    if (node.attributes.iconCls === 'operation') {
+                        domain.ServiceManager.openOperation({
+                            node: node,
+                            tree: tree,
+                            panelinfo: serviceInfoPanel
+                        });
+                    }
+                }//,
+//                click: function(node, e) {
+//                }
+            }
         });
         //tree.getRootNode().expand(true);
         var serviceInfoPanel = new Ext.Panel({
