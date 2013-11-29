@@ -4,14 +4,18 @@
  * @author Johns Castillo Valencia
  */
 Ext.ns('com.icg.UserManager');
-[
-    {"nombre": "NewWebService", 
-        "puertos": [
-            {"nombre": "NewWebServicePort", 
-                "operaciones": [
-                    {
-                        "nombre": "hello", 
-                        "request": {"element": [{"name": "name", "type": "string"}]}, 
-                        "response": {"element": [{"name": "return", "type": "string"}]}}, 
-                    {"nombre": "sumar", 
-                        "request": {"element": [{"name": "sumando_a", "type": "int"}, {"name": "sumando_b", "type": "int"}]}, "response": {"element": [{"name": "return", "type": "string"}]}}]}]}]
+
+[{"title": "Servicios del sistema",
+        "samples": [
+            {"id": 155, "icon": "desktop.gif", "text": "Servicio para sumar", "desc": "Este servicio calcula la suma de 2 números enteros.", "url": "122:NewWebService:NewWebServicePort:sumar"},
+            {"id": 155, "icon": "desktop.gif", "text": "Servicio para sumar", "desc": "Este servicio calcula la suma de 2 números enteros.", "url": "122:NewWebService:NewWebServicePort:sumar"}
+        ]}]
+
+[{
+        "id":155,
+        "nombre":"Servicio para sumar",
+        "router":"122:NewWebService:NewWebServicePort:sumar",
+        "url":null,
+        "descripcion":"Este servicio calcula la suma de 2 números enteros.",
+        "parametros":null
+    },{"id":155,"nombre":"Servicio para sumar","router":"122:NewWebService:NewWebServicePort:sumar","url":null,"descripcion":"Este servicio calcula la suma de 2 números enteros.","parametros":null}]

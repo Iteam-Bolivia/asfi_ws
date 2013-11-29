@@ -89,7 +89,12 @@ domain.ServiceManager = {
                     fieldLabel: 'Nombre',
                     allowBlank: false,
                     name: 'nombre'
-                }, {
+                },{
+                    xtype: 'textarea',
+                    fieldLabel: 'Descripci&oacute;n',
+                    allowBlank: false,
+                    name: 'descripcion'
+                },{
                     xtype: "hidden",
                     name: "router",
                     value: options.router,
@@ -130,33 +135,6 @@ domain.ServiceManager = {
                 }]
         });
         win.show();
-    },
-    deleteUser: function(options) {
-
-        Ext.MessageBox.confirm('Confirmar', '¿Confirma eliminar el registro? Se perderan Datos.', function(r) {
-            if (r == 'yes') {
-                var id = options.record.data.funcionario_id;
-                //var box = Ext.MessageBox.wait('Por favor espere.', 'Eliminando el <b>registro</b>'); 
-                Ext.Ajax.request({
-                    url: Ext.SROOT + 'entity/delete/funcionario',
-                    method: 'POST',
-                    params: {
-                        entity_id: id
-                    },
-                    success: function(result, request) {
-                        options.grid.store.reload();
-                        //box.hide();
-                    },
-                    failure: function(result, request) {
-                        if (result.status == '403') {
-                            domain.swi.security.msg.e403();
-                        }
-                    }
-                });
-            }
-        });
-
-
     },
     deleteService: function(options) {
         if (options.node.attributes.iconCls === 'server') {
@@ -389,75 +367,6 @@ domain.ServiceManager = {
         });
         options.grid = grid;
         return grid;
-    },
-    roles: function() {
-        var grid = this.grid(null);
-        grid.getSelectionModel().on('rowselect', function(sm, rowindex, record) {
-            form.getForm().load({
-                url: 'user/ldap/userroles',
-                method: 'GET',
-                params: {
-                    username: record.get('userName')
-                }
-            });
-        });
-
-        var form = new Ext.form.FormPanel({
-            url: 'user/ldap/updateroles',
-            title: 'ROLE selector',
-            border: true,
-            bodyStyle: 'padding:10px',
-            labelWidth: 100,
-            layout: 'column',
-            region: 'south',
-            //width:800,
-            frame: true,
-            items: [grid,
-                {
-                    columnWidth: 0.4,
-                    xtype: 'fieldset',
-                    margin: 3,
-                    style: {
-                        "margin-left": "10px", // when you add custom margin in IE 6...
-                        "margin-right": Ext.isIE6 ? (Ext.isStrict ? "-10px" : "-13px") : "0"  // you have to adjust for it somewhere else
-                    },
-                    labelWidth: 90,
-                    title: 'System access',
-                    defaultType: 'textfield',
-                    border: true,
-                    bodyStyle: 'padding:10px',
-                    items: [{
-                            xtype: 'checkboxgroup',
-                            fieldLabel: 'Roles',
-                            columns: 1,
-                            items: [{
-                                    boxLabel: 'Inspector',
-                                    name: 'Inspector'
-                                }, {
-                                    boxLabel: 'Supervisor',
-                                    name: 'Supervisor'
-                                }, {
-                                    boxLabel: 'Admin',
-                                    name: 'Admin'
-                                }]
-                        }, {
-                            xtype: 'hidden',
-                            name: 'userName'
-                        }]
-                }],
-            buttons: [{
-                    text: 'Guardar',
-                    handler: function() {
-                        guardar();
-                    }
-                }]
-        });
-
-        var guardar = function() {
-            form.getForm().submit({
-            });
-        }
-        return form;
     },
     datosServicio: function() {
         return {
