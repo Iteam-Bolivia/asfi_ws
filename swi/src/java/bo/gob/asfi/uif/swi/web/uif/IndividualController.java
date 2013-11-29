@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
- * @author John
+ * @author Marcelo
  */
 @Controller
 @RequestMapping(value = "/individual")
@@ -34,63 +33,38 @@ public class IndividualController {
     public String individual() {
         return "individual/individual";
     }
-    //private static final Logger logger = LoggerFactory.getLogger(IndividualController.class);
 
-    @RequestMapping(value = "/guardar_parametros", method = RequestMethod.POST)
+    @RequestMapping(value = "/guardarparametros", method = RequestMethod.POST)
     public @ResponseBody
-
     Map<String, ? extends Object> guardarParametro(Parametro parametro) {
         Map<String, Object> body = new HashMap<String, Object>();
         try {
-            Parametro u = dao.get(Parametro.class, parametro.getId());
-            u.setEtiqueta(parametro.getEtiqueta());
-            u.setOculto(parametro.getOculto());
-            u.setValordefecto(parametro.getValordefecto());
-            dao.update(u);
+            dao.update(parametro);
             body.put("success", true);
-            return body;
         } catch (Exception e) {
             body.put("success", false);
             e.printStackTrace();
-            java.util.logging.Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-
-            return null;
         }
+        return body;
     }
 
-    @RequestMapping(value = "/listar_servicios")
+    @RequestMapping(value = "/listaservicios", method = RequestMethod.GET)
     public @ResponseBody
-
-    List<UserService> listar_servicio() {
-        try {
-            Map params = new HashMap();
-            List<UserService> servicios = dao.find(UserService.class);
-            return servicios;
-        } catch (Exception e) {
-            e.printStackTrace();
-            java.util.logging.Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-
-            return null;
+    List<UserService> listarUserServices() {
+        List<UserService> lst = dao.find(UserService.class);
+        for (UserService us : lst) {
+            us.setParametros(null);
         }
-
+        return lst;
     }
 
-    @RequestMapping(value = "/listar_parametrosporservicio")
+    @RequestMapping(value = "/listaparametros")
     public @ResponseBody
-    Collection<Parametro> listar_parametrosporservicio(@RequestParam Integer servicio_id) {
-        try {
-            //Map params = new HashMap();
-            //List<Parametro> listparametros = dao.getParametrosPorServicio(1);
-            //long i=1;
-            //Servicio s = dao.get(Servicio.class, i);
-            //return s.getParametros();
-            return dao.get(UserService.class, servicio_id).getParametros();
-        } catch (Exception e) {
-            e.printStackTrace();
-            java.util.logging.Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-
-            return null;
+    Collection<Parametro> listarParametros(@RequestParam Integer servicio_id) {
+        Collection<Parametro> lst = dao.get(UserService.class, servicio_id).getParametros();
+        for (Parametro pm : lst) {
+            pm.setServicio(null);
         }
-
+        return lst;
     }
 }

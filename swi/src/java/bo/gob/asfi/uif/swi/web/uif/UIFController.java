@@ -4,8 +4,6 @@ import bo.gob.asfi.uif.swi.dao.Dao;
 import bo.gob.asfi.uif.swi.model.Usuario;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -65,7 +63,7 @@ public class UIFController {
             Object o = dao.get(Class.forName("bo.gob.asfi.uif.swi.model." + entity), id);
             return 0;
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(UIFController.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(UIFController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

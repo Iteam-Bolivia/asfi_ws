@@ -30,8 +30,8 @@ public class Parametro implements Serializable {
     private String nombre;
     private String etiqueta;
     private String tipo;
-    private Boolean requerido;
-    private Boolean oculto;
+    private Boolean requerido = false;
+    private Boolean oculto = false;
     private String valordefecto;
     private String patron;
     @ManyToOne(fetch = FetchType.LAZY)

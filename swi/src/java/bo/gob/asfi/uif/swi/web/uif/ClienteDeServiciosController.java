@@ -365,7 +365,7 @@ public class ClienteDeServiciosController {
         Servidor servidor = dao.get(Servidor.class, new Long(parts[0]));
         List<Servicio> servicios = servidor.getServicios();
 
-        Operacion op = this.getOperacion(parts[1], parts[2], parts[3], servicios);
+        Operacion op = ClienteDeServiciosController.getOperacion(parts[1], parts[2], parts[3], servicios);
         System.out.println(op);
         if (op != null) {
             if (op.getRequest() != null) {
@@ -386,7 +386,7 @@ public class ClienteDeServiciosController {
         return list;
     }
 
-    private Operacion getOperacion(String serviceName, String portName, String operationName, List<Servicio> servicios) {
+    public static Operacion getOperacion(String serviceName, String portName, String operationName, List<Servicio> servicios) {
         for (Servicio s : servicios) {
             if (s.getNombre().equals(serviceName)) {
                 for (Puerto p : s.getPuertos()) {
@@ -413,7 +413,7 @@ public class ClienteDeServiciosController {
             Servidor servidor = dao.get(Servidor.class, new Long(parts[0]));
             List<Servicio> servicios = servidor.getServicios();
 
-            Operacion op = this.getOperacion(parts[1], parts[2], parts[3], servicios);
+            Operacion op = ClienteDeServiciosController.getOperacion(parts[1], parts[2], parts[3], servicios);
             if (op != null) {
                 if (op.getRequest() != null) {
                     for (ElementParam ep : op.getRequest().getElements()) {

@@ -158,13 +158,13 @@
                                     </module>
                                 </menu> 
                                 <menu>                    
-                                    <text>Habilitar servicios</text> 
-                                    <iconCls>icon</iconCls> 
+                                    <text>Ver servicios</text> 
+                                    <iconCls>operation</iconCls> 
                                     <module>
                                         <id>gs-003</id> 
-                                        <title>Habilitar servicios</title>
-                                        <iconCls>icon</iconCls> 
-                                        <url>404.jsp</url> 
+                                        <title>Ver servicios</title>
+                                        <iconCls>operation</iconCls> 
+                                        <url>paneldeservicios</url> 
                                     </module>
                                 </menu> 
                             </items>

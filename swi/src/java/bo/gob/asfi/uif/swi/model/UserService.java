@@ -6,8 +6,6 @@ package bo.gob.asfi.uif.swi.model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -33,6 +32,9 @@ public class UserService implements Serializable {
     private Integer id;
     private String nombre;
     private String router;
+    private String url;
+    @Lob
+    private String descripcion;
     @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Parametro> parametros;
 
@@ -42,6 +44,22 @@ public class UserService implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getNombre() {
@@ -64,9 +82,10 @@ public class UserService implements Serializable {
         return parametros;
     }
 
-//    public void setParametros(Collection<Parametro> parametros) {
-//        this.parametros = parametros;
-//    }
+    public void setParametros(Collection<Parametro> parametros) {
+        this.parametros = parametros;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
