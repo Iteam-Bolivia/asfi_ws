@@ -5,11 +5,14 @@
 package bo.gob.asfi.uif.swi.model;
 
 import java.util.Calendar;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,6 +42,8 @@ public class Usuario {
     @Temporal(javax.persistence.TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Calendar caducaEn;
+    @OneToMany
+    private List<UserService> servicios;
 
     public Integer getId() {
         return id;
@@ -134,5 +139,13 @@ public class Usuario {
 
     public void setCaducaEn(Calendar caducaEn) {
         this.caducaEn = caducaEn;
+    }
+
+    public List<UserService> getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(List<UserService> servicios) {
+        this.servicios = servicios;
     }
 }

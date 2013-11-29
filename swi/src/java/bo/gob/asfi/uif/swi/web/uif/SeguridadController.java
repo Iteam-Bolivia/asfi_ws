@@ -6,6 +6,7 @@ package bo.gob.asfi.uif.swi.web.uif;
 
 import bo.gob.asfi.uif.swi.dao.Dao;
 import bo.gob.asfi.uif.swi.model.Usuario;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +83,12 @@ public class SeguridadController {
     public @ResponseBody
     Map<String, ? extends Object> listarUsuarios() {
         Map<String, Object> body = new HashMap<String, Object>();
-        List lst = dao.find(Usuario.class);
+        List<Usuario> lst = dao.find(Usuario.class);
+        
+        for(Usuario u: lst) {
+            u.setServicios(null);
+        }
+        
         body.put("data", lst);
         return body;
     }

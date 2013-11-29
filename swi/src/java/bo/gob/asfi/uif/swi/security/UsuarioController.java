@@ -7,9 +7,6 @@ package bo.gob.asfi.uif.swi.security;
 import bo.gob.asfi.uif.swi.model.Usuario;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.commons.io.IOUtils;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -20,14 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
- * @author Ruben Q. Huanacuni Cano
+ * @author John
  */
 @Controller
 public class UsuarioController {
 
 //    @Autowired
 //    IEntityServices service;
-
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @RequestMapping(value = "/administrarusuarios")
     public String administrarUsuarios(Model model) {
@@ -41,25 +37,25 @@ public class UsuarioController {
     public String formUsuario() {
         return "/usuarios/RegistrarUsuario";
     }
-        
+
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @RequestMapping(value = "/registrarusuario", method = RequestMethod.POST)
     public String registrarUsuario(Usuario usuario) {
 
-        
+
         return "redirect:/formusuario";
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/formcontrasenia")
-    public String password() {        
+    public String password() {
         return "/seguridad/ChangePassword";
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/changepassword")
     public String changePassword(Model model, @RequestParam String usuario, @RequestParam String old_password, @RequestParam String new_password) {
-        
+
         return "/seguridad/ChangePassword";
     }
 

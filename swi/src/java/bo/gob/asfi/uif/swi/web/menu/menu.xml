@@ -161,7 +161,7 @@
                                     <text>Habilitar servicios</text> 
                                     <iconCls>icon</iconCls> 
                                     <module>
-                                        <id>gs-002</id> 
+                                        <id>gs-003</id> 
                                         <title>Habilitar servicios</title>
                                         <iconCls>icon</iconCls> 
                                         <url>404.jsp</url> 
