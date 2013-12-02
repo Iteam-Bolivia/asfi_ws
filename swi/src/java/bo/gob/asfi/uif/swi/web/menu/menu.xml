@@ -30,7 +30,7 @@
                                         <id>gu-003</id> 
                                         <title>Asignacion de Servicios</title>
                                         <iconCls>icon</iconCls> 
-                                        <url>404.jsp</url> 
+                                        <url>asignacionservicios</url> 
                                     </module>
                                 </menu>                                                                  
                             </items>
@@ -57,16 +57,6 @@
                                     <module>
                                         <id>bu-002</id> 
                                         <title>Busqueda por servicio</title>
-                                        <iconCls>icon</iconCls> 
-                                        <url>404.jsp</url> 
-                                    </module>
-                                </menu> 
-                                <menu>                    
-                                    <text>Busqueda por periodo</text> 
-                                    <iconCls>icon</iconCls> 
-                                    <module>
-                                        <id>bu-003</id> 
-                                        <title>Busqueda por periodo</title>
                                         <iconCls>icon</iconCls> 
                                         <url>404.jsp</url> 
                                     </module>

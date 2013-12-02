@@ -4,6 +4,7 @@
  */
 package bo.gob.asfi.uif.swi.dao;
 
+import bo.gob.asfi.uif.swi.model.UserService;
 import bo.gob.asfi.uif.swi.model.Usuario;
 import java.io.Serializable;
 import java.util.List;
@@ -49,7 +50,7 @@ public class DaoImpl implements Dao {
     public <T> List<T> find(Class<T> entityClass) {
         return this.sessionFactory.getCurrentSession().createCriteria(entityClass).list();
     }
-    
+
     @Transactional(readOnly = true)
     public <T> List<T> findAll(Class<T> entityClass) {
         return this.sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName()).list();
@@ -74,5 +75,11 @@ public class DaoImpl implements Dao {
     public <T> T getUsuarioByUsername(String username) {
         return (T) this.sessionFactory.getCurrentSession().createCriteria(Usuario.class)
                 .add(Restrictions.eq("usuario", username)).uniqueResult();
+    }
+
+    @Transactional(readOnly = true)
+    public <T> T getServiciosPorUsuario(Integer id) {
+        return (T) this.sessionFactory.getCurrentSession().createCriteria(UserService.class)
+                .add(Restrictions.eq("id", id)).list();
     }
 }

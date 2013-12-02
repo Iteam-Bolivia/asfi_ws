@@ -4,6 +4,7 @@
  */
 package bo.gob.asfi.uif.swi.dao;
 
+import bo.gob.asfi.uif.swi.model.UserService;
 import java.io.Serializable;
 import java.util.List;
 
@@ -32,4 +33,6 @@ public interface Dao {
     public <T> List<T> findAll(Class<T> entityClass);
     
     public <T> T getUsuarioByUsername(String username);
+
+    public <T> T getServiciosPorUsuario(Integer id);
 }
