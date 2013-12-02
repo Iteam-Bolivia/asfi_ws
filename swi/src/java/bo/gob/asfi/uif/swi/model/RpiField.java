@@ -30,6 +30,7 @@ public class RpiField {
     private Boolean requerido = false;
     private String extfield;
     private String valordefecto;
+    private String serviceParamsIds;
     private int orden;
 
     public Integer getId() {
@@ -94,5 +95,13 @@ public class RpiField {
 
     public void setOrden(int orden) {
         this.orden = orden;
+    }
+
+    public String getServiceParamsIds() {
+        return serviceParamsIds;
+    }
+
+    public void setServiceParamsIds(String serviceParamsIds) {
+        this.serviceParamsIds = serviceParamsIds;
     }
 }

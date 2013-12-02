@@ -68,10 +68,10 @@ public class PanelDeServiciosController {
     List<FormField> formServiceItems(@RequestParam(value = "id") Integer id) {
         UserService us = dao.get(UserService.class, id);
 
-        return requestFormFiends(us.getParametros());
+        return PanelDeServiciosController.requestFormFiends(us.getParametros());
     }
 
-    private List<FormField> requestFormFiends(Collection<Parametro> parametros) {
+    public static List<FormField> requestFormFiends(Collection<Parametro> parametros) {
         List<FormField> list = new ArrayList<FormField>();
         for (Parametro pm : parametros) {
             FormField ff = new FormField();

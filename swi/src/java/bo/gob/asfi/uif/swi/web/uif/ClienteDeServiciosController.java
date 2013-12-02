@@ -298,13 +298,16 @@ public class ClienteDeServiciosController {
                 //n.setChildren(this.parseJsonStructServiceTree(s.getId().toString(), s.getServicios()));
                 List<org.heyma.core.extjs.components.Node> pms = new ArrayList<org.heyma.core.extjs.components.Node>();
                 for (Parametro pm : us.getParametros()) {
-                    Node np = new Node();
-                    np.setText(pm.getEtiqueta());
-                    np.setIconCls("param");
-                    np.setChecked(Boolean.FALSE);
-                    np.setId(pm.getId().toString());
-                    np.setLeaf(Boolean.TRUE);
-                    pms.add(np);
+                    // para verificar q el parametro no haya sido asignado
+                    if (pm.getRpifield() == null) {
+                        Node np = new Node();
+                        np.setText(pm.getEtiqueta());
+                        np.setIconCls("param");
+                        np.setChecked(Boolean.FALSE);
+                        np.setId(pm.getId().toString());
+                        np.setLeaf(Boolean.TRUE);
+                        pms.add(np);
+                    }
                 }
                 n.setChildren(pms);
                 nodes.add(n);

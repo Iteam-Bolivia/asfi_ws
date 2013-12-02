@@ -143,7 +143,7 @@
                                         <id>cd-002</id> 
                                         <title>Desplegar datos</title>
                                         <iconCls>icon</iconCls> 
-                                        <url>rpi</url> 
+                                        <url>rpiview</url> 
                                     </module>
                                 </menu>
                             </items>                                              

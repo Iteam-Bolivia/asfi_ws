@@ -62,27 +62,44 @@ public class RpiController {
         return requestFormFiends(lst);
     }
 
-    
     @RequestMapping(value = "/guardarcampo", method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, ? extends Object> guardarCampo(@RequestParam String srvfields, RpiField field) {
+    Map<String, ? extends Object> guardarCampo(RpiField field) {
         Map<String, Object> body = new HashMap<String, Object>();
         try {
             dao.persist(field);
-            System.out.println(srvfields);
-            String[] srvParams = srvfields.split(":");
-            for(String sp: srvParams) {
-                Parametro p = dao.load(Parametro.class, new Integer(sp));
+            //System.out.println(srvfields);
+            String[] srvParams = field.getServiceParamsIds().split(":");//srvfields.split(":");
+            for (String sp : srvParams) {
+                Parametro p = dao.get(Parametro.class, new Integer(sp));
                 p.setRpifield(new Integer(sp));
                 dao.update(p);
             }
         } catch (Exception e) {
-            
         }
         body.put("success", false);
         return body;
-    }        
-    
+    }
+
+    @RequestMapping(value = "/eliminarcampo", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, ? extends Object> eliminarCampo(@RequestParam Integer id) {
+        Map<String, Object> body = new HashMap<String, Object>();
+        try {
+            RpiField rf = dao.get(RpiField.class, id);
+            for (String sp : rf.getServiceParamsIds().split(":")) {
+                Parametro p = dao.get(Parametro.class, new Integer(sp));
+                p.setRpifield(null);
+                dao.update(p);
+            }
+            dao.remove(rf);
+            body.put("success", true);
+        } catch (Exception e) {
+        }
+        body.put("success", false);
+        return body;
+    }
+
     private List<FieldSet> requestFormFiends(List<UserService> services) {
         List<FieldSet> list = new ArrayList<FieldSet>();
         for (UserService us : services) {
@@ -105,6 +122,28 @@ public class RpiController {
                 fs.getItems().add(ff);
             }
             list.add(fs);
+        }
+        return list;
+    }
+
+    @RequestMapping(value = "/formrpiitems")
+    public @ResponseBody
+    List<FormField> formRpiItems() {
+        List<RpiField> fields = dao.findAll(RpiField.class);
+
+        return RpiController.rpiFormFiends(fields);
+    }
+
+    public static List<FormField> rpiFormFiends(List<RpiField> fields) {
+        List<FormField> list = new ArrayList<FormField>();
+        for (RpiField pm : fields) {
+            FormField ff = new FormField();
+            ff.setFieldLabel(pm.getEtiqueta());
+            ff.setXtype(pm.getTipo());
+            ff.setValue(pm.getValordefecto());
+            ff.setAllowBlank(!pm.getRequerido());
+            ff.setId(pm.getId() + ":rpifield");
+            list.add(ff);
         }
         return list;
     }
