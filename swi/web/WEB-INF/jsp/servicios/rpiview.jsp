@@ -1,5 +1,5 @@
 <%--
-    Document   : Configucacion de RPI
+    Document   : Vista de RPI
     Created on : 30-11-2013, 07:05:10 PM
     Author     : John Castillo Valencia
 --%>
@@ -10,7 +10,7 @@
 <!DOCTYPE HTML>
 <html lang="es">
     <head>
-        <title>Configucacion de RPI</title>
+        <title>Vista de RPI</title>
         <!-- ALL ExtJS Framework resources -->
         <%@include file="../ExtJSScripts-ES.jsp"%>  
 
@@ -160,6 +160,50 @@
 
                                                 }
                                             });
+
+
+
+//
+//                                            var nfield = {
+//                                                xtype: 'compositefield',
+//                                                fieldLabel: fdata.etiqueta,
+//                                                items: [{
+//                                                        xtype: fdata.tipo,
+//                                                        fieldLabel: fdata.etiqueta,
+//                                                        width: 200,
+//                                                        allowBlank: fdata.requerido ? false : true,
+//                                                        value: fdata.valordefecto
+//                                                    }, {
+//                                                        xtype: 'displayfield',
+//                                                        width: 50,
+//                                                        value: '      '
+//                                                    }, {
+//                                                        xtype: 'button',
+//                                                        iconCls: 'delete',
+//                                                        tooltip: 'eliminar campo',
+//                                                        name: 'ss',
+//                                                        handler: function() {
+//                                                            alert(this.id);
+//                                                        }
+//                                                    }/*, {
+//                                                     xtype: 'button',
+//                                                     iconCls: 'arrow-up',
+//                                                     tooltip: 'eliminar campo',
+//                                                     handler: function() {
+//                                                     alert('up');
+//                                                     }
+//                                                     }, {
+//                                                     xtype: 'button',
+//                                                     iconCls: 'arrow-down',
+//                                                     tooltip: 'eliminar campo',
+//                                                     handler: function() {
+//                                                     alert('down');
+//                                                     }
+//                                                     }*/]
+//                                            };
+//                                            options.form.add(nfield);
+//                                            options.form.doLayout();
+//                                            win.close();
                                         } else {
                                             domain.Manager.mustBeSelect();
                                         }
@@ -192,7 +236,7 @@
 
             domain.Panel = {
                 init: function() {
-
+                
                     var formParametro = new Ext.FormPanel({
                         url: 'individual/guardarparametros',
                         border: true,
@@ -203,11 +247,10 @@
 
                     var formServicio = new Ext.Panel({
                         border: false,
-                        //frame: true,
                         items: [/*formParametro*/],
                         tbar: [{
-                                text: 'Agregar campo',
-                                iconCls: 'create',
+                                text: 'Ejecutar',
+                                iconCls: 'play',
                                 handler: function() {
                                     domain.Manager.addField({
                                         form: formParametro,
@@ -293,38 +336,14 @@
                         });
                     };
 
-                    fsload();
+                    //fsload();
 
                     var fsloadRpi = function() {
                         Ext.Ajax.request({
-                            url: Ext.SROOT + 'rpi/formrpiitems',
+                            url: Ext.SROOT + 'rpiview/formrpiitems',
                             method: 'GET',
                             success: function(result, request) {
                                 var sfields = Ext.util.JSON.decode(result.responseText);
-                                var cfields = new Array(); //composedfields
-                                Ext.each(sfields, function(field, index) {
-                                    var nfield = {
-                                        xtype: 'compositefield',
-                                        fieldLabel: field.etiqueta,
-                                        items: [field, {
-                                                xtype: 'displayfield',
-                                                width: 50,
-                                                value: '      '
-                                            }, {
-                                                xtype: 'button',
-                                                iconCls: 'delete',
-                                                tooltip: 'eliminar campo',
-                                                name: 'ss',
-                                                handler: function() {
-                                                      domain.Manager.deleteField({
-                                                          id:field.id.split(':')[0],
-                                                          handler:fsloadRpi
-                                                      });    
-                                                }
-                                            }]
-                                    };
-                                    cfields.push(nfield);
-                                });
 
                                 var form = new Ext.FormPanel({
                                     url: Ext.SROOT + 'submitservice',
@@ -334,7 +353,7 @@
                                     labelWidth: 170,
                                     frame: false,
                                     //labelAlign: 'top',
-                                    items: cfields
+                                    items: sfields
                                 });
                                 formServicio.removeAll();
                                 formServicio.add(form);
