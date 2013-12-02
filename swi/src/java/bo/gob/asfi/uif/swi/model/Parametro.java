@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -31,9 +32,11 @@ public class Parametro implements Serializable {
     private String etiqueta;
     private String tipo;
     private Boolean requerido = false;
-    private Boolean oculto = false;
+    @Transient
+    private Boolean oculto;
     private String valordefecto;
     private String patron;
+    private Integer rpifield;
     @ManyToOne(fetch = FetchType.LAZY)
     private UserService servicio;
 
@@ -43,6 +46,14 @@ public class Parametro implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getRpifield() {
+        return rpifield;
+    }
+
+    public void setRpifield(Integer rpifield) {
+        this.rpifield = rpifield;
     }
 
     public String getNombre() {
@@ -86,11 +97,7 @@ public class Parametro implements Serializable {
     }
 
     public Boolean getOculto() {
-        return oculto;
-    }
-
-    public void setOculto(Boolean oculto) {
-        this.oculto = oculto;
+        return this.tipo.equals("hidden");
     }
 
     public String getValordefecto() {

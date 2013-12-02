@@ -35,6 +35,7 @@ public class UserService implements Serializable {
     private String url;
     @Lob
     private String descripcion;
+    private Boolean rpiEnable = false;
     @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Parametro> parametros;
 
@@ -44,6 +45,14 @@ public class UserService implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Boolean getRpiEnable() {
+        return rpiEnable;
+    }
+
+    public void setRpiEnable(Boolean rpiEnable) {
+        this.rpiEnable = rpiEnable;
     }
 
     public String getUrl() {

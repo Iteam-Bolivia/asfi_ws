@@ -53,7 +53,7 @@ public class UserServiceControllerDemo {
     public @ResponseBody
     List<UserService> listarUserServices() {
 
-        List<UserService> lst = dao.find(UserService.class);
+        List<UserService> lst = dao.findAll(UserService.class);
         List<UserService> lst2 = new ArrayList<UserService>();
         for (UserService us : lst) {
             System.out.println(us.getNombre());

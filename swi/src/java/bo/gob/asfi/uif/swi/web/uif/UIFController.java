@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author John Castillo Valencia
  */
-@Controller
+//@Controller
 public class UIFController {
 
     @Autowired
@@ -49,7 +49,7 @@ public class UIFController {
         Map<String, Object> data = new HashMap<String, Object>();
         if (error == true) {
             data.put("success", Boolean.FALSE);
-            data.put("reason", "Fallo el ingreo.. intente nuevamente");
+            data.put("reason", "Fallo el ingreso.. intente nuevamente");
         } else {
             data.put("success", Boolean.TRUE);   
         }

@@ -22,17 +22,7 @@
                                         <iconCls>user</iconCls> 
                                         <url>security/usermanager</url> 
                                     </module>
-                                </menu>                     
-                                <menu>                    
-                                    <text>Asignacion de Rol</text> 
-                                    <iconCls>icon</iconCls> 
-                                    <module>
-                                        <id>gu-002</id> 
-                                        <title>Asignacion de Rol</title>
-                                        <iconCls>icon</iconCls> 
-                                        <url>404.jsp</url> 
-                                    </module>
-                                </menu> 
+                                </menu>                                                      
                                 <menu>                    
                                     <text>Asignacion de Servicios</text> 
                                     <iconCls>icon</iconCls> 
@@ -42,31 +32,10 @@
                                         <iconCls>icon</iconCls> 
                                         <url>404.jsp</url> 
                                     </module>
-                                </menu> 
-                                <menu>                    
-                                    <text>Caducidad de acceso</text> 
-                                    <iconCls>icon</iconCls> 
-                                    <module>
-                                        <id>gu-004</id> 
-                                        <title>Caducidad de acceso</title>
-                                        <iconCls>icon</iconCls> 
-                                        <url>404.jsp</url> 
-                                    </module>
-                                </menu> 
-                                <menu>                    
-                                    <text>Habilitar acceso</text> 
-                                    <iconCls>icon</iconCls> 
-                                    <module>
-                                        <id>gu-005</id> 
-                                        <title>Habilitar acceso</title>
-                                        <iconCls>icon</iconCls> 
-                                        <url>404.jsp</url> 
-                                    </module>
-                                </menu> 
+                                </menu>                                                                  
                             </items>
                         </menu>
-                    </menu>
-                    
+                    </menu>                    
                     <menu>    
                         <text>Bitacora de Usuarios</text> 
                         <iconCls>icon</iconCls> 
@@ -104,28 +73,10 @@
                                 </menu> 
                             </items>
                         </menu>
-                    </menu>
-                    
-                    <menu>                    
-                        <text>Prueba 1</text> 
-                        <iconCls>user</iconCls> 
-                        <module>
-                            <id>prb-001</id> 
-                            <title>Prueba 1</title>
-                            <iconCls>icon</iconCls> 
-                            <url>formulario1</url> 
-                        </module>
-                    </menu> 
+                    </menu>                                        
                 </items>
             </menu>
         </menu>
-        
-        
-        
-        
-        
-        
-        
         <menu>
             <xtype>tbbutton</xtype>
             <text>Parametrizacion de Servicios</text> 
@@ -176,13 +127,23 @@
                         <menu>     
                             <items>               
                                 <menu>                    
-                                    <text>Visualizar datos</text> 
+                                    <text>Configurar RPI</text> 
                                     <iconCls>icon</iconCls> 
                                     <module>
                                         <id>cd-001</id> 
-                                        <title>Visualizar datos</title>
-                                        <iconCls>module-app</iconCls> 
-                                        <url>servicios.jsp</url> 
+                                        <title>Configurar RPI</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>rpi</url> 
+                                    </module>
+                                </menu>
+                                <menu>                    
+                                    <text>Desplegar RPI</text> 
+                                    <iconCls>icon</iconCls> 
+                                    <module>
+                                        <id>cd-002</id> 
+                                        <title>Desplegar datos</title>
+                                        <iconCls>icon</iconCls> 
+                                        <url>rpi</url> 
                                     </module>
                                 </menu>
                             </items>                                              

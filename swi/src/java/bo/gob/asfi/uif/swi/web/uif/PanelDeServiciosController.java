@@ -40,7 +40,7 @@ public class PanelDeServiciosController {
     @RequestMapping(value = "/listaservicios", method = RequestMethod.GET)
     public @ResponseBody
     List<Map<String, Object>> listarUserServices() {
-        List<UserService> lst = dao.find(UserService.class);
+        List<UserService> lst = dao.findAll(UserService.class);
         List<Map<String, Object>> samples = new ArrayList<Map<String, Object>>();
         System.out.println(lst.size());
         for (UserService us : lst) {

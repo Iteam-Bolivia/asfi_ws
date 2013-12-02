@@ -29,5 +29,7 @@ public interface Dao {
 
     public <T> List<T> find(String sql);
     
+    public <T> List<T> findAll(Class<T> entityClass);
+    
     public <T> T getUsuarioByUsername(String username);
 }

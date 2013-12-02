@@ -51,7 +51,7 @@ public class IndividualController {
     @RequestMapping(value = "/listaservicios", method = RequestMethod.GET)
     public @ResponseBody
     List<UserService> listarUserServices() {
-        List<UserService> lst = dao.find(UserService.class);
+        List<UserService> lst = dao.findAll(UserService.class);
         for (UserService us : lst) {
             us.setParametros(null);
         }

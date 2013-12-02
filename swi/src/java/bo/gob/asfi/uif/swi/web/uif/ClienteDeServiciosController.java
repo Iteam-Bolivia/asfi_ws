@@ -32,16 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,7 +62,7 @@ public class ClienteDeServiciosController {
     public @ResponseBody
     List<Servidor> servicios() {
 
-        List<Servidor> servicios = dao.find(Servidor.class);
+        List<Servidor> servicios = dao.findAll(Servidor.class);
         return servicios;
     }
 
@@ -78,8 +70,8 @@ public class ClienteDeServiciosController {
     public @ResponseBody
     Map<String, ? extends Object> crearServicio(Servidor servidor) {
         Map<String, Object> body = new HashMap<String, Object>();
-        WSDLParser parser = new WSDLParser();
         try {
+            WSDLParser parser = new WSDLParser();
             Definitions defs = parser.parse(servidor.getWsdlurl());
             servidor.setJsonstruct(this.jsonStruct(defs));
             dao.persist(servidor);
@@ -138,45 +130,21 @@ public class ClienteDeServiciosController {
         return body;
     }
 
-    @RequestMapping(value = "/restclient")
+    @RequestMapping(value = "/reloadservidor", method = RequestMethod.POST)
     public @ResponseBody
-    String restCliente() {
-
-        DefaultHttpClient client = new DefaultHttpClient();
-        client.getCredentialsProvider().setCredentials(
-                new AuthScope("localhost", 8080),
-                new UsernamePasswordCredentials("uif", "123456"));
-
-        Credentials defaultcreds = new UsernamePasswordCredentials("username", "password");
-        //client.getState().setCredentials(new AuthScope("myhost", 80, AuthScope.ANY_REALM), defaultcreds);
-
-
-
-        ClientHttpRequestFactory commons = new HttpComponentsClientHttpRequestFactory(client);
-
-        RestTemplate template = new RestTemplate(commons);
-
-        String res = template.getForObject("http://localhost:8080/segip-ws/service/searchfields", String.class);
-
-
-        return res;
-    }
-
-    @RequestMapping(value = "/cliente")
-    public String cliente() {
-
-        HttpComponentsClientHttpRequestFactory requestFactory = (HttpComponentsClientHttpRequestFactory) restTemplate.getRequestFactory();
-
-        DefaultHttpClient httpClient = (DefaultHttpClient) requestFactory.getHttpClient();
-        httpClient.getCredentialsProvider().setCredentials(
-                new AuthScope("localhost", 8080, AuthScope.ANY_REALM),
-                new UsernamePasswordCredentials("uif", "123456"));
-
-        ResponseEntity en = restTemplate.exchange("http://localhost:8080/spring-security-rest-template/api/foos/1",
-                HttpMethod.GET, null, String.class);
-        Gson g = new Gson();
-        System.err.println(g.toJson(g));
-        return "servicios/administrarServicios";
+    Map<String, ? extends Object> reloadServidor(@RequestParam Long id) {
+        Map<String, Object> body = new HashMap<String, Object>();
+        try {
+            Servidor servidor = dao.get(Servidor.class, id);
+            WSDLParser parser = new WSDLParser();
+            Definitions defs = parser.parse(servidor.getWsdlurl());
+            servidor.setJsonstruct(this.jsonStruct(defs));
+            dao.update(servidor);
+            body.put("success", true);
+        } catch (Exception e) {
+        }
+        body.put("success", false);
+        return body;
     }
 
     private String ejemploJsonTree() {
@@ -276,16 +244,8 @@ public class ClienteDeServiciosController {
         return nodes;
     }
 
-//    private List<Servicio> fromJson(String json) {
-//        Type listType = new TypeToken<ArrayList<Servicio>>() {
-//        }.getType();
-//        List<Servicio> servicios = new Gson().fromJson(json, listType);
-//        return servicios;
-//    }
     private List<org.heyma.core.extjs.components.Node> parseJsonStructServiceTree(String rootId, List<Servicio> servicios) {
         List<org.heyma.core.extjs.components.Node> nodes = new ArrayList<org.heyma.core.extjs.components.Node>();
-
-        //List<Servicio> servicios = this.fromJson(json);
 
         for (Servicio srv : servicios) {
             Node ns = new Node();
@@ -326,14 +286,46 @@ public class ClienteDeServiciosController {
         return nodes;
     }
 
+    private List<Node> nodesFromUserServices(List<UserService> services) {
+        List<Node> nodes = new ArrayList<Node>();
+
+        for (UserService us : services) {
+            if (us.getRpiEnable()) {
+                Node n = new Node();
+                n.setText(us.getNombre());
+                n.setIconCls("service");
+                n.setId(us.getId().toString());
+                //n.setChildren(this.parseJsonStructServiceTree(s.getId().toString(), s.getServicios()));
+                List<org.heyma.core.extjs.components.Node> pms = new ArrayList<org.heyma.core.extjs.components.Node>();
+                for (Parametro pm : us.getParametros()) {
+                    Node np = new Node();
+                    np.setText(pm.getEtiqueta());
+                    np.setIconCls("param");
+                    np.setChecked(Boolean.FALSE);
+                    np.setId(pm.getId().toString());
+                    np.setLeaf(Boolean.TRUE);
+                    pms.add(np);
+                }
+                n.setChildren(pms);
+                nodes.add(n);
+            }
+        }
+        return nodes;
+    }
+
     @RequestMapping(value = "/treeservices")
     public @ResponseBody
     List<Node> treeServices() {
-
-        List<Servidor> servidores = dao.find(Servidor.class);
-
+        List<Servidor> servidores = dao.findAll(Servidor.class);
         List<Node> nodes = this.nodesFromServidores(servidores);
+        return nodes;
+    }
 
+    @RequestMapping(value = "/treeuserservices")
+    public @ResponseBody
+    List<Node> treeUserServices() {
+        List<UserService> services = dao.findAll(UserService.class);
+        List<Node> nodes = this.nodesFromUserServices(services);
         return nodes;
     }
 
@@ -417,7 +409,7 @@ public class ClienteDeServiciosController {
             if (op != null) {
                 if (op.getRequest() != null) {
                     for (ElementParam ep : op.getRequest().getElements()) {
-                        Parametro param =  new Parametro();
+                        Parametro param = new Parametro();
                         param.setNombre(ep.getName());
                         param.setEtiqueta(ep.getName());
                         param.setTipo(ep.getType());

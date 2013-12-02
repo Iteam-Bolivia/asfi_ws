@@ -49,6 +49,11 @@ public class DaoImpl implements Dao {
     public <T> List<T> find(Class<T> entityClass) {
         return this.sessionFactory.getCurrentSession().createCriteria(entityClass).list();
     }
+    
+    @Transactional(readOnly = true)
+    public <T> List<T> findAll(Class<T> entityClass) {
+        return this.sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName()).list();
+    }
 
     @Transactional(readOnly = true)
     public <T> T load(Class<T> entityClass, Serializable id) {
