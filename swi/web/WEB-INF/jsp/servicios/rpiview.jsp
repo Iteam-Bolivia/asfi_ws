@@ -236,7 +236,7 @@
 
             domain.Panel = {
                 init: function() {
-                
+
                     var formParametro = new Ext.FormPanel({
                         url: 'individual/guardarparametros',
                         border: true,
@@ -252,10 +252,13 @@
                                 text: 'Ejecutar',
                                 iconCls: 'play',
                                 handler: function() {
-                                    domain.Manager.addField({
-                                        form: formParametro,
-                                        handler:fsloadRpi
-                                    })
+
+                                }
+                            }, '->', {
+                                tooltip: 'Actualizar Formulario',
+                                iconCls: 'refresh',
+                                handler: function() {
+                                    fsloadRpi();
                                 }
                             }]
                     });
@@ -289,54 +292,6 @@
                         ]
                     });
 
-                    //storeServicio.load();
-                    var setServiceEnabled = function(e) {
-                        Ext.Ajax.request({
-                            url: Ext.SROOT + 'rpi/setserviceenabled',
-                            method: 'POST',
-                            params: {id: e},
-                            success: function(result, request) {
-                                fsload();
-                            },
-                            failure: function(result, request) {
-
-                            }
-                        });
-                    };
-
-                    var fsload = function() {
-                        Ext.Ajax.request({
-                            url: Ext.SROOT + 'rpi/formserviceitems',
-                            method: 'GET',
-                            success: function(result, request) {
-                                var sfields = Ext.util.JSON.decode(result.responseText);
-                                //console.log(sfields)
-                                Ext.each(sfields, function(field, index) {
-                                    //console.log(field.buttons[0])
-                                    field.buttons[0].handler = function(e) {
-                                        setServiceEnabled(field.id);
-                                    }
-                                });
-                                var form = new Ext.FormPanel({
-                                    url: Ext.SROOT + 'submitservice',
-                                    border: false,
-                                    autoHeight: true,
-                                    bodyStyle: 'padding:10px',
-                                    labelWidth: 170,
-                                    frame: true,
-                                    items: sfields
-                                });
-                                derecha.removeAll();
-                                derecha.add(form);
-                                derecha.doLayout();
-                            },
-                            failure: function(result, request) {
-
-                            }
-                        });
-                    };
-
-                    //fsload();
 
                     var fsloadRpi = function() {
                         Ext.Ajax.request({
