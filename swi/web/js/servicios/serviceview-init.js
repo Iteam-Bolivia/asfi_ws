@@ -136,7 +136,14 @@ Ext.onReady(function() {
             autoScroll: true,
             items: new SamplePanel({
                 store: store
-            })
+            }),
+            tbar:[{
+                    iconCls: 'refresh',
+                    tooltip: 'Recargar',
+                    handler: function() {
+                        store.reload();
+                    }
+                }]
         });
 
         new Ext.Viewport({

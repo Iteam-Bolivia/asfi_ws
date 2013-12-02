@@ -31,8 +31,8 @@
         <property name="packagesToScan" value="bo.gob.asfi.uif.swi.model"/>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
-                <prop key="hibernate.default_schema">UIF</prop>
+                <prop key="hibernate.dialect">${jdbc.dialect}</prop>                
+                <!--<prop key="hibernate.default_schema">UIF</prop>-->
                 <prop key="hibernate.show_sql">true</prop>                
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>

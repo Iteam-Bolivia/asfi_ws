@@ -89,12 +89,12 @@ domain.ServiceManager = {
                     fieldLabel: 'Nombre',
                     allowBlank: false,
                     name: 'nombre'
-                },{
+                }, {
                     xtype: 'textarea',
                     fieldLabel: 'Descripci&oacute;n',
                     allowBlank: false,
                     name: 'descripcion'
-                },{
+                }, {
                     xtype: "hidden",
                     name: "router",
                     value: options.router,
@@ -160,6 +160,26 @@ domain.ServiceManager = {
             domain.errors.mustBeServer();
         }
     },
+    reloadService: function(options) {
+        if (options.node.attributes.iconCls === 'server') {
+            var item = options.node.attributes;
+            Ext.Ajax.request({
+                url: Ext.SROOT + 'reloadservidor',
+                method: 'POST',
+                params: {
+                    id: item.id
+                },
+                success: function(result, request) {
+                    options.tree.getRootNode().reload();
+                },
+                failure: function(result, request) {
+
+                }
+            });
+        } else {
+            domain.errors.mustBeServer();
+        }
+    },
     openOperation: function(options) {
         options.panelinfo.removeAll();
         if (options.node.attributes.iconCls === 'operation') {
@@ -170,8 +190,8 @@ domain.ServiceManager = {
                 params: {
                     id: item.id
                 },
-                success: function(result, request) {                    
-                    var sfields = Ext.util.JSON.decode(result.responseText);                    
+                success: function(result, request) {
+                    var sfields = Ext.util.JSON.decode(result.responseText);
                     var form = new Ext.FormPanel({
                         url: Ext.SROOT + 'submitservice',
                         border: false,
@@ -214,159 +234,6 @@ domain.ServiceManager = {
         } else {
             domain.errors.mustBeOperation();
         }
-    },
-    serviceGrid: function(options) {
-        var store = new Ext.data.JsonStore({
-            url: Ext.SROOT + 'servicios',
-            //root: 'data',
-            fields: ['id', 'nombre', 'servidor', 'puerto', 'protocolo',
-                'activo', 'descripcion', 'username'],
-            autoLoad: true
-        });
-
-//        var searchListFilters = new Ext.ux.grid.GridFilters({
-//            encode: false,
-//            local: true,
-//            menuFilterText: 'Filtrar',
-//            filters: [
-//                {type: 'string', dataIndex: 'nombres'},
-//                {type: 'string', dataIndex: 'paterno'},
-//                {type: 'string', dataIndex: 'materno'},
-//                {type: 'list', dataIndex: 'rol', options: ['Usuario', 'Administrador']},
-//                {type: 'boolean', dataIndex: 'activo', yesText: 'Activo', noText: 'Desactivado'}
-//            ]});
-
-        var grid = new Ext.grid.GridPanel({
-            title: 'Servicios',
-            border: false,
-            store: store,
-            region: 'center',
-//            plugins: [searchListFilters],
-//            plugins: [new Ext.ux.grid.Search({
-//                    iconCls: 'icon-zoom'
-//                            , readonlyIndexes: ['id']
-//                            , disableIndexes: ['uid', 'clave']
-//                            , minChars: 3
-//                            , autoFocus: true,
-//                    width: 100
-//				,menuStyle:'radio'
-//                }), new Ext.ux.grid.RowActions({
-//                    actions: [{
-//                            iconCls: 'icon-minus'
-//                                    , qtip: 'Delete Record'
-//                                    , style: 'margin:0 0 0 3px'
-//                        }]
-//                })],
-            loadMask: true,
-            columns: [new Ext.grid.RowNumberer({
-                    width: 27
-                }), {
-                    header: "Nombre",
-                    sortable: true,
-                    dataIndex: 'nombre'
-                }, {
-                    header: "Servidor",
-                    sortable: true,
-                    dataIndex: 'servidor'
-                }, {
-                    header: "Puerto",
-                    sortable: true,
-                    dataIndex: 'puerto'
-                }, {
-                    header: "Usuario",
-                    sortable: true,
-                    dataIndex: 'username'
-                }, {
-                    header: "Activo",
-                    sortable: true,
-                    dataIndex: 'activo',
-                    renderer: function(val) {
-                        if (val) {
-                            return '<img src="' + Ext.IMAGES_SILK + 'accept.png">';
-                        } else {
-                            return '<img src="' + Ext.IMAGES_SILK + 'cancel.png">';
-                        }
-                    }
-                }],
-            tbar: [{
-                    iconCls: 'refresh',
-                    handler: function() {
-                        grid.store.reload();
-                    }
-                }, '-', {
-                    text: 'Nuevo usuario',
-                    iconCls: 'create',
-                    tooltip: 'Nuevo',
-                    handler: function() {
-                        domain.ServiceManager.newService(options);
-                    }
-                }/*, '-', {
-                 //text: 'Modificar',
-                 iconCls: 'update',
-                 tooltip: 'Modificar datos personales',
-                 handler: function() {
-                 var record = grid.getSelectionModel().getSelected();
-                 if (record) {
-                 options.record = record;
-                 domain.UserManager.updateUser(options);
-                 } else {
-                 com.icg.errors.mustSelect();
-                 }
-                 }
-                 }*/, {
-                    text: 'Activar/Desactivar',
-                    iconCls: 'delete',
-                    tooltip: 'Activar/Desactivar',
-                    handler: function() {
-                        var record = grid.getSelectionModel().getSelected();
-                        if (record) {
-                            var box = Ext.MessageBox.wait('Por favor espere...');
-                            Ext.Ajax.request({
-                                url: Ext.SROOT + 'disableservice',
-                                method: 'POST',
-                                params: {
-                                    id: record.data.id
-                                },
-                                success: function(result, request) {
-                                    grid.getStore().reload();
-                                    box.hide();
-                                },
-                                failure: function(result, request) {
-                                    Ext.Msg.alert('Error', 'Fallo.');
-                                    box.hide();
-                                }
-                            });
-                        } else {
-                            domain.errors.mustSelect();
-                        }
-                    }
-                }/*, {
-                 iconCls: 'key',
-                 tooltip: 'Asignar o cambiar la clave',
-                 handler: function() {
-                 var record = grid.getSelectionModel().getSelected();
-                 if (record) {
-                 options.record = record;
-                 domain.UserManager.changePassword(options);
-                 } else {
-                 domain.errors.mustSelect();
-                 }
-                 }
-                 }, '-',*/
-            ]//,
-//            bbar: new Ext.PagingToolbar({
-//                store: this.store
-//                        , displayInfo: true
-//                        , pageSize: 3
-//            })
-//            bbar: new Ext.PagingToolbar({
-//                store: store,
-//                pageSize: 50,
-//                plugins: [searchListFilters]
-//            })
-        });
-        options.grid = grid;
-        return grid;
     },
     datosServicio: function() {
         return {
@@ -461,21 +328,15 @@ domain.ServiceManager.View = {
                         tree.getRootNode().reload();
                     }
                 }, '-', {
-                    text: 'Expandir todo',
-                    handler: function() {
-                        tree.getRootNode().reload();
-                        tree.getRootNode().expand(true);
-                    }
-                }, {
                     text: 'Nuevo',
-                    iconCls: 'create',
+                    iconCls: 'server-add',
                     tooltip: 'Nuevo servicio',
                     handler: function() {
                         domain.ServiceManager.newService({tree: tree});
                     }
                 }, {
                     text: 'Eliminar',
-                    iconCls: 'delete',
+                    iconCls: 'server-delete',
                     tooltip: 'Eliminar servicio',
                     handler: function() {
                         var record = tree.getSelectionModel().getSelectedNode();
@@ -497,6 +358,24 @@ domain.ServiceManager.View = {
                                 tree: tree,
                                 panelinfo: serviceInfoPanel
                             });
+                        } else {
+                            domain.errors.mustSelect();
+                        }
+                    }
+                }, {
+                    iconCls: 'drink',
+                    text: 'Expandir',
+                    handler: function() {
+                        tree.getRootNode().reload();
+                        tree.getRootNode().expand(true);
+                    }
+                }, {
+                    iconCls: 'page-refresh',
+                    text: 'Recargar',
+                    handler: function() {
+                        var record = tree.getSelectionModel().getSelectedNode();
+                        if (record) {
+                            domain.ServiceManager.reloadService({node: record, tree: tree});
                         } else {
                             domain.errors.mustSelect();
                         }

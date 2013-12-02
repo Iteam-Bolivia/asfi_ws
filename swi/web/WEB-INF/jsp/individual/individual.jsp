@@ -74,7 +74,7 @@
                         typeAhead: true,
                         selectOnFocus: true
                     });
-                    var verUsuario = new Ext.FormPanel({
+                    var formServicio = new Ext.FormPanel({
                         border: false,
                         defaults: {xtype: 'textfield'},
                         bodyStyle: 'padding:10px',
@@ -120,7 +120,7 @@
                                         forceSelection: true,
                                         store: new Ext.data.ArrayStore({
                                             fields: ['type', 'objeto'],
-                                            data: [['string', 'Cadena'], ['text', 'Texto'], ['int', 'Entero'], ['float', 'Real'], ['boolean', 'Falso/Verdadero'], ['date', 'Fecha'], /*['time', 'Hora'], ['timestamp','Fecha y Hora'],['entity', 'Entidad'],['subentity','Entidad propia'],['entity','Entidad agregada (1/n)'],['centity','Entidad compuesta (n)'],['class','Entidad compuesta (1)']*/]
+                                            data: [['string', 'Cadena'], ['text', 'Texto'], ['int', 'Entero'], ['float', 'Real'], ['truefalse', 'Falso/Verdadero'], ['date', 'Fecha'], ['hidden', 'Oculto'], /*['timestamp','Fecha y Hora'],['entity', 'Entidad'],['subentity','Entidad propia'],['entity','Entidad agregada (1/n)'],['centity','Entidad compuesta (n)'],['class','Entidad compuesta (1)']*/]
                                         }),
                                         valueField: 'type',
                                         displayField: 'objeto',
@@ -135,19 +135,13 @@
                                         name: 'requerido'
                                     },{
                                         xtype: 'textfield',
-                                        fieldLabel: 'Nombre a Desplegar',
-                                        emptyText: 'nombre desplegado...',
+                                        fieldLabel: 'Nombre a Desplegar',                                        
                                         allowBlank: false,
                                         name: 'etiqueta'
                                     },{
                                         xtype: 'textfield',
-                                        fieldLabel: 'Valor por Defecto',
-                                        emptyText: 'valor por defecto...',
+                                        fieldLabel: 'Valor por Defecto',                                        
                                         name: 'valordefecto'
-                                    },{
-                                        xtype: 'checkbox',
-                                        fieldLabel: 'Oculto',
-                                        name: 'oculto'
                                     },{
                                         xtype: 'hidden',
                                         name: 'id'
@@ -173,11 +167,7 @@
                                     })
                                 }},
                             {text: 'Limpiar', handler: function() {
-                                    formParametro.getForm().reset();
-                                    //rowselected(null, null, fila);
-                                }},
-                            {text: 'Imprimir', handler: function() {
-                                    //rowselected(null, null, fila);
+                                    formParametro.getForm().reset();                                    
                                 }}
                         ]
                     });
@@ -188,7 +178,7 @@
                     var centro = new Ext.Panel({
                         title: 'Servicios',
                         region: 'center',                        
-                        items: [verUsuario]
+                        items: [formServicio]
                     });
 
                     var derecha = new Ext.Panel({

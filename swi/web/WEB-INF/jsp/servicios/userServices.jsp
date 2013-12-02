@@ -29,11 +29,37 @@
                                     msgTarget: 'side'
                                 },
                                 items: [{
-                                        xtype: 'textfield',
+                                        xtype: 'compositefield',
                                         fieldLabel: 'Nombre',
-                                        width: 200,
-                                        allowBlank: false,
-                                        name: 'nombre'
+                                        items: [{
+                                                xtype: 'textfield',
+                                                fieldLabel: 'Nombre',
+                                                width: 100,
+                                                allowBlank: false,
+                                                name: 'nombre'
+                                            },{
+                                                xtype: 'button',
+                                                iconCls: 'delete',
+                                                tooltip:'eliminar campo',
+                                                name:'ss',
+                                                handler: function() {
+                                                    alert(this.id);
+                                                }
+                                            },{
+                                                xtype: 'button',
+                                                iconCls: 'arrow-up',
+                                                tooltip:'eliminar campo',
+                                                handler: function() {
+                                                    alert('up');
+                                                }
+                                            },{
+                                                xtype: 'button',
+                                                iconCls: 'arrow-down',
+                                                tooltip:'eliminar campo',
+                                                handler: function() {
+                                                    alert('down');
+                                                }
+                                            }]
                                     }]
                             }],
                         buttons: [{
@@ -71,11 +97,11 @@
                         }),
                         columns: [new Ext.grid.RowNumberer({
                                 width: 27
-                            }),{
+                            }), {
                                 header: "Nombre",
                                 sortable: true,
                                 dataIndex: 'nombre'
-                            },{
+                            }, {
                                 header: "ID",
                                 sortable: true,
                                 dataIndex: 'id'
@@ -135,19 +161,19 @@
                                                     xtype: 'fieldset',
                                                     title: 'Datos',
                                                     defaults: {
-                                                        msgTarget: 'side'                                                        
+                                                        msgTarget: 'side'
                                                     },
                                                     items: [{
                                                             xtype: 'textfield',
                                                             fieldLabel: 'Nombre',
                                                             allowBlank: false,
                                                             name: 'nombre'
-                                                        },{
+                                                        }, {
                                                             xtype: 'textfield',
                                                             fieldLabel: 'Etiqueta',
                                                             allowBlank: false,
                                                             name: 'etiqueta'
-                                                        },{
+                                                        }, {
                                                             xtype: 'textfield',
                                                             fieldLabel: 'ref',
                                                             allowBlank: false,
@@ -162,9 +188,9 @@
                                             title: 'Registrar Parametro',
                                             autoScroll: true,
                                             width: 400,
-                                            autoHeight: true,                                            
+                                            autoHeight: true,
                                             items: form,
-                                            modal: true,                                            
+                                            modal: true,
                                             buttons: [{
                                                     text: 'Guardar',
                                                     handler: function() {
@@ -172,7 +198,7 @@
                                                         form.getForm().submit({
                                                             waitMsg: 'Leyendo WSDL...',
                                                             success: function(form, action) {
-                                                                grid2.store.reload();                               
+                                                                grid2.store.reload();
                                                                 win.close();
                                                             },
                                                             failure: function(form, action) {
@@ -192,7 +218,7 @@
                                         });
                                     }
                                 }
-                            },{
+                            }, {
                                 text: 'Modificar',
                                 iconCls: 'update',
                                 handler: function() {
@@ -210,24 +236,24 @@
                                                     xtype: 'fieldset',
                                                     title: 'Datos',
                                                     defaults: {
-                                                        msgTarget: 'side'                                                        
+                                                        msgTarget: 'side'
                                                     },
                                                     items: [{
                                                             xtype: 'textfield',
                                                             fieldLabel: 'Nombre',
                                                             allowBlank: false,
                                                             name: 'nombre'
-                                                        },{
+                                                        }, {
                                                             xtype: 'textfield',
                                                             fieldLabel: 'Etiqueta',
                                                             allowBlank: false,
                                                             name: 'etiqueta'
-                                                        },{
+                                                        }, {
                                                             xtype: 'textfield',
                                                             fieldLabel: 'id',
                                                             allowBlank: false,
                                                             name: 'id'
-                                                        },{
+                                                        }, {
                                                             xtype: 'textfield',
                                                             fieldLabel: 'ref',
                                                             allowBlank: false,
@@ -242,9 +268,9 @@
                                             title: 'Registrar Parametro',
                                             autoScroll: true,
                                             width: 400,
-                                            autoHeight: true,                                            
+                                            autoHeight: true,
                                             items: form,
-                                            modal: true,                                            
+                                            modal: true,
                                             buttons: [{
                                                     text: 'Guardar',
                                                     handler: function() {
@@ -252,7 +278,7 @@
                                                         form.getForm().submit({
                                                             waitMsg: 'Leyendo WSDL...',
                                                             success: function(form, action) {
-                                                                grid2.store.reload();                               
+                                                                grid2.store.reload();
                                                                 win.close();
                                                             },
                                                             failure: function(form, action) {
