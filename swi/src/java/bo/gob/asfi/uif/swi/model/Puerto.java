@@ -13,6 +13,7 @@ import java.util.List;
 public class Puerto {
 
     private String nombre;
+    private String direccion;
     private List<Operacion> operaciones;
 
     public String getNombre() {
@@ -29,5 +30,13 @@ public class Puerto {
 
     public void setOperaciones(List<Operacion> operaciones) {
         this.operaciones = operaciones;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 }

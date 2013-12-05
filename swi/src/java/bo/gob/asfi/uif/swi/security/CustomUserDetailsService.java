@@ -47,25 +47,17 @@ public class CustomUserDetailsService implements UserDetailsService {
                 accountNonExpired,
                 accountNonLocked,
                 credentialsNonExpired,
-                getRoles(1));
+                getRoles(user.getRol()));
 
         userDetail.setNombre(user.getNombres());
         userDetail.setApellido(user.getPaterno());
-
+        userDetail.setRole(user.getRol());
         return userDetail;
     }
 
-    private Set<String> getRoles(Integer role) {
+    private Set<String> getRoles(String role) {
         Set<String> roles = new HashSet<String>();
-        if (role.intValue() == 1) {
-            roles.add("ROLE_ADMINISTRADOR");
-        } else if (role.intValue() == 2) {
-            roles.add("ROLE_FUNCIONARIO");
-        } else if (role.intValue() == 3) {
-            roles.add("ROLE_SUPERVISOR");
-        } else if (role.intValue() == 4) {
-            roles.add("ROLE_OPERADOR");
-        }
+        roles.add(role);
         return roles;
     }
 }

@@ -29,7 +29,16 @@ public class CustomUserDetails implements UserDetails {
     //custom attibites
     private String nombre;
     private String apellido;
+    private String role;
     private List menu;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public List getMenu() {
         return menu;

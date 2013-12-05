@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author John Castillo Valencia
  */
-//@Controller
+@Controller
 public class UIFController {
 
     @Autowired

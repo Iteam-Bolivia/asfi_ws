@@ -4,60 +4,49 @@
         <!-- Principal Usuario UIF ToolBar -->
         <menu>
             <xtype>tbbutton</xtype>
-            <text>Administrar usuarios</text> 
-            <iconCls>user</iconCls> 
+            <text>Inicio</text> 
+            <iconCls>icon</iconCls> 
             <menu>
-                <items>                    
+                <items>
                     <menu>                    
-                        <text>Cuentas de usuario</text> 
-                        <iconCls>user</iconCls> 
+                        <text>Salir</text> 
+                        <iconCls>server</iconCls> 
                         <module>
-                            <id>_usuarios</id> 
-                            <title>Cuentas de usuario</title>
-                            <iconCls>user</iconCls> 
-                            <url>usuarios.jsp</url> 
-                        </module>
-                    </menu>                     
-                    <menu>                    
-                        <text>Menu 1</text> 
-                        <iconCls>icon</iconCls> 
-                        <module>
-                            <id>_menu12</id> 
-                            <title>Menu 1</title>
-                            <iconCls>icon</iconCls> 
-                            <url>404.jsp</url> 
+                            <id>gs-00443</id> 
+                            <title>Ver servicios</title>
+                            <iconCls>operation</iconCls> 
+                            <url>logout</url> 
                         </module>
                     </menu> 
                 </items>
             </menu>
         </menu>
-        
         <menu>
             <xtype>tbbutton</xtype>
-            <text>Administrar servicios</text> 
+            <text>Servicios</text> 
             <iconCls>module-app</iconCls> 
             <menu>
-                <items>                    
+                <items>
                     <menu>                    
-                        <text>Menu 1</text> 
-                        <iconCls>module-app</iconCls> 
+                        <text>Ver servicios</text> 
+                        <iconCls>operation</iconCls> 
                         <module>
-                            <id>_menu21</id> 
-                            <title>Menu 1</title>
-                            <iconCls>module-app</iconCls> 
-                            <url>404.jsp</url> 
-                        </module>
-                    </menu>                     
-                    <menu>                    
-                        <text>Menu 1</text> 
-                        <iconCls>icon</iconCls> 
-                        <module>
-                            <id>_menu22</id> 
-                            <title>Menu 1</title>
-                            <iconCls>icon</iconCls> 
-                            <url>404.jsp</url> 
+                            <id>gs-003</id> 
+                            <title>Ver servicios</title>
+                            <iconCls>operation</iconCls> 
+                            <url>paneldeservicios</url> 
                         </module>
                     </menu> 
+                    <menu>                    
+                        <text>Desplegar RPI</text> 
+                        <iconCls>icon</iconCls> 
+                        <module>
+                            <id>cd-002</id> 
+                            <title>Desplegar datos</title>
+                            <iconCls>icon</iconCls> 
+                            <url>rpiview</url> 
+                        </module>
+                    </menu>
                 </items>
             </menu>
         </menu>

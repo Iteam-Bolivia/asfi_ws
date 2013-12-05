@@ -77,9 +77,35 @@ public class DaoImpl implements Dao {
                 .add(Restrictions.eq("usuario", username)).uniqueResult();
     }
 
+//    @Transactional(readOnly = true)
+//    public <T> T getServiciosPorUsuario(Integer id) {
+//        return (T) this.sessionFactory.getCurrentSession().createCriteria(UserService.class)
+//                .add(Restrictions.eq("id", id)).list();
+//    }
+
+    @Transactional
+    public void setServicesToUser(Integer usuario_id, Integer servicio_id) {
+        Usuario u = load(Usuario.class, usuario_id);
+        u.addServicices(load(UserService.class, servicio_id));
+        update(u);
+    }
+
     @Transactional(readOnly = true)
-    public <T> T getServiciosPorUsuario(Integer id) {
-        return (T) this.sessionFactory.getCurrentSession().createCriteria(UserService.class)
-                .add(Restrictions.eq("id", id)).list();
+    public List<UserService> getUserServices(Integer usuario_id) {
+        List<UserService> lst = get(Usuario.class, usuario_id).getServicios();
+        for(UserService us : lst) {
+            us.setParametros(null);
+            System.out.println(us.getNombre());
+        }
+        return lst;
+    }
+    
+    @Transactional(readOnly = true)
+    public List<UserService> getUserNotServices(Integer usuario_id) {
+        return this.sessionFactory.getCurrentSession().createQuery("select from Usuario "
+                + "u.id left join UserService us.id on u.id=us.id").list();
+                //createCriteria(UserService.class)
+                //.add(Restrictions.eq("usuario", username)).uniqueResult();
+        //return lst;
     }
 }

@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -35,6 +36,8 @@ public class UserService implements Serializable {
     private String url;
     @Lob
     private String descripcion;
+    @Lob
+    private String requestXmlTemplate;
     private Boolean rpiEnable = false;
     @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Parametro> parametros;
@@ -93,6 +96,14 @@ public class UserService implements Serializable {
 
     public void setParametros(Collection<Parametro> parametros) {
         this.parametros = parametros;
+    }
+
+    public String getRequestXmlTemplate() {
+        return requestXmlTemplate;
+    }
+
+    public void setRequestXmlTemplate(String requestXmlTemplate) {
+        this.requestXmlTemplate = requestXmlTemplate;
     }
 
     @Override

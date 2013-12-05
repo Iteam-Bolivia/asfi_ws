@@ -13,6 +13,7 @@ public class Operacion {
     private String nombre;
     private ORequest request;
     private OResponse response;
+    private String bindingName;
 
     public String getNombre() {
         return nombre;
@@ -36,5 +37,13 @@ public class Operacion {
 
     public void setResponse(OResponse response) {
         this.response = response;
+    }
+
+    public String getBindingName() {
+        return bindingName;
+    }
+
+    public void setBindingName(String bindingName) {
+        this.bindingName = bindingName;
     }
 }

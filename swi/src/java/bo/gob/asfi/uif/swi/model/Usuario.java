@@ -4,6 +4,7 @@
  */
 package bo.gob.asfi.uif.swi.model;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.persistence.Column;
@@ -45,6 +46,13 @@ public class Usuario {
     @OneToMany
     private List<UserService> servicios;
 
+    public void addServicices(UserService us) {
+        if(servicios == null) {
+            servicios = new ArrayList<UserService>();
+        }
+        servicios.add(us);
+    }
+    
     public Integer getId() {
         return id;
     }

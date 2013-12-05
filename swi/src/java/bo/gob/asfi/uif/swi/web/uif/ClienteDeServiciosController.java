@@ -92,11 +92,12 @@ public class ClienteDeServiciosController {
             for (Port port : srv.getPorts()) {
                 Puerto p = new Puerto();
                 p.setNombre(port.getName());
+                p.setDireccion(port.getAddress().getLocation());
                 p.setOperaciones(new ArrayList<Operacion>());
                 for (BindingOperation op : port.getBinding().getOperations()) {
                     Operacion o = new Operacion();
                     o.setNombre(op.getName());
-
+                    o.setBindingName(port.getBinding().getName());
                     Operation operation = definitions.getOperation(op.getName(), op.getBinding().getPortType().getName());
                     Element elreq = operation.getInput().getMessage().getParts().get(0).getElement();
                     if (elreq != null) {
@@ -260,7 +261,8 @@ public class ClienteDeServiciosController {
                 for (Operacion op : prt.getOperaciones()) {
                     Node no = new Node();
                     no.setText(op.getNombre());
-                    no.setId(rootId + ":" + srv.getNombre() + ":" + prt.getNombre() + ":" + op.getNombre());
+                    no.setId(rootId + ":" + srv.getNombre() + ":" + prt.getNombre() + ":" + op.getNombre() + ":" + op.getBindingName());
+                    no.setUrl(prt.getDireccion());
                     no.setIconCls("operation");
                     no.setLeaf(Boolean.TRUE);
                     nb.getChildren().add(no);

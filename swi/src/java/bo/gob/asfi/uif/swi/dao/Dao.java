@@ -34,5 +34,11 @@ public interface Dao {
     
     public <T> T getUsuarioByUsername(String username);
 
-    public <T> T getServiciosPorUsuario(Integer id);
+//    public <T> T getServiciosPorUsuario(Integer id);
+    
+    public void setServicesToUser(Integer usuario_id, Integer servicio_id);
+    
+    public List<UserService> getUserServices(Integer usuario_id);
+    
+    public List<UserService> getUserNotServices(Integer usuario_id);
 }

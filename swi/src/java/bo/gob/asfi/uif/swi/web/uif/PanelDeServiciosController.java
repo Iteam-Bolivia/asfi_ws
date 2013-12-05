@@ -78,6 +78,7 @@ public class PanelDeServiciosController {
             ff.setFieldLabel(pm.getEtiqueta());
             ff.setXtype(ExtJSUtils.attributetypeTOExtJSType(pm.getTipo()));
             ff.setValue(pm.getValordefecto());
+            ff.setName(pm.getNombre());
             ff.setAllowBlank(!pm.getRequerido());
             list.add(ff);
         }

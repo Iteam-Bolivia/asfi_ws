@@ -63,7 +63,17 @@
                                 </menu> 
                             </items>
                         </menu>
-                    </menu>                                        
+                    </menu>   
+                    <menu>                    
+                        <text>Salir</text> 
+                        <iconCls>delete</iconCls> 
+                        <module>
+                            <id>gs-00443</id> 
+                            <title>Salir</title>
+                            <iconCls>delete</iconCls> 
+                            <url>logout</url> 
+                        </module>
+                    </menu>                                      
                 </items>
             </menu>
         </menu>
