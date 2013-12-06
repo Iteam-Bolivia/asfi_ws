@@ -4,10 +4,13 @@
  */
 package bo.gob.asfi.uif.swi.dao;
 
+import bo.gob.asfi.uif.swi.model.Bitacora;
 import bo.gob.asfi.uif.swi.model.UserService;
 import bo.gob.asfi.uif.swi.model.Usuario;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +85,6 @@ public class DaoImpl implements Dao {
 //        return (T) this.sessionFactory.getCurrentSession().createCriteria(UserService.class)
 //                .add(Restrictions.eq("id", id)).list();
 //    }
-
     @Transactional
     public void setServicesToUser(Integer usuario_id, Integer servicio_id) {
         Usuario u = load(Usuario.class, usuario_id);
@@ -93,18 +95,45 @@ public class DaoImpl implements Dao {
     @Transactional(readOnly = true)
     public List<UserService> getUserServices(Integer usuario_id) {
         List<UserService> lst = get(Usuario.class, usuario_id).getServicios();
-        for(UserService us : lst) {
-            us.getParametros();            
+        for (UserService us : lst) {
+            us.getParametros();
         }
         return lst;
     }
-    
+
     @Transactional(readOnly = true)
     public List<UserService> getUserNotServices(Integer usuario_id) {
         return this.sessionFactory.getCurrentSession().createQuery("select from Usuario "
                 + "u.id left join UserService us.id on u.id=us.id").list();
-                //createCriteria(UserService.class)
-                //.add(Restrictions.eq("usuario", username)).uniqueResult();
+        //createCriteria(UserService.class)
+        //.add(Restrictions.eq("usuario", username)).uniqueResult();
         //return lst;
+    }
+
+    @Transactional(readOnly = true)
+    public <T> T getBitacoraBusqueda1(String usuario, String servicio, Date fechai, Date fechaf) {
+
+        Criteria criterio1 = this.sessionFactory.getCurrentSession().createCriteria(Bitacora.class);
+
+        if (!"[TODOS]".equals(usuario)) {
+            criterio1.add(Restrictions.eq("usuario", usuario));
+        }
+        if (!"[TODOS]".equals(servicio)) {
+            criterio1.add(Restrictions.eq("servicio", servicio));
+        }
+
+        criterio1.add(Restrictions.between("fecha", fechai, fechaf));
+        //if(fechai.toString()!="01/01/1975")
+        //{
+        // criterio1.add(Restrictions.ge("fecha",fechai));
+
+        /* }
+         if(fechaf.toString()!="01/01/1975")
+         {*/
+        //criterio1.add(Restrictions.le("fecha",fechaf));
+
+        // }
+        List result = criterio1.list();
+        return (T) result;
     }
 }

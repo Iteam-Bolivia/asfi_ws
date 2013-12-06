@@ -6,6 +6,7 @@ package bo.gob.asfi.uif.swi.dao;
 
 import bo.gob.asfi.uif.swi.model.UserService;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,4 +42,6 @@ public interface Dao {
     public List<UserService> getUserServices(Integer usuario_id);
     
     public List<UserService> getUserNotServices(Integer usuario_id);
+    
+    public <T> T getBitacoraBusqueda1(String usuario, String servicio, Date fechai, Date fechaf);
 }
