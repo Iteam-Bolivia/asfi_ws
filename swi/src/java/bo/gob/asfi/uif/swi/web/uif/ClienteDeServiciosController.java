@@ -50,8 +50,6 @@ public class ClienteDeServiciosController {
 
     @Autowired
     Dao dao;
-    //private RestTemplateFactory rest;
-    private RestTemplate restTemplate;
 
     @RequestMapping(value = "/administrarservicios")
     public String administrarServicios() {

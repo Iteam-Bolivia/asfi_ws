@@ -10,11 +10,11 @@
                 <items>
                     <menu>                    
                         <text>Salir</text> 
-                        <iconCls>server</iconCls> 
+                        <iconCls>delete</iconCls> 
                         <module>
                             <id>gs-00443</id> 
                             <title>Ver servicios</title>
-                            <iconCls>operation</iconCls> 
+                            <iconCls>delete</iconCls> 
                             <url>logout</url> 
                         </module>
                     </menu> 

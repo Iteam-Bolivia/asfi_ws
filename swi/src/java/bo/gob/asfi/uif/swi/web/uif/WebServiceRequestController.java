@@ -119,6 +119,7 @@ public class WebServiceRequestController {
             SOAPMessage soapResponse = soapConnection.call(getSoapMessageFromString(writer2.toString()), url);
 
             body.put("result", printSOAPResponse(soapResponse));
+            body.put("id", params.get("_swi_userservice_id_"));
             body.put("success", Boolean.TRUE);
             soapConnection.close();
         } catch (Exception e) {

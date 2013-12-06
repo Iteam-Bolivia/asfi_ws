@@ -94,8 +94,7 @@ public class DaoImpl implements Dao {
     public List<UserService> getUserServices(Integer usuario_id) {
         List<UserService> lst = get(Usuario.class, usuario_id).getServicios();
         for(UserService us : lst) {
-            us.setParametros(null);
-            System.out.println(us.getNombre());
+            us.getParametros();            
         }
         return lst;
     }

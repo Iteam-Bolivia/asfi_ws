@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class CustomUserDetails implements UserDetails {
 
-    private long id;
+    private Integer id;
     private String password;
     private String username;
     private Set<String> roles;
@@ -31,6 +31,14 @@ public class CustomUserDetails implements UserDetails {
     private String apellido;
     private String role;
     private List menu;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getRole() {
         return role;
@@ -47,7 +55,7 @@ public class CustomUserDetails implements UserDetails {
     public void setMenu(List menu) {
         this.menu = menu;
     }
-     
+
     public String getNombre() {
         return nombre;
     }

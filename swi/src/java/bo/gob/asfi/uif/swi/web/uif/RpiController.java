@@ -72,7 +72,7 @@ public class RpiController {
             String[] srvParams = field.getServiceParamsIds().split(":");//srvfields.split(":");
             for (String sp : srvParams) {
                 Parametro p = dao.get(Parametro.class, new Integer(sp));
-                p.setRpifield(new Integer(sp));
+                p.setRpifield(field.getId());
                 dao.update(p);
             }
         } catch (Exception e) {

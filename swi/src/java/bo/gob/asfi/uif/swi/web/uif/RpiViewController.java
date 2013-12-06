@@ -9,11 +9,17 @@ import bo.gob.asfi.uif.swi.model.FormField;
 import bo.gob.asfi.uif.swi.model.Parametro;
 import bo.gob.asfi.uif.swi.model.RpiField;
 import bo.gob.asfi.uif.swi.model.UserService;
+import bo.gob.asfi.uif.swi.security.CustomUserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.heyma.core.extjs.components.ExtJSUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,22 +42,33 @@ public class RpiViewController {
 
     @RequestMapping(value = "/formrpiitems")
     public @ResponseBody
-    List<FormField> formRpiItems() {
-        List<RpiField> fields = dao.findAll(RpiField.class);
+    Collection<FormField> formRpiItems() {
+        List<UserService> lst = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails ud = (CustomUserDetails) auth.getPrincipal();
+            if (ud.getRole().equals("admin_uif")) {
+                lst = dao.findAll(UserService.class);
+            } else {
+                lst = dao.getUserServices(ud.getId());
+            }
+        } else {
+            lst = dao.findAll(UserService.class);
+        }
 
-        List<FormField> extfields = RpiController.rpiFormFiends(fields);
-
-        List<UserService> uservices = dao.findAll(UserService.class);
-        for (UserService us : uservices) {
+        Collection<Parametro> parametros = new ArrayList<Parametro>();
+        for (UserService us : lst) {
             if (us.getRpiEnable()) {
-                extfields.addAll(rpiFormFiendsFromParams(us.getParametros()));
+                //extfields.addAll(rpiFormFiendsFromParams(us.getParametros()));
+                parametros.addAll(us.getParametros());
             }
         }
-        return extfields;
+        return rpiFormFiendsFromParams(parametros);
     }
 
-    public List<FormField> rpiFormFiendsFromParams(Collection<Parametro> parametros) {
-        List<FormField> list = new ArrayList<FormField>();
+    public Collection<FormField> rpiFormFiendsFromParams(Collection<Parametro> parametros) {
+        //Set<FormField> list = new HashSet<FormField>();
+        Map<String, FormField> lst = new HashMap<String, FormField>();
         for (Parametro pm : parametros) {
             if (pm.getRpifield() == null) {
                 FormField ff = new FormField();
@@ -59,9 +76,22 @@ public class RpiViewController {
                 ff.setXtype(ExtJSUtils.attributetypeTOExtJSType(pm.getTipo()));
                 ff.setValue(pm.getValordefecto());
                 ff.setAllowBlank(!pm.getRequerido());
-                list.add(ff);
+                ff.setName(pm.getServicio().getId() + ":" + pm.getNombre());
+                //list.add(ff);
+                lst.put(ff.getName(), ff);
+            } else {
+                RpiField rf = dao.get(RpiField.class, pm.getRpifield());
+                FormField ff = new FormField();
+                ff.setFieldLabel(rf.getEtiqueta());
+                ff.setXtype(rf.getTipo());
+                ff.setValue(rf.getValordefecto());
+                ff.setAllowBlank(!rf.getRequerido());
+                ff.setName("rpifield-" + rf.getId());
+                //ff.setId(rf.getId() + ":rpifield");
+                //list.add(ff);
+                lst.put(ff.getName(), ff);
             }
         }
-        return list;
+        return lst.values();
     }
 }

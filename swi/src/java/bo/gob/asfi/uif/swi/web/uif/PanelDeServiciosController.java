@@ -8,6 +8,7 @@ import bo.gob.asfi.uif.swi.dao.Dao;
 import bo.gob.asfi.uif.swi.model.FormField;
 import bo.gob.asfi.uif.swi.model.Parametro;
 import bo.gob.asfi.uif.swi.model.UserService;
+import bo.gob.asfi.uif.swi.security.CustomUserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import org.heyma.core.extjs.components.ExtJSUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,7 +43,20 @@ public class PanelDeServiciosController {
     @RequestMapping(value = "/listaservicios", method = RequestMethod.GET)
     public @ResponseBody
     List<Map<String, Object>> listarUserServices() {
-        List<UserService> lst = dao.findAll(UserService.class);
+
+        List<UserService> lst = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails ud = (CustomUserDetails) auth.getPrincipal();
+            if (ud.getRole().equals("admin_uif")) {
+                lst = dao.findAll(UserService.class);
+            } else {
+                lst = dao.getUserServices(ud.getId());
+            }
+        } else {
+            lst = dao.findAll(UserService.class);
+        }
+
         List<Map<String, Object>> samples = new ArrayList<Map<String, Object>>();
         System.out.println(lst.size());
         for (UserService us : lst) {

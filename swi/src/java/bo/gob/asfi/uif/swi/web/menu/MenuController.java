@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @email: john.gnu@gmail.com
  */
 @Controller
-@Scope("session")
+//@Scope("session")
 @RequestMapping(value = "/menu")
 public class MenuController {
 
@@ -75,8 +75,8 @@ public class MenuController {
         System.out.println("Loading menu from Atribute...");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Gson g = new Gson();
-        System.out.println(g.toJson(auth.getPrincipal()));
+//        Gson g = new Gson();
+//        System.out.println(g.toJson(auth.getPrincipal()));
         if (auth.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails ud = (CustomUserDetails) auth.getPrincipal();
             this.menuFromXML(ud.getRole());

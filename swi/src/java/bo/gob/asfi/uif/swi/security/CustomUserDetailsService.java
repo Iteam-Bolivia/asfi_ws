@@ -52,6 +52,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         userDetail.setNombre(user.getNombres());
         userDetail.setApellido(user.getPaterno());
         userDetail.setRole(user.getRol());
+        userDetail.setId(user.getId());
         return userDetail;
     }
 

@@ -7,11 +7,14 @@ package bo.gob.asfi.uif.swi.web.uif;
 import bo.gob.asfi.uif.swi.dao.Dao;
 import bo.gob.asfi.uif.swi.model.Parametro;
 import bo.gob.asfi.uif.swi.model.UserService;
+import bo.gob.asfi.uif.swi.security.CustomUserDetails;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,10 +53,34 @@ public class IndividualController {
 
     @RequestMapping(value = "/listaservicios", method = RequestMethod.GET)
     public @ResponseBody
-    List<UserService> listarUserServices() {
+    List<UserService> listaServicioss() {
         List<UserService> lst = dao.findAll(UserService.class);
         for (UserService us : lst) {
-            us.setParametros(null);
+            us.setParametros(listarParametros(us.getId()));
+        }
+        return lst;
+    }
+
+    @RequestMapping(value = "/listaserviciosusuario", method = RequestMethod.GET)
+    public @ResponseBody
+    List<UserService> listaServiciosUsuario() {
+
+        List<UserService> lst = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails ud = (CustomUserDetails) auth.getPrincipal();
+            if (ud.getRole().equals("admin_uif")) {
+                lst = dao.findAll(UserService.class);
+            } else {
+                lst = dao.getUserServices(ud.getId());
+            }
+        } else {
+            lst = dao.findAll(UserService.class);
+        }
+        //List<UserService> lst = dao.findAll(UserService.class);        
+
+        for (UserService us : lst) {
+            us.setParametros(listarParametros(us.getId()));
         }
         return lst;
     }
