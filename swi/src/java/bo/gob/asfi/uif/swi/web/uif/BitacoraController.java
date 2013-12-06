@@ -90,22 +90,20 @@ public class BitacoraController {
         return body;
     }
 
-    @RequestMapping(value = "/listar_servicios")
-    public @ResponseBody
-
-    List<UserService> listar_servicios() {
-        try {
-            Map params = new HashMap();
-            List<UserService> servicios = dao.find(UserService.class);
-            return servicios;
-        } catch (Exception e) {
-            e.printStackTrace();
-            java.util.logging.Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
-
-            return null;
-        }
-
-    }
+//    @RequestMapping(value = "/listar_servicios")
+//    public @ResponseBody
+//    List<UserService> listar_servicios() {
+//        try {
+//            Map params = new HashMap();
+//            List<UserService> servicios = dao.find(UserService.class);
+//            return servicios;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            java.util.logging.Logger.getLogger(IndividualController.class.getName()).log(Level.SEVERE, null, e);
+//
+//            return null;
+//        }
+//    }
 
     @RequestMapping(value = "/listar_serviciosporusuario")
     public @ResponseBody

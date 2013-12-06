@@ -43,24 +43,14 @@
                             <items>                    
                                 <menu>                    
                                     <text>Busqueda por usuario</text> 
-                                    <iconCls>user</iconCls> 
+                                    <iconCls>entity-app</iconCls> 
                                     <module>
                                         <id>bu-001</id> 
                                         <title>Busqueda por usuario</title>
-                                        <iconCls>user</iconCls> 
-                                        <url>busquedaporusurio</url> 
+                                        <iconCls>entity-app</iconCls> 
+                                        <url>busquedaporusuario</url> 
                                     </module>
                                 </menu>                     
-                                <menu>                    
-                                    <text>Busqueda por servicio</text> 
-                                    <iconCls>icon</iconCls> 
-                                    <module>
-                                        <id>bu-002</id> 
-                                        <title>Busqueda por servicio</title>
-                                        <iconCls>icon</iconCls> 
-                                        <url>404.jsp</url> 
-                                    </module>
-                                </menu> 
                             </items>
                         </menu>
                     </menu>   
