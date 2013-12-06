@@ -1,11 +1,16 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- Author: Johns Castillo Valencia, john.gnu@gmail.com -->
 <!DOCTYPE html>
 <html lang="es">
     <head>        
-        <title>SWI - Iniciar sesión</title>
-
+        <title>SWI - Iniciar sesiÃ³n</title>
+        <script type="text/javascript">
+    if (top != self) {
+        top.location = '<c:url value="/"/>main';
+    }
+        </script> 
         <%@include file="../ExtJSScripts-ES.jsp"%>  
 
         <script type="text/javascript" src="js/login/loginform.js"></script>

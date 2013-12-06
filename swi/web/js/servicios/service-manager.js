@@ -98,6 +98,10 @@ domain.ServiceManager = {
                     xtype: "hidden",
                     name: "router",
                     value: options.router,
+                }, {
+                    xtype: "hidden",
+                    name: "url",
+                    value: options.url,
                 }]
         });
 
@@ -220,7 +224,7 @@ domain.ServiceManager = {
                                 iconCls: 'accept',
                                 tooltip: 'Definir como Servicio del sistema',
                                 handler: function() {
-                                    domain.ServiceManager.definirServicio({router: item.id});
+                                    domain.ServiceManager.definirServicio({router: item.id, url: item.url});
                                 }
                             }]
                     });
@@ -382,7 +386,7 @@ domain.ServiceManager.View = {
                     }
                 }],
             listeners: {
-                dblclick: function(node, e) {
+                dblclick: function(node, e) {                    
                     if (node.attributes.iconCls === 'operation') {
                         domain.ServiceManager.openOperation({
                             node: node,
@@ -390,9 +394,7 @@ domain.ServiceManager.View = {
                             panelinfo: serviceInfoPanel
                         });
                     }
-                }//,
-//                click: function(node, e) {
-//                }
+                }
             }
         });
         //tree.getRootNode().expand(true);

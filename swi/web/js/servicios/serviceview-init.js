@@ -8,9 +8,9 @@ Ext.ns('Ext.samples');
 
 (function() {
 
-    Ext.samples.RequestForm = function(options) {       
+    Ext.samples.RequestForm = function(options) {
         var formreq = Ext.getCmp('form_request');
-        formreq.removeAll();        
+        formreq.removeAll();
         Ext.Ajax.request({
             url: Ext.SROOT + 'paneldeservicios/formserviceitems',
             method: 'POST',
@@ -19,35 +19,51 @@ Ext.ns('Ext.samples');
             },
             success: function(result, request) {
                 var sfields = Ext.util.JSON.decode(result.responseText);
+                sfields.push({
+                    xtype: 'hidden',
+                    name: '_swi_userservice_id_',
+                    value: options.id
+                });
                 var form = new Ext.FormPanel({
-                    url: Ext.SROOT + 'submitservice',
+                    url: Ext.SROOT + 'wsrwquest',
                     border: false,
                     autoHeight: true,
+                    region: 'center',
                     bodyStyle: 'padding:10px',
                     labelWidth: 130,
                     frame: true,
                     labelAlign: 'top',
-                    items: [{
-                            xtype: 'fieldset',
-                            layout: 'form',
-                            defaults: {
-                                msgTarget: 'side'
-                            },
-                            items: sfields
-                        }],
+                    defaults: {
+                        msgTarget: 'side'
+                    },
+                    items: sfields,
                     tbar: [{
-                            text: 'Enviar',
+                            text: 'Ejecutar',
                             iconCls: 'play',
                             tooltip: 'Llamar la operaci&oacute;n del servicio',
                             handler: function() {
-                                //submit service request
-                            }
-                        }, '-', {
-                            text: 'Definir Servicio',
-                            iconCls: 'accept',
-                            tooltip: 'Definir como Servicio del sistema',
-                            handler: function() {
-                                //domain.ServiceManager.definirServicio({router: item.id});
+                                formreq.getEl().mask("Espere...", "x-mask-loading");
+                                form.getForm().submit({
+                                    success: function(form, action) {
+                                        var ro = Ext.util.JSON.decode(action.response.responseText);
+                                        formreq.getEl().unmask();
+                                        formreq.remove(1);
+                                        formreq.add({
+                                            xtype: 'panel',
+                                            title: 'Resultado',
+                                            bodyStyle: 'padding:10px',
+                                            autoScroll: true,
+                                            height:200,
+                                            html: '<pre>'+ro.result+'</pre>'
+                                        });
+                                        formreq.doLayout();
+                                    },
+                                    failure: function(form, action) {
+                                        //Ext.Msg.alert('Warning', action.result.errorMessage);
+                                        //options.error('Error interno',action.result.errorMessage);
+                                        //domain.errors.submitFailure('Error interno', action.result.errorMessage);
+                                    }
+                                });
                             }
                         }]
                 });
@@ -99,15 +115,15 @@ Ext.ns('Ext.samples');
                 return status == 'updated';
             }
         }),
-        onClick: function(e) {
+        onDblClick: function(e) {
             var group = e.getTarget('h2', 3, true);
             if (group) {
                 group.up('div').toggleClass('collapsed');
             } else {
                 var t = e.getTarget('dd', 5, true);
                 if (t && !e.getTarget('a', 2)) {
-                    var url = t.getAttributeNS('ext', 'url');                    
-                    var id = t.getAttributeNS('ext', 'id');                    
+                    var url = t.getAttributeNS('ext', 'url');
+                    var id = t.getAttributeNS('ext', 'id');
                     Ext.samples.RequestForm({id: id});
                 }
             }
@@ -132,12 +148,13 @@ Ext.onReady(function() {
             title: 'Servicios',
             frame: true,
             id: 'all-demos',
+            border: false,
             region: 'center',
             autoScroll: true,
             items: new SamplePanel({
                 store: store
             }),
-            tbar:[{
+            tbar: ['->', {
                     iconCls: 'refresh',
                     tooltip: 'Recargar',
                     handler: function() {
@@ -153,7 +170,12 @@ Ext.onReady(function() {
                     region: 'east',
                     title: 'Formulario de Solicitud',
                     id: 'form_request',
-                    width: 500
+                    split: true,
+                    layout: 'fit',
+                    collapsible: true,
+                    autoScroll: true,
+                    width: 500,
+                    minWidth: 400
                 }]
         });
 

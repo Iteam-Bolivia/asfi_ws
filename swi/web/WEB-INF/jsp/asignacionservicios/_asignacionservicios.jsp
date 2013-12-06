@@ -32,9 +32,10 @@
                         ],
                         autoLoad:true,
                     });
+                    
                     var gridPanelUsuario = new Ext.grid.GridPanel({
-                        title: 'Usuarios',
-                        height: 300,
+                        //title: 'Usuarios',
+                        //height: 300,
                         columns: [
                             //{header: "id", width: 50, sortable: true, dataIndex: 'id'},
                             {header: "Usuario", width: 100, sortable: true, dataIndex: 'usuario'},
@@ -75,50 +76,51 @@ var idUsuario;
                         storeUsuario.load({params: {usuario_id: cboBusServicio.getValue()}});
                     };
 
-                    var storeServicio = new Ext.data.JsonStore({
-                        url: Ext.SROOT + 'individual/listaservicios',
-                        fields: [{name: 'id'},
-                            {name: 'nombre'}
-                        ]
-                    });
-
-                    var cboBusServicio = new Ext.form.ComboBox({
-                        fieldLabel: 'Servicio',
-                        name: 'cboBusServicio',
-                        forceSelection: true,
-                        store: storeUsuario,
-                        //emptyText:'servicio..',
-                        triggerAction: 'all',
-                        lastQuery: '', //hideTrigger:true,
-                        editable: false,
-                        displayField: 'nombres',
-                        valueField: 'id',
-                        typeAhead: true,
-                        selectOnFocus: true
-                    });
-                    var verUsuario = new Ext.FormPanel({
-                        border: false,
-                        width: 650,
-                        defaults: {xtype: 'textfield'},
-                        bodyStyle: 'padding:10px',
-                        autoScroll: false,
-                                
-                        items: [
-                            /*new Ext.form.FieldSet({
-                                title: 'Seleccionar Servicio',
-                                autoHeight: true,
-                                defaultType: 'textfield',
-                                items: [cboBusServicio],
-                                buttons: [{
-                                        text: 'Cargar',
-                                        handler: function() {
-                                            fun_buscar();
-                                        }}
-                                ]
-                            }),*/
-                            gridPanelUsuario
-                        ]
-                    });
+//                    var storeServicio = new Ext.data.JsonStore({
+//                        url: Ext.SROOT + 'individual/listar_servicios',
+//                        fields: [{name: 'id'},
+//                            {name: 'nombre'}
+//                        ]
+//                    });
+//
+//                    var cboBusServicio = new Ext.form.ComboBox({
+//                        fieldLabel: 'Servicio',
+//                        name: 'cboBusServicio',
+//                        forceSelection: true,
+//                        store: storeUsuario,
+//                        //emptyText:'servicio..',
+//                        triggerAction: 'all',
+//                        lastQuery: '', //hideTrigger:true,
+//                        editable: false,
+//                        displayField: 'nombres',
+//                        valueField: 'id',
+//                        typeAhead: true,
+//                        selectOnFocus: true
+//                    });
+                    
+//                    var verUsuario = new Ext.FormPanel({
+//                        border: false,
+//                        width: 650,
+//                        defaults: {xtype: 'textfield'},
+//                        bodyStyle: 'padding:10px',
+//                        autoScroll: false,
+//                                
+//                        items: [
+//                            /*new Ext.form.FieldSet({
+//                                title: 'Seleccionar Servicio',
+//                                autoHeight: true,
+//                                defaultType: 'textfield',
+//                                items: [cboBusServicio],
+//                                buttons: [{
+//                                        text: 'Cargar',
+//                                        handler: function() {
+//                                            fun_buscar();
+//                                        }}
+//                                ]
+//                            }),*/
+//                            gridPanelUsuario
+//                        ]
+//                    });
 /////////////////////////
 
 
@@ -153,8 +155,6 @@ var idUsuario;
         columns          : cols,
 	enableDragDrop   : true,
         stripeRows       : true,
-                selModel
-:new Ext.grid.RowSelectionModel({singleSelect:true}),
         //autoExpandColumn : 'nombre',
         title            : 'Servicios disponibles (arrastre el servicio para asignar)',
         //height:400,
@@ -165,12 +165,9 @@ var idUsuario;
         var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
                 ddGroup    : 'firstGridDDGroup',
                 notifyDrop : function(ddSource, e, data){
-                        //var records =  ddSource.dragData.selections;
-                        var urecord = gridPanelUsuario.getSelectionModel().getSelected();
-                        var urecord = firstGrid.getSelectionModel().getSelected();
+                        var records =  ddSource.dragData.selections;
                         Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
-                        
-        //firstGrid.store.add(records);
+                        firstGrid.store.add(records);
                         //firstGrid.store.sort('nombre', 'ASC');
                         return true
                 }
@@ -179,9 +176,9 @@ var idUsuario;
     });
 
     var secondGridStore = new Ext.data.JsonStore({
-        url: Ext.SROOT + 'asignacionservicios/listarserviciosporusuario',
+        url: Ext.SROOT + 'asignacionservicios/listar_serviciosporusuario',
                         fields: [{name: 'id'},
-                            {name: 'nombre'}]
+                            {name: 'nombre'}],	
     });
 
     // create the destination Grid
@@ -191,42 +188,22 @@ var idUsuario;
         columns          : cols,
 	enableDragDrop   : true,
         stripeRows       : true,
-        selModel
-:new Ext.grid.RowSelectionModel({singleSelect:true}),
         //autoExpandColumn : 'name',
         title            : 'Servicios asignados al usuario',
         //height:400,
         // autoHeight:true,
         listeners : {
-        afterrender : function(comp) {
+       afterrender : function(comp) {
         //  ..................;
         var secondGridDropTargetEl = secondGrid.getView().scroller.dom;
         var secondGridDropTarget = new Ext.dd.DropTarget(secondGridDropTargetEl, {
                 ddGroup    : 'secondGridDDGroup',
-                notifyDrop : function(ddSource, e, data){   
-                        console.log(ddSource);
-                        console.log(e);
-                        console.log(data);
-                        var urecord = gridPanelUsuario.getSelectionModel().getSelected();
-                        var srecord = firstGrid.getSelectionModel().getSelected();
-                        if(urecord) {
-                                                    Ext.Ajax.request({
-                                url: 'asignacionservicios/guardarservicios',
-                                method: 'POST',
-                                params: {
-                                    idUsuario: urecord.id,
-                                    idServicio:srecord.id                                    
-                                },
-                                success: function(result, request) {
-                                    firstGridStore.getStore().reload();                                    
-                                    //box.hide();
-                                },
-                                failure: function(result, request) {
-                                    Ext.Msg.alert('Error', 'Fallo.');
-                                    //box.hide();
-                                }
-                            });
-                        }
+                notifyDrop : function(ddSource, e, data){
+                        var records =  ddSource.dragData.selections;
+                        Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
+                        secondGrid.store.add(records);
+                        //secondGrid.store.sort('name', 'ASC');
+                        return true
                 }
         });
        }
@@ -252,66 +229,19 @@ var idUsuario;
                     var formParametro = new Ext.FormPanel({
                         url: 'asignarservicios/guardar_servicios',
                         width        : 650,
-                        height       : 400,
-                        layout       : 'hbox',
-                        //renderTo     : 'panel',
-                        defaults     : { flex : 1 }, //auto stretch
-                        layoutConfig : { align : 'stretch' },
-                                items: [
-                                    firstGrid,
-                                    secondGrid,
-                                    {
-                                                xtype: 'hidden',
-                                                //fieldLabel: 'id',
-                                                //columns:3, 
-                                                name: 'id',
-                                                id:'id'
-
-                                             }
-                                ],
+		height       : 400,
+		layout       : 'hbox',
+		//renderTo     : 'panel',
+		defaults     : { flex : 1 }, //auto stretch
+		layoutConfig : { align : 'stretch' },
+                        items: [
+                            firstGrid,
+			    secondGrid
+                        ],
                         //buttonAlign: 'center',
                         buttons: [
                             {text: 'Guardar', handler: function() {
-                                    
-                                    Ext.Ajax.request({
-                                                 waitMsg : 'Guardando...',
-                                                 url:'asignarservicios/guardar_servicios',
-                                                 method: 'POST',
-                                                 params:{
-                                                    //predio_id: codigoE.getValue(),//OJO//
-                                                    usuario:secondGrid.getStore()
-                                                    //nombre:txtNombre.getValue(),
-                                                    //rol:cmbRol.getValue()
-                                                },
-                               
-                                      success: function(result, request) {
-                                        //verNuevoUsuario.getForm().reset();
-                                        
-                                        var data = request.result;
-                                                            Ext.MessageBox.show({
-                                                                title:'Información',
-                                                                msg:'Eliminación correcta',
-                                                                buttons: Ext.MessageBox.OK,
-                                                                icon:Ext.Msg.INFO
-                                                            });
-                                        fun_buscar();  
-                                        formParametro.getForm().reset();
-                                                  
-                                    },
-                                    failure: function(result, request) {
-                                       
-                                                var data = request.result;
-                                                Ext.MessageBox.show({
-                                                    title:'Error',
-                                                    msg:data.errorMessage,
-                                                    buttons: Ext.MessageBox.OK,
-                                                    icon:Ext.Msg.ERROR
-                                                });
-                                    }    
-                                }); 
-                                
-                           
-                                   /*formParametro.getForm().submit({
+                                    formParametro.getForm().submit({
                                         success: function(form, action) {
                                             gridPanelUsuario.store.reload();
                                         },
@@ -321,7 +251,7 @@ var idUsuario;
                                                 alert(r.errorMessage);
                                             }
                                         }
-                                    })*/
+                                    })
                                 }},
                            { text    : 'Restaurar',
 				handler : function() {
@@ -345,10 +275,10 @@ var idUsuario;
                     /*************PANELES*********************/
                     /****/
           var izquierda=new Ext.Panel({
-            title: 'Búsqueda',
+            title: 'Usuarios',
             region: 'west',
             collapsible: true,
-
+            layout:'fit',
             split: true,
             autoScroll: true,
             autoWidth:600,
@@ -356,7 +286,7 @@ var idUsuario;
             //split:true,
             //layout:'accordion',
             //height: 350,
-            items:[verUsuario]
+            items:[gridPanelUsuario]
         });
         /*FIN PANEL IZQUIERDA*/
         /*PANEL CENTRO*/

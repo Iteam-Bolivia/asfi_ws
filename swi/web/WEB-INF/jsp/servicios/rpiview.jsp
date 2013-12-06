@@ -17,242 +17,137 @@
         <script type="text/javascript">
             Ext.namespace('domain');
             domain.Manager = {
-                mustBeSelect: function() {
-                    Ext.MessageBox.show({
-                        title: 'Aviso',
-                        msg: 'Debe seleccionar los <b>Campos en los servicios</b>.',
-                        buttons: Ext.MessageBox.OK,
-                        icon: Ext.Msg.INFO
-                    });
-                },
-                addField: function(options) {
-
-                    var form = new Ext.FormPanel({
-                        url: Ext.SROOT + 'rpi/definirservicio',
-                        border: false,
-                        title: 'Nuevo Campo',
-                        frame: true,
-                        bodyStyle: 'padding:10px',
-                        labelWidth: 150,
-                        autoHeight: true,
-                        region: 'center',
-                        defaults: {
-                            msgTarget: 'side',
-                            width: 200
+                individual: function(options) {
+                    var serviceResponse;
+                    Ext.Ajax.request({
+                        url: Ext.SROOT + 'paneldeservicios/formserviceitems',
+                        method: 'POST',
+                        params: {
+                            id: options.id
                         },
-                        items: [{
-                                xtype: 'combo',
-                                fieldLabel: 'Tipo de dato',
-                                hiddenName: 'tipo',
-                                forceSelection: true,
-                                allowBlank: false,
-                                store: new Ext.data.ArrayStore({
-                                    fields: ['type', 'objeto'],
-                                    data: [['textfield', 'Cadena'], ['textarea', 'Texto'], ['numberfield', 'Entero'], ['numberfield', 'Real'], ['checkbox', 'Falso/Verdadero'], ['datefield', 'Fecha']]
-                                }),
-                                valueField: 'type',
-                                displayField: 'objeto',
-                                typeAhead: true,
-                                mode: 'local',
-                                triggerAction: 'all',
-                                emptyText: 'Selecione el tipo...',
-                                selectOnFocus: true
-                            }, {
-                                xtype: 'checkbox',
-                                fieldLabel: 'Requerido',
-                                name: 'requerido'
-                            }, {
-                                xtype: 'textfield',
-                                fieldLabel: 'Nombre a Desplegar',
-                                allowBlank: false,
-                                name: 'etiqueta'
-                            }, {
-                                xtype: 'textfield',
-                                fieldLabel: 'Valor por Defecto',
-                                name: 'valordefecto'
-                            }, ]
-                    });
-                    var tree = new Ext.tree.TreePanel({
-                        title: 'Servicios disponibles',
-                        region: 'east',
-                        //height: 300,
-                        width: 300,
-                        minWidth: 250,
-                        maxWidth: 400,
-                        useArrows: true,
-                        autoScroll: true,
-                        animate: true,
-                        enableDD: true,
-                        containerScroll: true,
-                        rootVisible: false,
-                        split: true,
-                        collapsible: true,
-                        //frame: true,
-                        root: {
-                            nodeType: 'async'
-                        },
-                        dataUrl: 'treeuserservices',
-                        listeners: {
-                            'checkchange': function(node, checked) {
-                                if (checked) {
-                                    node.getUI().addClass('complete');
-                                } else {
-                                    node.getUI().removeClass('complete');
-                                }
-                            }
-                        }//,
-//                        buttons: [{
-//                                text: 'Get Completed Tasks',
-//                                handler: function() {
-//                                    var msg = '', selNodes = tree.getChecked();
-//                                    Ext.each(selNodes, function(node) {
-//                                        if (msg.length > 0) {
-//                                            msg += ', ';
-//                                        }
-//                                        msg += node.text;
-//                                    });
-//                                    Ext.Msg.show({
-//                                        title: 'Completed Tasks',
-//                                        msg: msg.length > 0 ? msg : 'None',
-//                                        icon: Ext.Msg.INFO,
-//                                        minWidth: 200,
-//                                        buttons: Ext.Msg.OK
-//                                    });
-//                                }
-//                            }]
-                    });
-
-                    var win = new Ext.Window({
-                        title: 'Agregar campo',
-                        autoScroll: true,
-                        width: 800,
-                        height: 300,
-                        maximizable: true,
-                        layout: 'border',
-                        items: [form, tree],
-                        modal: true,
-                        buttonAlign: 'center',
-                        buttons: [{
-                                text: 'Guardar',
-                                handler: function() {
-                                    var selNodes = tree.getChecked();
-                                    var nodessel = '';
-                                    Ext.each(selNodes, function(node) {
-                                        if (nodessel.length === 0) {
-                                            nodessel += node.id;
-                                        } else {
-                                            nodessel += ":" + node.id;
-                                        }
-                                    });
-                                    if (form.getForm().isValid()) {
-                                        if (selNodes.length > 0) {
-                                            var fdata = form.getForm().getValues();
-                                            fdata.serviceParamsIds = nodessel;
-                                            Ext.Ajax.request({
-                                                url: Ext.SROOT + 'rpi/guardarcampo',
-                                                method: 'POST',
-                                                params: fdata,
-                                                success: function(result, request) {
-                                                    options.handler();
-                                                    win.close();
+                        success: function(result, request) {
+                            var sfields = Ext.util.JSON.decode(result.responseText);
+                            sfields.push({
+                                xtype: 'hidden',
+                                name: '_swi_userservice_id_',
+                                value: options.id
+                            });
+                            var form = new Ext.FormPanel({
+                                url: Ext.SROOT + 'wsrwquest',
+                                border: false,
+                                autoHeight: true,
+                                region: 'center',
+                                bodyStyle: 'padding:10px',
+                                labelWidth: 130,
+                                frame: true,
+                                labelAlign: 'top',
+                                defaults: {
+                                    msgTarget: 'side'
+                                },
+                                items: sfields,
+                                tbar: [{
+                                        text: 'Ejecutar',
+                                        iconCls: 'play',
+                                        tooltip: 'Llamar la operaci&oacute;n del servicio',
+                                        handler: function() {
+                                            form.getForm().submit({
+                                                waitMsg: 'Enviando...',
+                                                success: function(form, action) {
+                                                    serviceResponse = Ext.util.JSON.decode(action.response.responseText);
+                                                    win.getEl().unmask();
+                                                    win.remove(1);
+                                                    win.add({
+                                                        xtype: 'panel',
+                                                        title: 'Resultado',
+                                                        bodyStyle: 'padding:10px',
+                                                        autoScroll: true,
+                                                        height: 200,
+                                                        html: '<pre>' + serviceResponse.result + '</pre>'
+                                                    });
+                                                    win.doLayout();
                                                 },
-                                                failure: function(result, request) {
-
+                                                failure: function(form, action) {
+                                                    //Ext.Msg.alert('Warning', action.result.errorMessage);
+                                                    //options.error('Error interno',action.result.errorMessage);
+                                                    //domain.errors.submitFailure('Error interno', action.result.errorMessage);
                                                 }
                                             });
-
-
-
-//
-//                                            var nfield = {
-//                                                xtype: 'compositefield',
-//                                                fieldLabel: fdata.etiqueta,
-//                                                items: [{
-//                                                        xtype: fdata.tipo,
-//                                                        fieldLabel: fdata.etiqueta,
-//                                                        width: 200,
-//                                                        allowBlank: fdata.requerido ? false : true,
-//                                                        value: fdata.valordefecto
-//                                                    }, {
-//                                                        xtype: 'displayfield',
-//                                                        width: 50,
-//                                                        value: '      '
-//                                                    }, {
-//                                                        xtype: 'button',
-//                                                        iconCls: 'delete',
-//                                                        tooltip: 'eliminar campo',
-//                                                        name: 'ss',
-//                                                        handler: function() {
-//                                                            alert(this.id);
-//                                                        }
-//                                                    }/*, {
-//                                                     xtype: 'button',
-//                                                     iconCls: 'arrow-up',
-//                                                     tooltip: 'eliminar campo',
-//                                                     handler: function() {
-//                                                     alert('up');
-//                                                     }
-//                                                     }, {
-//                                                     xtype: 'button',
-//                                                     iconCls: 'arrow-down',
-//                                                     tooltip: 'eliminar campo',
-//                                                     handler: function() {
-//                                                     alert('down');
-//                                                     }
-//                                                     }*/]
-//                                            };
-//                                            options.form.add(nfield);
-//                                            options.form.doLayout();
-//                                            win.close();
-                                        } else {
-                                            domain.Manager.mustBeSelect();
                                         }
-                                    }
-                                }
-                            }]
-                    });
-                    win.show();
-                },
-                deleteField: function(options) {
-                    Ext.MessageBox.confirm('Confirmar', '¿Confirma eliminar el registro? Se perderan Datos.', function(r) {
-                        if (r === 'yes') {
-                            Ext.Ajax.request({
-                                url: Ext.SROOT + 'rpi/eliminarcampo',
-                                method: 'POST',
-                                params: {
-                                    id: options.id
-                                },
-                                success: function(result, request) {
-                                    options.handler();
-                                },
-                                failure: function(result, request) {
-
-                                }
+                                    }]
                             });
+                            
+                            var win = new Ext.Window({
+                                title: 'Registrar Usuario',
+                                autoScroll: true,
+                                layout:'anchor',
+                                width: 600,
+                                height: 300,
+                                minHeight: 250,
+                                minWidth: 550,
+                                items: form,
+                                maximizable: true,
+                                modal: true,
+                                buttons: [{
+                                        text: 'Usar este resultado',
+                                        handler: function() {                                            
+                                            var resPanel = Ext.getCmp('responsepanel-' + serviceResponse.id);
+                                            resPanel.body.update('<pre>' + serviceResponse.result + '</pre>');
+                                            win.close();
+                                        }
+                                    }]
+                            });
+                            win.show();
+                        },
+                        failure: function(result, request) {
+
                         }
                     });
                 }
-            }
+            };
 
             domain.Panel = {
                 init: function() {
 
                     var formParametro = new Ext.FormPanel({
-                        url: 'individual/guardarparametros',
-                        border: true,
+                        url: Ext.SROOT + 'rpiwsrwquest',
+                        border: false,
+                        autoHeight: true,
                         bodyStyle: 'padding:10px',
-                        labelWidth: 150,
-                        items: []
+                        labelWidth: 170,
+                        frame: false,
                     });
 
                     var formServicio = new Ext.Panel({
                         border: false,
-                        items: [/*formParametro*/],
+                        items: [formParametro],
                         tbar: [{
                                 text: 'Ejecutar',
                                 iconCls: 'play',
                                 handler: function() {
+                                    Ext.each(servicesdata, function(s) {                                        
+                                        var params = new Object();
+                                        Ext.each(s.parametros, function(p) {
+                                            if(!p.rpifield) {
+                                               params[p.nombre] = formParametro.getForm().findField(s.id + ':' + p.nombre).getValue();
+                                            } else {
+                                               params[p.nombre] = formParametro.getForm().findField('rpifield-' + p.rpifield).getValue(); 
+                                            }
+                                        });
+                                        params['_swi_userservice_id_'] = s.id;                                        
+                                        Ext.Ajax.request({
+                                            url: Ext.SROOT + 'wsrwquest',
+                                            method: 'POST',
+                                            params: params,
+                                            success: function(result, request) {
+                                                var robj = Ext.util.JSON.decode(result.responseText);
+                                                var resPanel = Ext.getCmp('responsepanel-' + robj.id);
+                                                resPanel.body.update('<pre>' + robj.result + '</pre>');
+                                            },
+                                            failure: function(result, request) {
 
+                                            }
+                                        });
+                                    });
                                 }
                             }, '->', {
                                 tooltip: 'Actualizar Formulario',
@@ -270,9 +165,9 @@
                     });
 
                     var derecha = new Ext.Panel({
-                        title: 'Servicios Disponibles',
+                        title: 'Resultados',
                         region: 'east',
-                        collapsible: true,
+                        //collapsible: true,
                         split: true,
                         autoScroll: true,
                         width: 550,
@@ -292,6 +187,39 @@
                         ]
                     });
 
+                    //Lista de servicios del usuario
+                    var servicesdata = null;
+                    Ext.Ajax.request({
+                        url: Ext.SROOT + 'individual/listaserviciosusuario',
+                        method: 'GET',
+                        success: function(result, request) {
+                            servicesdata = Ext.util.JSON.decode(result.responseText);
+                            //Each UserServices
+                            Ext.each(servicesdata, function(s) {
+                                derecha.add({
+                                    xtype: 'panel',
+                                    title: s.nombre,
+                                    id: 'responsepanel-' + s.id,
+                                    bodyStyle: 'padding:10px',
+                                    autoScroll: true,
+                                    collapsible: true,
+                                    height: 150,
+                                    tbar: ['->', {
+                                            text: 'Abrir',
+                                            tooltip: 'Abrir el servicio individual',
+                                            iconCls: 'open',
+                                            handler: function() {
+                                                domain.Manager.individual({id: s.id});
+                                            }
+                                        }]
+                                });
+                            });
+                            derecha.doLayout();
+                        },
+                        failure: function(result, request) {
+
+                        }
+                    });
 
                     var fsloadRpi = function() {
                         Ext.Ajax.request({
@@ -299,19 +227,8 @@
                             method: 'GET',
                             success: function(result, request) {
                                 var sfields = Ext.util.JSON.decode(result.responseText);
-
-                                var form = new Ext.FormPanel({
-                                    url: Ext.SROOT + 'submitservice',
-                                    border: false,
-                                    autoHeight: true,
-                                    bodyStyle: 'padding:10px',
-                                    labelWidth: 170,
-                                    frame: false,
-                                    //labelAlign: 'top',
-                                    items: sfields
-                                });
-                                formServicio.removeAll();
-                                formServicio.add(form);
+                                formParametro.removeAll();
+                                formParametro.add(sfields);
                                 formServicio.doLayout();
                             },
                             failure: function(result, request) {

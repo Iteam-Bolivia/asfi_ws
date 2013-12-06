@@ -10,7 +10,9 @@
 <html>
     <head>
         <title>SWI</title>
-
+        <script type="text/javascript">
+            if (top != self) {top.location='<c:url value="/"/>main';}                           
+        </script> 
         <%@include file="ExtJSScripts-ES.jsp"%>     
         
         <script type="text/javascript" src="menu"></script>

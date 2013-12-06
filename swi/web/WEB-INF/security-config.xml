@@ -19,7 +19,7 @@
     <http pattern="/resources/**" security="none" />
         
     <http auto-config="true" use-expressions="true" access-denied-page="/accessdenied">        
-        <!--<intercept-url pattern="/main" access="isAuthenticated()" />-->   
+        <intercept-url pattern="/main" access="isAuthenticated()" />   
                      	
         <form-login
             login-page="/loginform" 
@@ -29,7 +29,7 @@
         />			
         <logout 
             invalidate-session="true" 
-            logout-success-url="/" 
+            logout-success-url="/main" 
             logout-url="/logout"/>
     </http>
     

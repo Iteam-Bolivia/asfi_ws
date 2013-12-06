@@ -3,19 +3,11 @@
  * Copyright(c) 2011-2012 ICG Inc.
  * @author Johns Castillo Valencia
  */
-Ext.ns('com.icg.UserManager');
 
-[{"title": "Servicios del sistema",
-        "samples": [
-            {"id": 155, "icon": "desktop.gif", "text": "Servicio para sumar", "desc": "Este servicio calcula la suma de 2 números enteros.", "url": "122:NewWebService:NewWebServicePort:sumar"},
-            {"id": 155, "icon": "desktop.gif", "text": "Servicio para sumar", "desc": "Este servicio calcula la suma de 2 números enteros.", "url": "122:NewWebService:NewWebServicePort:sumar"}
-        ]}]
-
-[{
-        "id":155,
-        "nombre":"Servicio para sumar",
-        "router":"122:NewWebService:NewWebServicePort:sumar",
-        "url":null,
-        "descripcion":"Este servicio calcula la suma de 2 números enteros.",
-        "parametros":null
-    },{"id":155,"nombre":"Servicio para sumar","router":"122:NewWebService:NewWebServicePort:sumar","url":null,"descripcion":"Este servicio calcula la suma de 2 números enteros.","parametros":null}]
+[
+    {"xtype":"numberfield","fieldLabel":"sumando_b","width":230,"name":"70:sumando_b","allowBlank":true},
+    {"xtype":"textarea","fieldLabel":"Ciudad y Nombre","value":"La Paz","width":230,"name":"rpifield-77","allowBlank":false},
+    {"xtype":"textfield","fieldLabel":"CountryName","width":230,"name":"73:CountryName","allowBlank":true},
+    {"xtype":"textarea","fieldLabel":"Ciudad y Nombre","value":"La Paz","width":230,"name":"rpifield-77","allowBlank":false},
+    {"xtype":"numberfield","fieldLabel":"A","value":"5","width":230,"name":"70:sumando_a","allowBlank":true}
+]
