@@ -8,10 +8,12 @@ import bo.gob.asfi.uif.swi.dao.Dao;
 import bo.gob.asfi.uif.swi.model.FormField;
 import bo.gob.asfi.uif.swi.model.Parametro;
 import bo.gob.asfi.uif.swi.model.RpiField;
+import bo.gob.asfi.uif.swi.model.RpiResultado;
 import bo.gob.asfi.uif.swi.model.UserService;
 import bo.gob.asfi.uif.swi.security.CustomUserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -93,5 +97,65 @@ public class RpiViewController {
             }
         }
         return lst.values();
+    }
+
+    @RequestMapping(value = "/listaserviciosusuario", method = RequestMethod.GET)
+    public @ResponseBody
+    List<UserService> listaServiciosUsuario() {
+
+        List<UserService> lst = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails ud = (CustomUserDetails) auth.getPrincipal();
+            if (ud.getRole().equals("admin_uif")) {
+                lst = dao.findAll(UserService.class);
+            } else {
+                lst = dao.getUserServices(ud.getId());
+            }
+        } else {
+            lst = dao.findAll(UserService.class);
+        }
+
+        List<UserService> lst2 = new ArrayList<UserService>();
+        for (UserService us : lst) {
+            if (us.getRpiEnable()) {
+                us.setParametros(listarParametros(us.getId()));
+                lst2.add(us);
+            }
+        }
+
+        return lst2;
+    }
+
+    private Collection<Parametro> listarParametros(@RequestParam Integer servicio_id) {
+        Collection<Parametro> lst = dao.get(UserService.class, servicio_id).getParametros();
+        for (Parametro pm : lst) {
+            pm.setServicio(null);
+        }
+        return lst;
+    }
+
+    @RequestMapping(value = "/guardarrpi", method = RequestMethod.POST)
+    public @ResponseBody
+    Map<String, ? extends Object> guardarRpi(RpiResultado rpi) {
+        Map<String, Object> body = new HashMap<String, Object>();
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            rpi.setUsuario(auth.getName());
+            rpi.setFecha(new Date());
+            dao.persist(rpi);
+            body.put("success", true);
+        } catch (Exception e) {
+        }
+        body.put("success", false);
+        return body;
+    }
+
+    @RequestMapping(value = "/listarpis", method = RequestMethod.GET)
+    public @ResponseBody
+    List<RpiResultado> listaRpiS() {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return dao.findAll(RpiResultado.class);
     }
 }

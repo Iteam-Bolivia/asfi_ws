@@ -38,6 +38,7 @@ public class UserService implements Serializable {
     private String descripcion;
     @Lob
     private String requestXmlTemplate;
+    private String responseXpath;
     private Boolean rpiEnable = false;
     @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Parametro> parametros;
@@ -129,5 +130,13 @@ public class UserService implements Serializable {
     @Override
     public String toString() {
         return "bo.gob.asfi.uif.swi.model.UserService[ id=" + id + " ]";
+    }
+
+    public String getResponseXpath() {
+        return responseXpath;
+    }
+
+    public void setResponseXpath(String responseXpath) {
+        this.responseXpath = responseXpath;
     }
 }

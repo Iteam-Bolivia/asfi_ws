@@ -15,16 +15,21 @@ import com.predic8.wsdl.WSDLParser;
 import com.predic8.wstool.creator.RequestCreator;
 import com.predic8.wstool.creator.RequestTemplateCreator;
 import com.predic8.wstool.creator.SOARequestCreator;
+import com.predic8.wstool.creator.TemplateUtil;
 import groovy.xml.MarkupBuilder;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPConnection;
@@ -35,17 +40,24 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
- * @author John
+ * @author John Castillo V. john.gnu@gmail.com
  */
 @Controller
 public class WebServiceRequestController {
@@ -64,10 +76,17 @@ public class WebServiceRequestController {
         }
         return defs;
     }
-    
-    @RequestMapping(value = "/wsrwquest", method = RequestMethod.POST)
+
+    /**
+     * WebService System Request Invoca un servicio habilitado en el sistema Se
+     * registra en Bitacora
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/webservicesystem", method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, ? extends Object> wsFormRequest(HttpServletRequest request) {
+    Map<String, ? extends Object> webServiceSystemRequest(HttpServletRequest request) {
         Map<String, Object> body = new HashMap<String, Object>();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Bitacora bit = new Bitacora();
@@ -90,7 +109,7 @@ public class WebServiceRequestController {
             //System.out.println(sp.extract(writer.toString()));
 
             Map<String, String> map = sp.extract(writer.toString());
-
+            
             for (Entry<String, Object> entry : params.entrySet()) {
                 map.put("xpath:/" + routerparts[3] + "/" + entry.getKey(), entry.getValue().toString());
             }
@@ -99,8 +118,8 @@ public class WebServiceRequestController {
             SOARequestCreator creator2 = new SOARequestCreator(getDefinitios(serverid), new RequestCreator(), new MarkupBuilder(writer2));
             creator2.setFormParams(map);
             creator2.createRequest(routerparts[2], routerparts[3], routerparts[4]);
-            
-            System.out.println(writer2.toString());
+
+            //System.out.println(writer2.toString());
             bit.setRequest(writer2.toString());
             String url = us.getUrl(); //EndPoint url
             System.out.println("Operation EndPoint: " + url);
@@ -111,7 +130,13 @@ public class WebServiceRequestController {
             
             String response = printSOAPResponse(soapResponse);
             bit.setResponse(response);
-            body.put("result", response);
+            System.out.println(response);
+            //response = response.replaceAll("<", "&lt;");
+            //response = response.replaceAll(">", "&gt;");
+            
+            List<Map<String, String>> lst = new SOAPProcessor().parseXML(response, us.getResponseXpath());
+            
+            body.put("result", lst);
             body.put("id", params.get("_swi_userservice_id_"));
             body.put("success", Boolean.TRUE);
             soapConnection.close();
@@ -139,26 +164,67 @@ public class WebServiceRequestController {
         transformer.transform(sourceContent, result);
         return writer2.toString();
     }
-    
-    @RequestMapping(value = "/rpiwsrwquest", method = RequestMethod.POST)
+
+    /**
+     * WebService World Request Invoca un servicio generico anonimamente
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/webserviceworld", method = RequestMethod.POST)
     public @ResponseBody
-    Map<String, ? extends Object> rpiFormRequest(HttpServletRequest request) {
+             Map<String, ? extends Object> /*String*/ webServiceWorldRequest(Model model, HttpServletRequest request) {
         Map<String, Object> body = new HashMap<String, Object>();
         try {
             Map<String, Object> params = DynamicEntityMap.requestMapToEntityMap(request.getParameterMap());
+
+            //UserService us = dao.get(UserService.class, new Integer(params.get("_swi_userservice_id_").toString()));
+            String[] routerparts = params.get("__router_swi_var").toString().split(":");//us.getRouter().split(":");
+            String serverid = routerparts[0];
+            //reate body
+            StringWriter writer = new StringWriter();
+            //SOAPRequestCreator constructor: SOARequestCreator(Definitions, Creator, MarkupBuilder)
+            SOARequestCreator creator = new SOARequestCreator(getDefinitios(serverid), new RequestTemplateCreator(), new MarkupBuilder(writer));
+            creator.createRequest(routerparts[2], routerparts[3], routerparts[4]);
+            
+            FormParamsExtractor sp = new FormParamsExtractor();
+            //System.out.println(sp.extract(writer.toString()));
+
+            Map<String, String> map = sp.extract(writer.toString());
+            
             for (Entry<String, Object> entry : params.entrySet()) {
-                System.out.println("key: " + entry.getKey());
-                System.out.println("   value: " + entry.getValue());
+                map.put("xpath:/" + routerparts[3] + "/" + entry.getKey(), entry.getValue().toString());
             }
             
-            body.put("result", "");
-            body.put("success", Boolean.TRUE);
+            StringWriter writer2 = new StringWriter();
+            SOARequestCreator creator2 = new SOARequestCreator(getDefinitios(serverid), new RequestCreator(), new MarkupBuilder(writer2));
+            creator2.setFormParams(map);
+            creator2.createRequest(routerparts[2], routerparts[3], routerparts[4]);
+
+            //System.out.println(writer2.toString());
+
+            String url = params.get("__endpoint_swi_var").toString(); //EndPoint url
+            System.out.println("Operation EndPoint: " + url);
+            // Create SOAP Connection
+            SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
+            SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+            SOAPMessage soapResponse = soapConnection.call(getSoapMessageFromString(writer2.toString()), url);
             
+            String response = printSOAPResponse(soapResponse);
+            
+            response = response.replaceAll("<", "&lt;");
+            response = response.replaceAll(">", "&gt;");
+                        
+            body.put("result", response);
+            model.addAttribute("result", response);
+            //body.put("id", params.get("_swi_userservice_id_"));
+            body.put("success", Boolean.TRUE);
+            soapConnection.close();
         } catch (Exception e) {
             e.printStackTrace();
             body.put("success", Boolean.FALSE);
         }
-        
         return body;
+        //return "xml";
     }
 }

@@ -230,7 +230,7 @@ public class ClienteDeServiciosController {
             nb.setIconCls("binding");
             nb.setChildren(new ArrayList<org.heyma.core.extjs.components.Node>());
             for (BindingOperation op : bdg.getOperations()) {
-                System.out.println(" - " + op.getName());
+                //System.out.println(" - " + op.getName());
                 Node no = new Node();
                 no.setText(op.getName());
                 no.setIconCls("operation");
@@ -361,7 +361,7 @@ public class ClienteDeServiciosController {
         List<Servicio> servicios = servidor.getServicios();
 
         Operacion op = ClienteDeServiciosController.getOperacion(parts[1], parts[2], parts[3], servicios);
-        System.out.println(op);
+        //System.out.println(op);
         if (op != null) {
             if (op.getRequest() != null) {
                 return requestFormFiends(op.getRequest());
@@ -376,6 +376,7 @@ public class ClienteDeServiciosController {
             FormField ff = new FormField();
             ff.setFieldLabel(ep.getName() + "  (" + ep.getType() + ")");
             ff.setXtype(FormField.TEXT_FIELD);
+            ff.setName(ep.getName());
             list.add(ff);
         }
         return list;

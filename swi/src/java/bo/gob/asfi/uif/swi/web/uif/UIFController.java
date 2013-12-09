@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+
 /**
  *
  * @author John Castillo Valencia
@@ -57,23 +59,23 @@ public class UIFController {
     }
     
     
-    @RequestMapping(value = "/get/{entity}/{id}")
-    public @ResponseBody Object get(@PathVariable String entity, @PathVariable Integer id) {
-        try {
-            Object o = dao.get(Class.forName("bo.gob.asfi.uif.swi.model." + entity), id);
-            return 0;
-        } catch (ClassNotFoundException ex) {
-            //Logger.getLogger(UIFController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+//    @RequestMapping(value = "/get/{entity}/{id}")
+//    public @ResponseBody Object get(@PathVariable String entity, @PathVariable Integer id) {
+//        try {
+//            Object o = dao.get(Class.forName("bo.gob.asfi.uif.swi.model." + entity), id);
+//            return 0;
+//        } catch (ClassNotFoundException ex) {
+//            //Logger.getLogger(UIFController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
     
-    @RequestMapping(value = "/finduser/{username}")
-    public @ResponseBody Object find(@PathVariable String username) {
-        
-        Usuario user = dao.getUsuarioByUsername(username);
-        System.out.println(user);
-        return user;
-    }
+//    @RequestMapping(value = "/finduser/{username}")
+//    public @ResponseBody Object find(@PathVariable String username) {
+//        
+//        Usuario user = dao.getUsuarioByUsername(username);
+//        System.out.println(user);
+//        return user;
+//    }
     
 }

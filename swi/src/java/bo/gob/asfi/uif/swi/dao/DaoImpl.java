@@ -8,6 +8,7 @@ import bo.gob.asfi.uif.swi.model.Bitacora;
 import bo.gob.asfi.uif.swi.model.UserService;
 import bo.gob.asfi.uif.swi.model.Usuario;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Criteria;
@@ -92,11 +93,33 @@ public class DaoImpl implements Dao {
         update(u);
     }
 
+    @Transactional
+    public void setDeleteServiceToUser(Integer usuario_id, Integer servicio_id) {
+        Usuario u = load(Usuario.class, usuario_id);
+        List<UserService> lst2 = new ArrayList<UserService>();
+        for (UserService us : u.getServicios()) {
+            if (!us.getId().equals(servicio_id)) {
+                lst2.add(us);
+            }
+        }
+        u.setServicios(lst2);
+        update(u);
+    }
+
     @Transactional(readOnly = true)
     public List<UserService> getUserServices(Integer usuario_id) {
         List<UserService> lst = get(Usuario.class, usuario_id).getServicios();
         for (UserService us : lst) {
             us.getParametros();
+        }
+        return lst;
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserService> getUserOnlyServices(Integer usuario_id) {
+        List<UserService> lst = get(Usuario.class, usuario_id).getServicios();
+        for (UserService us : lst) {
+            us.setParametros(null);
         }
         return lst;
     }

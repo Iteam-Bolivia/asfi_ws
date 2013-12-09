@@ -39,7 +39,11 @@ public interface Dao {
     
     public void setServicesToUser(Integer usuario_id, Integer servicio_id);
     
+    public void setDeleteServiceToUser(Integer usuario_id, Integer servicio_id);
+    
     public List<UserService> getUserServices(Integer usuario_id);
+    
+    public List<UserService> getUserOnlyServices(Integer usuario_id);
     
     public List<UserService> getUserNotServices(Integer usuario_id);
     
