@@ -17,8 +17,40 @@
         <script type="text/javascript">
             Ext.namespace('domain');
             domain.Manager = {
+                fields: function(data) {
+                    if (data.length > 0) {
+                        var cols = new Array();
+                        var fields = new Array();
+                        for (var prop in data[0]) {
+                            console.log("key:" + prop);
+                            var col = {
+                                header: prop,
+                                dataIndex: prop
+                            };
+                            cols.push(col);
+                            var field = {
+                                name: prop
+                            };
+                            fields.push(field)
+                        }
+
+                        var grid = new Ext.grid.GridPanel({
+                            //title: 'Resultados',                            
+                            //height: 190,
+                            store: new Ext.data.JsonStore({
+                                fields: fields,
+                                data: data,
+                                autoLoad: true
+                            }),
+                            columns: cols
+                        });
+                        return grid;
+                    }
+                    return undefined;
+                },
                 individual: function(options) {
                     var serviceResponse;
+                    var grid;
                     Ext.Ajax.request({
                         url: Ext.SROOT + 'paneldeservicios/formserviceitems',
                         method: 'POST',
@@ -33,7 +65,7 @@
                                 value: options.id
                             });
                             var form = new Ext.FormPanel({
-                                url: Ext.SROOT + 'wsrwquest',
+                                url: Ext.SROOT + 'webservicesystem',
                                 border: false,
                                 autoHeight: true,
                                 region: 'center',
@@ -51,19 +83,21 @@
                                         tooltip: 'Llamar la operaci&oacute;n del servicio',
                                         handler: function() {
                                             form.getForm().submit({
-                                                waitMsg: 'Enviando...',
+                                                waitMsg: {tile:'Enviando...'},
                                                 success: function(form, action) {
                                                     serviceResponse = Ext.util.JSON.decode(action.response.responseText);
                                                     win.getEl().unmask();
                                                     win.remove(1);
-                                                    win.add({
-                                                        xtype: 'panel',
-                                                        title: 'Resultado',
-                                                        bodyStyle: 'padding:10px',
-                                                        autoScroll: true,
-                                                        height: 200,
-                                                        html: '<pre>' + serviceResponse.result + '</pre>'
-                                                    });
+                                                    grid = domain.Manager.fields(serviceResponse.result);
+                                                    win.add(grid);
+//                                                    win.add({
+//                                                        xtype: 'panel',
+//                                                        title: 'Resultado',
+//                                                        bodyStyle: 'padding:10px',
+//                                                        autoScroll: true,
+//                                                        height: 200,
+//                                                        html: '<pre>' + serviceResponse.result + '</pre>'
+//                                                    });                                                    
                                                     win.doLayout();
                                                 },
                                                 failure: function(form, action) {
@@ -75,11 +109,11 @@
                                         }
                                     }]
                             });
-                            
+
                             var win = new Ext.Window({
-                                title: 'Registrar Usuario',
+                                title: 'Servicio In',
                                 autoScroll: true,
-                                layout:'anchor',
+                                layout: 'anchor',
                                 width: 600,
                                 height: 300,
                                 minHeight: 250,
@@ -89,9 +123,13 @@
                                 modal: true,
                                 buttons: [{
                                         text: 'Usar este resultado',
-                                        handler: function() {                                            
+                                        handler: function() {
                                             var resPanel = Ext.getCmp('responsepanel-' + serviceResponse.id);
-                                            resPanel.body.update('<pre>' + serviceResponse.result + '</pre>');
+                                            //resPanel.body.update('<pre>' + serviceResponse.result + '</pre>');
+                                            resPanel.removeAll();
+                                            resPanel.add(grid);
+                                            resPanel.doLayout();
+                                            options.salida = serviceResponse.result;
                                             win.close();
                                         }
                                     }]
@@ -102,11 +140,86 @@
 
                         }
                     });
-                }
+                },
+                guardar: function(options) {
+                    console.log(options.entrada);
+                    console.log(options.salida);
+                    var form = new Ext.FormPanel({
+                        url: Ext.SROOT + 'rpiview/guardarrpi',
+                        border: false,
+                        autoHeight: true,
+                        bodyStyle: 'padding:10px',
+                        defaults: {
+                            msgTarget: 'side',
+                            width: 300
+                        },
+                        items: [{
+                                xtype: 'textfield',
+                                fieldLabel: 'Nombre',
+                                allowBlank: false,
+                                name: 'nombre'
+                            }, /*{
+                             xtype: 'textarea',
+                             fieldLabel: 'Descripci&oacute;n',
+                             allowBlank: false,
+                             name: 'descripcion'
+                             },*/ {
+                                xtype: "textarea",
+                                name: "entrada",
+                                value: Ext.util.JSON.encode(options.entrada),
+                            }, {
+                                xtype: "textarea",
+                                name: "salida",
+                                value: Ext.util.JSON.encode(options.salida),
+                            }]
+                    });
+
+                    var win = new Ext.Window({
+                        iconCls: 'entity-save',
+                        title: 'Guardar RPI',
+                        autoScroll: true,
+                        autoHeight: true,
+                        width: 500,
+                        activeItem: 0,
+                        layout: 'anchor',
+                        items: form,
+                        modal: true,
+                        buttonAlign: 'center',
+                        buttons: [{
+                                text: 'Guardar',
+                                handler: function() {
+                                    form.getForm().submit({
+                                        success: function(form, action) {
+                                            win.close();
+                                        },
+                                        failure: function(form, action) {
+                                            if (action.failureType === 'server') {
+                                                var r = Ext.util.JSON.decode(action.response.responseText);
+                                                com.icg.errors.submitFailure('Error', r.errorMessage);
+                                            }
+                                        }
+                                    });
+                                }
+                            }]
+                    });
+                    win.show();
+                },
+                mustExecute: function() {
+                    Ext.MessageBox.show({
+                        title: 'Aviso',
+                        msg: 'Debe ejecutar la <b>consulta</b>.',
+                        buttons: Ext.MessageBox.OK,
+                        icon: Ext.Msg.INFO
+                    });
+                },
             };
 
             domain.Panel = {
                 init: function() {
+
+                    var _rpidata = new Object();
+                    _rpidata.salida = new Array();
+                    var isEjecutado = false;
 
                     var formParametro = new Ext.FormPanel({
                         url: Ext.SROOT + 'rpiwsrwquest',
@@ -124,24 +237,33 @@
                                 text: 'Ejecutar',
                                 iconCls: 'play',
                                 handler: function() {
-                                    Ext.each(servicesdata, function(s) {                                        
+                                    _rpidata.entrada = formParametro.getForm().getValues();
+                                    _rpidata.salida = new Array();
+                                    isEjecutado = true;
+                                    Ext.each(servicesdata, function(s) {
                                         var params = new Object();
                                         Ext.each(s.parametros, function(p) {
-                                            if(!p.rpifield) {
-                                               params[p.nombre] = formParametro.getForm().findField(s.id + ':' + p.nombre).getValue();
+                                            if (!p.rpifield) {
+                                                params[p.nombre] = formParametro.getForm().findField(s.id + ':' + p.nombre).getValue();
                                             } else {
-                                               params[p.nombre] = formParametro.getForm().findField('rpifield-' + p.rpifield).getValue(); 
+                                                params[p.nombre] = formParametro.getForm().findField('rpifield-' + p.rpifield).getValue();
                                             }
                                         });
-                                        params['_swi_userservice_id_'] = s.id;                                        
+                                        params['_swi_userservice_id_'] = s.id;
                                         Ext.Ajax.request({
-                                            url: Ext.SROOT + 'wsrwquest',
+                                            url: Ext.SROOT + 'webservicesystem',
                                             method: 'POST',
                                             params: params,
+                                            waitMsg: 'Espere...',
                                             success: function(result, request) {
                                                 var robj = Ext.util.JSON.decode(result.responseText);
+                                                _rpidata.salida.push(robj);
                                                 var resPanel = Ext.getCmp('responsepanel-' + robj.id);
-                                                resPanel.body.update('<pre>' + robj.result + '</pre>');
+                                                //resPanel.body.update('<pre>' + robj.result + '</pre>');
+                                                var grid = domain.Manager.fields(robj.result);
+                                                resPanel.removeAll();
+                                                resPanel.add(grid);
+                                                resPanel.doLayout();
                                             },
                                             failure: function(result, request) {
 
@@ -149,17 +271,37 @@
                                         });
                                     });
                                 }
+                            }, '-', {
+                                text: 'Guardar',
+                                iconCls: 'entity-save',
+                                handler: function() {
+                                    if (isEjecutado) {
+                                        domain.Manager.guardar({
+                                            entrada: _rpidata.entrada,
+                                            salida: _rpidata.salida
+                                        });
+                                    } else {
+                                        domain.Manager.mustExecute();
+                                    }
+                                }
+                            }, {
+                                text: 'Imprimir',
+                                iconCls: 'printer',
+                                handler: function() {
+
+                                }
                             }, '->', {
                                 tooltip: 'Actualizar Formulario',
                                 iconCls: 'refresh',
                                 handler: function() {
                                     fsloadRpi();
+                                    isEjecutado = false;
                                 }
                             }]
                     });
 
                     var centro = new Ext.Panel({
-                        title: 'Servicios',
+                        title: 'Formulario de Consulta',
                         region: 'center',
                         items: [formServicio]
                     });
@@ -190,7 +332,7 @@
                     //Lista de servicios del usuario
                     var servicesdata = null;
                     Ext.Ajax.request({
-                        url: Ext.SROOT + 'individual/listaserviciosusuario',
+                        url: Ext.SROOT + 'rpiview/listaserviciosusuario',
                         method: 'GET',
                         success: function(result, request) {
                             servicesdata = Ext.util.JSON.decode(result.responseText);
@@ -199,17 +341,21 @@
                                 derecha.add({
                                     xtype: 'panel',
                                     title: s.nombre,
+                                    layout:'fit',
                                     id: 'responsepanel-' + s.id,
-                                    bodyStyle: 'padding:10px',
+                                    //bodyStyle: 'padding:10px',
                                     autoScroll: true,
                                     collapsible: true,
-                                    height: 150,
+                                    height: 170,
                                     tbar: ['->', {
                                             text: 'Abrir',
                                             tooltip: 'Abrir el servicio individual',
                                             iconCls: 'open',
                                             handler: function() {
-                                                domain.Manager.individual({id: s.id});
+                                                domain.Manager.individual({
+                                                    id: s.id,
+                                                    salida: _rpidata
+                                                });
                                             }
                                         }]
                                 });

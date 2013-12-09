@@ -196,28 +196,90 @@ domain.ServiceManager = {
                 },
                 success: function(result, request) {
                     var sfields = Ext.util.JSON.decode(result.responseText);
+                    sfields.push({
+                        xtype: 'hidden',
+                        name: '__router_swi_var',
+                        value: item.id
+                    });
+                    sfields.push({
+                        xtype: 'hidden',
+                        name: '__endpoint_swi_var',
+                        value: item.url
+                    });
                     var form = new Ext.FormPanel({
-                        url: Ext.SROOT + 'submitservice',
+                        url: Ext.SROOT + 'webserviceworld',
                         border: false,
                         autoHeight: true,
                         bodyStyle: 'padding:10px',
                         labelWidth: 130,
                         frame: true,
                         labelAlign: 'top',
-                        items: [{
-                                xtype: 'fieldset',
-                                layout: 'form',
-                                defaults: {
-                                    msgTarget: 'side'
-                                },
-                                items: sfields
-                            }],
+                        defaults: {
+                            msgTarget: 'side'
+                        },
+                        items: sfields,
                         tbar: [{
-                                text: 'Enviar',
+                                text: 'Ejecutar',
                                 iconCls: 'play',
                                 tooltip: 'Llamar la operaci&oacute;n del servicio',
                                 handler: function() {
-                                    //submit service request
+//                                    form.getForm().submit({
+//                                        waitMsg: 'Enviando...',
+//                                        success: function(form, action) {
+//                                            //var serviceResponse = Ext.util.JSON.decode(action.response.responseText);
+//                                            //win.getEl().unmask();
+//                                            options.panelinfo.remove(1);
+//                                            options.panelinfo.add({
+//                                                xtype: 'panel',
+//                                                title: 'Resultado',
+//                                                bodyStyle: 'padding:10px',
+//                                                autoScroll: true,
+//                                                height: 200,
+//                                                html: '<pre>' + action.response.responseText + '</pre>'
+//                                            });
+//                                            options.panelinfo.doLayout();
+//                                            //win.doLayout();
+//                                        },
+//                                        failure: function(form, action) {
+//                                            
+//                                            //Ext.Msg.alert('Warning', action.result.errorMessage);
+//                                            //options.error('Error interno',action.result.errorMessage);
+//                                            //domain.errors.submitFailure('Error interno', action.result.errorMessage);
+//                                        }
+//                                    });
+
+                                    Ext.Ajax.request({
+                                        url: Ext.SROOT + 'webserviceworld',
+                                        method: 'POST',
+                                        waitMsg: 'Enviando...',
+                                        params: form.getForm().getValues(),
+                                        success: function(result, request) {
+                                            //console.log(result.responseXML);
+                                            //console.log(result.responseText);
+                                            var serviceResponse = Ext.util.JSON.decode(result.responseText);
+                                            //var or
+                                            //document.getElementById('xml-div').innerHTML = '<pre class="brush: xml;">' + result.responseText + '</pre>';
+                                            options.panelinfo.remove(1);
+                                            var ppanel = new Ext.Panel({
+                                                xtype: 'panel',
+                                                title: 'Resultado',
+                                                bodyStyle: 'padding:10px',
+                                                autoScroll: true,
+                                                height: 200,
+                                                html: '<pre>' + serviceResponse.result + '</pre>'
+                                            });
+                                            options.panelinfo.add(ppanel);
+                                            //ppanel.body.update('<pre class="brush: xml;">' + result.responseText + '</pre>');
+                                            options.panelinfo.doLayout();
+                                            //win.doLayout();
+                                        },
+                                        failure: function(result, request) {
+
+                                        }
+                                    });
+
+
+
                                 }
                             }, '-', {
                                 text: 'Definir Servicio',
@@ -386,7 +448,7 @@ domain.ServiceManager.View = {
                     }
                 }],
             listeners: {
-                dblclick: function(node, e) {                    
+                dblclick: function(node, e) {
                     if (node.attributes.iconCls === 'operation') {
                         domain.ServiceManager.openOperation({
                             node: node,

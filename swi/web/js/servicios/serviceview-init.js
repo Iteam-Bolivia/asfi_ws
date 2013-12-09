@@ -3,10 +3,45 @@
  * Copyright(c) 2006-2010 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
+ * @Author: John Castillo Valencia
+ * john.gnu@gmail.com
  */
 Ext.ns('Ext.samples');
 
 (function() {
+
+    Ext.samples.Fields = function(data) {
+        if (data.length > 0) {
+            var cols = new Array();
+            var fields = new Array();
+            for (var prop in data[0]) {
+                console.log("key:" + prop);
+                var col = {
+                    header: prop,
+                    dataIndex: prop
+                };
+                cols.push(col);
+                var field = {
+                    name: prop
+                };
+                fields.push(field)
+            }
+
+            var grid = new Ext.grid.GridPanel({
+                title: 'Resultados',
+                //width: 400,
+                height: 190,
+                store: new Ext.data.JsonStore({
+                    fields: fields,
+                    data: data,
+                    autoLoad: true
+                }),
+                columns: cols
+            });
+            return grid;
+        }
+        return undefined;
+    };
 
     Ext.samples.RequestForm = function(options) {
         var formreq = Ext.getCmp('form_request');
@@ -25,7 +60,7 @@ Ext.ns('Ext.samples');
                     value: options.id
                 });
                 var form = new Ext.FormPanel({
-                    url: Ext.SROOT + 'wsrwquest',
+                    url: Ext.SROOT + 'webservicesystem',
                     border: false,
                     autoHeight: true,
                     region: 'center',
@@ -48,14 +83,16 @@ Ext.ns('Ext.samples');
                                         var ro = Ext.util.JSON.decode(action.response.responseText);
                                         formreq.getEl().unmask();
                                         formreq.remove(1);
-                                        formreq.add({
-                                            xtype: 'panel',
-                                            title: 'Resultado',
-                                            bodyStyle: 'padding:10px',
-                                            autoScroll: true,
-                                            height:200,
-                                            html: '<pre>'+ro.result+'</pre>'
-                                        });
+                                        var grid = Ext.samples.Fields(ro.result)
+//                                        formreq.add({
+//                                            xtype: 'panel',
+//                                            title: 'Resultado',
+//                                            bodyStyle: 'padding:10px',
+//                                            autoScroll: true,
+//                                            height: 200,
+//                                            html: '<code>' + ro.result + '</code>'
+//                                        });
+                                        formreq.add(grid);
                                         formreq.doLayout();
                                     },
                                     failure: function(form, action) {

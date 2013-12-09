@@ -1,5 +1,5 @@
 <%--
-    Document   : Configucacion de Parametros
+    Document   : Asignacion de servicios
     Created on : 28-11-2013, 09:55:10 PM
     Author     : Marcelo Cardenas
 --%>
@@ -10,7 +10,7 @@
 <!DOCTYPE HTML>
 <html lang="es">
     <head>
-        <title>Configucacion de Parametros</title>
+        <title>Asignacion de servicios</title>
         <!-- ALL ExtJS Framework resources -->
         <%@include file="../ExtJSScripts-ES.jsp"%>  
 
@@ -19,7 +19,7 @@
             domain.Panel = {
                 init: function() {
                     var storeUsuario = new Ext.data.JsonStore({
-                        url: Ext.SROOT + 'listarusuarios',
+                        url: Ext.SROOT + 'asignacionservicios/listarusuarios',
                         root: 'data',
                         fields: [{name: 'id'},
                             {name: 'usuario'},
@@ -30,92 +30,69 @@
                             {name: 'activo'},
                             {name: 'caducaEn'}
                         ],
-                        autoLoad:true,
+                        autoLoad: true,
                     });
+
                     var gridPanelUsuario = new Ext.grid.GridPanel({
                         title: 'Usuarios',
                         height: 300,
                         columns: [
-                            //{header: "id", width: 50, sortable: true, dataIndex: 'id'},
                             {header: "Usuario", width: 100, sortable: true, dataIndex: 'usuario'},
                             {header: "Nombres", width: 100, sortable: true, dataIndex: 'nombres'},
                             {header: "Ap.Paterno", width: 100, sortable: true, dataIndex: 'paterno'},
                             {header: "Ap. Materno", width: 100, sortable: true, dataIndex: 'materno'},
-                            {header: "Rol",width: 70, sortable: true,dataIndex: 'rol'},
-                            {header: "Activo",width: 40,sortable: true,dataIndex: 'activo',
-                                renderer: function(val) {  if (val) {
-                                return '<img src="' + Ext.IMAGES_SILK + 'accept.png">';
-                                } else {
-                                return '<img src="' + Ext.IMAGES_SILK + 'cancel.png">';
-                                }
+                            {header: "Rol", width: 70, sortable: true, dataIndex: 'rol'},
+                            {header: "Activo", width: 40, sortable: true, dataIndex: 'activo',
+                                renderer: function(val) {
+                                    if (val) {
+                                        return '<img src="' + Ext.IMAGES_SILK + 'accept.png">';
+                                    } else {
+                                        return '<img src="' + Ext.IMAGES_SILK + 'cancel.png">';
+                                    }
                                 }
                             },
-                            {header: "Caduca en",sortable: true,dataIndex: 'caducaEn',
+                            {header: "Caduca en", sortable: true, dataIndex: 'caducaEn',
                                 renderer: function(val) {
                                     var date = new Date(val);
                                     return date.format('d/m/Y');
-                                    }
-                            }                          
+                                }
+                            }
                         ],
                         store: storeUsuario
                     });
-/*OJO*/
-var idUsuario;
+                    /*OJO*/
+                    //var idUsuario;
                     gridPanelUsuario.getSelectionModel().on('rowselect', function rowselected(sm, rowindex, record) {
-                        //record.data['usuario.id'] = cboBusServicio.getValue();
-        //alert(record);                
-        //alert(record.data['id']);
-                        secondGridStore.load({params:{id:record.data['id']}});
-        idUsuario=record.data['id'];                
-        firstGridStore.load();
+                        secondGridStore.load({params: {id: record.data['id']}});
+                        //idUsuario = record.data['id'];
+                        //firstGridStore.load();
                         //formParametro.getForm().loadRecord(record);
                     });
 
                     function fun_buscar() {
                         storeUsuario.load({params: {usuario_id: cboBusServicio.getValue()}});
-                    };
+                    }
+                    ;
 
-                    var storeServicio = new Ext.data.JsonStore({
-                        url: Ext.SROOT + 'individual/listaservicios',
-                        fields: [{name: 'id'},
-                            {name: 'nombre'}
-                        ]
-                    });
-
-                    var cboBusServicio = new Ext.form.ComboBox({
-                        fieldLabel: 'Servicio',
-                        name: 'cboBusServicio',
-                        forceSelection: true,
-                        store: storeUsuario,
-                        //emptyText:'servicio..',
-                        triggerAction: 'all',
-                        lastQuery: '', //hideTrigger:true,
-                        editable: false,
-                        displayField: 'nombres',
-                        valueField: 'id',
-                        typeAhead: true,
-                        selectOnFocus: true
-                    });
                     var verUsuario = new Ext.FormPanel({
                         border: false,
                         width: 650,
                         defaults: {xtype: 'textfield'},
                         bodyStyle: 'padding:10px',
                         autoScroll: false,
-                                
                         items: [
                             /*new Ext.form.FieldSet({
-                                title: 'Seleccionar Servicio',
-                                autoHeight: true,
-                                defaultType: 'textfield',
-                                items: [cboBusServicio],
-                                buttons: [{
-                                        text: 'Cargar',
-                                        handler: function() {
-                                            fun_buscar();
-                                        }}
-                                ]
-                            }),*/
+                             title: 'Seleccionar Servicio',
+                             autoHeight: true,
+                             defaultType: 'textfield',
+                             items: [cboBusServicio],
+                             buttons: [{
+                             text: 'Cargar',
+                             handler: function() {
+                             fun_buscar();
+                             }}
+                             ]
+                             }),*/
                             gridPanelUsuario
                         ]
                     });
@@ -123,250 +100,132 @@ var idUsuario;
 
 
 
-	// Generic fields array to use in both store defs.
-	var fields = [
-		{name: 'id', mapping : 'id'},
-		{name: 'nombre', mapping : 'nombre'}
-		
-	];
+                    // Generic fields array to use in both store defs.
+                    var fields = [
+                        {name: 'id', mapping: 'id'},
+                        {name: 'nombre', mapping: 'nombre'}
 
-    // create the data store
-    var firstGridStore = new Ext.data.JsonStore({
-        url: Ext.SROOT + 'individual/listaservicios',
-                        fields: [{name: 'id'},
-                            {name: 'nombre'}],	
-		//root   : 'records'
-    });
+                    ];
 
-
-	// Column Model shortcut array
-	var cols = [
-		//{ id : 'name', header: "Record Name", width: 160, sortable: true, dataIndex: 'name'},
-		{header: "nombre", width: 150, autoExpandColumn:true,sortable: true, dataIndex: 'nombre'}
-		//{header: "column2", width: 150, sortable: true, dataIndex: 'column2'}
-	];
-
-	// declare the source Grid
-    var firstGrid = new Ext.grid.GridPanel({
-	ddGroup          : 'secondGridDDGroup',
-        store            : firstGridStore,
-        columns          : cols,
-	enableDragDrop   : true,
-        stripeRows       : true,
-                selModel
-:new Ext.grid.RowSelectionModel({singleSelect:true}),
-        //autoExpandColumn : 'nombre',
-        title            : 'Servicios disponibles (arrastre el servicio para asignar)',
-        //height:400,
-        //autoHeight:true,
-         listeners : {
-       afterrender : function(comp) {
-        var firstGridDropTargetEl =  firstGrid.getView().scroller.dom;
-        var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
-                ddGroup    : 'firstGridDDGroup',
-                notifyDrop : function(ddSource, e, data){
-                        //var records =  ddSource.dragData.selections;
-                        var urecord = gridPanelUsuario.getSelectionModel().getSelected();
-                        var urecord = firstGrid.getSelectionModel().getSelected();
-                        Ext.each(records, ddSource.grid.store.remove, ddSource.grid.store);
-                        
-        //firstGrid.store.add(records);
-                        //firstGrid.store.sort('nombre', 'ASC');
-                        return true
-                }
-        });
-       }}
-    });
-
-    var secondGridStore = new Ext.data.JsonStore({
-        url: Ext.SROOT + 'asignacionservicios/listarserviciosporusuario',
+                    // create the data store
+                    var firstGridStore = new Ext.data.JsonStore({
+                        url: Ext.SROOT + 'individual/listaservicios',
                         fields: [{name: 'id'},
                             {name: 'nombre'}]
-    });
-
-    // create the destination Grid
-    var secondGrid = new Ext.grid.GridPanel({
-	ddGroup          : 'firstGridDDGroup',
-        store            : secondGridStore,
-        columns          : cols,
-	enableDragDrop   : true,
-        stripeRows       : true,
-        selModel
-:new Ext.grid.RowSelectionModel({singleSelect:true}),
-        //autoExpandColumn : 'name',
-        title            : 'Servicios asignados al usuario',
-        //height:400,
-        // autoHeight:true,
-        listeners : {
-        afterrender : function(comp) {
-        //  ..................;
-        var secondGridDropTargetEl = secondGrid.getView().scroller.dom;
-        var secondGridDropTarget = new Ext.dd.DropTarget(secondGridDropTargetEl, {
-                ddGroup    : 'secondGridDDGroup',
-                notifyDrop : function(ddSource, e, data){   
-                        console.log(ddSource);
-                        console.log(e);
-                        console.log(data);
-                        var urecord = gridPanelUsuario.getSelectionModel().getSelected();
-                        var srecord = firstGrid.getSelectionModel().getSelected();
-                        if(urecord) {
-                                                    Ext.Ajax.request({
-                                url: 'asignacionservicios/guardarservicios',
-                                method: 'POST',
-                                params: {
-                                    idUsuario: urecord.id,
-                                    idServicio:srecord.id                                    
-                                },
-                                success: function(result, request) {
-                                    firstGridStore.getStore().reload();                                    
-                                    //box.hide();
-                                },
-                                failure: function(result, request) {
-                                    Ext.Msg.alert('Error', 'Fallo.');
-                                    //box.hide();
-                                }
-                            });
-                        }
-                }
-        });
-       }
-}
-    });
-
-
-
-
-	// used to add records to the destination stores
-	var blankRecord =  Ext.data.Record.create(fields);
-
-        /****
-        * Setup Drop Targets
-        ***/
-        // This will make sure we only drop to the  view scroller element
-        
-
-
-
-////////////////////////
-                    
-                    var formParametro = new Ext.FormPanel({
-                        url: 'asignarservicios/guardar_servicios',
-                        width        : 650,
-                        height       : 400,
-                        layout       : 'hbox',
-                        //renderTo     : 'panel',
-                        defaults     : { flex : 1 }, //auto stretch
-                        layoutConfig : { align : 'stretch' },
-                                items: [
-                                    firstGrid,
-                                    secondGrid,
-                                    {
-                                                xtype: 'hidden',
-                                                //fieldLabel: 'id',
-                                                //columns:3, 
-                                                name: 'id',
-                                                id:'id'
-
-                                             }
-                                ],
-                        //buttonAlign: 'center',
-                        buttons: [
-                            {text: 'Guardar', handler: function() {
-                                    
-                                    Ext.Ajax.request({
-                                                 waitMsg : 'Guardando...',
-                                                 url:'asignarservicios/guardar_servicios',
-                                                 method: 'POST',
-                                                 params:{
-                                                    //predio_id: codigoE.getValue(),//OJO//
-                                                    usuario:secondGrid.getStore()
-                                                    //nombre:txtNombre.getValue(),
-                                                    //rol:cmbRol.getValue()
-                                                },
-                               
-                                      success: function(result, request) {
-                                        //verNuevoUsuario.getForm().reset();
-                                        
-                                        var data = request.result;
-                                                            Ext.MessageBox.show({
-                                                                title:'Información',
-                                                                msg:'Eliminación correcta',
-                                                                buttons: Ext.MessageBox.OK,
-                                                                icon:Ext.Msg.INFO
-                                                            });
-                                        fun_buscar();  
-                                        formParametro.getForm().reset();
-                                                  
-                                    },
-                                    failure: function(result, request) {
-                                       
-                                                var data = request.result;
-                                                Ext.MessageBox.show({
-                                                    title:'Error',
-                                                    msg:data.errorMessage,
-                                                    buttons: Ext.MessageBox.OK,
-                                                    icon:Ext.Msg.ERROR
-                                                });
-                                    }    
-                                }); 
-                                
-                           
-                                   /*formParametro.getForm().submit({
-                                        success: function(form, action) {
-                                            gridPanelUsuario.store.reload();
-                                        },
-                                        failure: function(form, action) {
-                                            if (action.Failure == 'server') {
-                                                var r = Ext.util.JSON.decode(action.response.responseText);
-                                                alert(r.errorMessage);
-                                            }
-                                        }
-                                    })*/
-                                }},
-                           { text    : 'Restaurar',
-				handler : function() {
-					//refresh source grid
-					 firstGridStore.load();
-                                         //alert(idUsuario);
-                                         if(idUsuario)
-                                         { //alert('si');
-                                            secondGridStore.load({params: {id: idUsuario}});
-                                         }else{
-                                         //alert('no');    
-                                            secondGridStore.removeAll();  
-                                         }   
-					//purge destination grid
-					//secondGridStore.removeAll();
-                                }}
-                        ]
                     });
 
 
-                    /*************PANELES*********************/
-                    /****/
-          var izquierda=new Ext.Panel({
-            title: 'Búsqueda',
-            region: 'west',
-            collapsible: true,
+                    // Column Model shortcut array
+                    var cols = [
+                        //{ id : 'name', header: "Record Name", width: 160, sortable: true, dataIndex: 'name'},
+                        {header: "nombre", width: 150, autoExpandColumn: true, sortable: true, dataIndex: 'nombre'}
+                        //{header: "column2", width: 150, sortable: true, dataIndex: 'column2'}
+                    ];
 
-            split: true,
-            autoScroll: true,
-            autoWidth:600,
-            minWidth: 600,
-            //split:true,
-            //layout:'accordion',
-            //height: 350,
-            items:[verUsuario]
-        });
-        /*FIN PANEL IZQUIERDA*/
-        /*PANEL CENTRO*/
+                    // declare the source Grid
+                    var firstGrid = new Ext.grid.GridPanel({
+                        ddGroup: 'secondGridDDGroup',
+                        store: firstGridStore,
+                        columns: cols,
+                        enableDragDrop: true,
+                        stripeRows: true,
+                        selModel: new Ext.grid.RowSelectionModel({singleSelect: true}),
+                        title: 'Servicios (arrastre el servicio para asignar)',
+                        listeners: {
+                            afterrender: function(comp) {
+                                var firstGridDropTargetEl = firstGrid.getView().scroller.dom;
+                                var firstGridDropTarget = new Ext.dd.DropTarget(firstGridDropTargetEl, {
+                                    ddGroup: 'firstGridDDGroup',
+                                    notifyDrop: function(ddSource, e, data) {
+                                        var urecord = gridPanelUsuario.getSelectionModel().getSelected();
+                                        var srecord = secondGrid.getSelectionModel().getSelected();
+                                        Ext.Ajax.request({
+                                            url: 'asignacionservicios/eliminarservicio',
+                                            method: 'POST',
+                                            params: {
+                                                idUsuario: urecord.id,
+                                                idServicio: srecord.id
+                                            },
+                                            success: function(result, request) {
+                                                secondGrid.getStore().reload();
+                                            },
+                                            failure: function(result, request) {
 
-        var centro=new Ext.Panel({
-            title: 'Asignación de servicios a usuarios',
-            region: 'center',
-            layout:'fit',
-            items:[formParametro]
-        });
+                                            }
+                                        });
+                                    }
+                                });
+                            }}
+                    });
+
+                    var secondGridStore = new Ext.data.JsonStore({
+                        url: Ext.SROOT + 'asignacionservicios/listarserviciosporusuario',
+                        fields: [{name: 'id'},
+                            {name: 'nombre'}]
+                    });
+
+                    // create the destination Grid
+                    var secondGrid = new Ext.grid.GridPanel({
+                        ddGroup: 'firstGridDDGroup',
+                        store: secondGridStore,
+                        columns: cols,
+                        enableDragDrop: true,
+                        stripeRows: true,
+                        selModel: new Ext.grid.RowSelectionModel({singleSelect: true}),
+                        title: 'Servicios asignados al usuario',
+                        listeners: {
+                            afterrender: function(comp) {
+                                var secondGridDropTargetEl = secondGrid.getView().scroller.dom;
+                                var secondGridDropTarget = new Ext.dd.DropTarget(secondGridDropTargetEl, {
+                                    ddGroup: 'secondGridDDGroup',
+                                    notifyDrop: function(ddSource, e, data) {
+                                        var urecord = gridPanelUsuario.getSelectionModel().getSelected();
+                                        var srecord = firstGrid.getSelectionModel().getSelected();
+                                        if (urecord) {
+                                            Ext.Ajax.request({
+                                                url: 'asignacionservicios/guardarservicios',
+                                                method: 'POST',
+                                                params: {
+                                                    idUsuario: urecord.id,
+                                                    idServicio: srecord.id
+                                                },
+                                                success: function(result, request) {
+                                                    secondGrid.getStore().reload();
+                                                },
+                                                failure: function(result, request) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    var izquierda = new Ext.Panel({
+                        title: 'Búsqueda',
+                        region: 'west',
+                        layout: 'fit',
+                        collapsible: true,
+                        split: true,
+                        width: 700,
+                        autoScroll: true,
+                        minWidth: 600,
+                        items: [gridPanelUsuario]
+                    });
+
+                    var centro = new Ext.Panel({
+                        title: 'Asignación de servicios a usuarios',
+                        region: 'center',
+                        //layout: 'fit',
+                        layout: 'hbox',
+                        //renderTo     : 'panel',
+                        defaults: {flex: 1}, //auto stretch
+                        layoutConfig: {align: 'stretch'},
+                        items: [firstGrid,
+                            secondGrid]
+                    });
 
                     new Ext.Viewport({
                         layout: 'fit',
@@ -374,14 +233,14 @@ var idUsuario;
                         items: [{
                                 layout: 'border',
                                 border: false,
-                                items: [izquierda,centro]
+                                items: [izquierda, centro]
                             }
                         ]
                     });
 
-                    storeUsuario.load();
+                    //storeUsuario.load();
                     firstGridStore.load();
-                    //secondGridStore.load(1);
+
                 }
 
             };

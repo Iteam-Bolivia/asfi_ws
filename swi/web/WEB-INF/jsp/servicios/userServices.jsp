@@ -79,10 +79,14 @@
                     });
 
                     //grid
+                    var ss = '{"id":"68","result":[{"nombre":"Hello ffff !"}],"success":true}';
+                    var oo = Ext.util.JSON.decode(ss);
+                    
                     var store = new Ext.data.JsonStore({
-                        url: Ext.SROOT + 'listuserservice',
+                        //url: Ext.SROOT + 'listuserservice',
                         fields: ['id', 'nombre'],
-                        autoLoad: true
+                        data: oo.result
+                        //autoLoad: true
                     });
                     var grid = new Ext.grid.GridPanel({
                         title: 'Servicios',
