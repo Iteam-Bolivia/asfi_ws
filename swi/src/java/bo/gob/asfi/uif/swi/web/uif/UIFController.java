@@ -35,15 +35,15 @@ public class UIFController {
     }
 
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/seguro")
-    public @ResponseBody String cuequiercosa() {
-        
-        Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
-        String nombre = autenticacion.getName();
-        
-        return "Hola " + nombre + ", acceso validado!";
-    }
+//    @PreAuthorize("isAuthenticated()")
+//    @RequestMapping(value = "/seguro")
+//    public @ResponseBody String cuequiercosa() {
+//        
+//        Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
+//        String nombre = autenticacion.getName();
+//        
+//        return "Hola " + nombre + ", acceso validado!";
+//    }
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public  @ResponseBody Map<String, ? extends Object> getLogin(@RequestParam(value = "error", required = false) boolean error) {
