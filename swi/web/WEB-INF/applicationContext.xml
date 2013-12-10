@@ -61,7 +61,7 @@
     
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
     <mvc:resources mapping="/**" location="/" />
-    
+            
     <!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) -->
     <import resource="database-config.xml"/>
     <import resource="security-config.xml"/>
